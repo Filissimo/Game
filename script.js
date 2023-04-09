@@ -14,9 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
             `
         }
     }
+    let body = document.querySelector("body")
     if (screen.width > screen.height) {
+        body.setAttribute("style", `grid-template-columns: auto auto`)
         grid.classList.add("wide")
     } else {
+        body.setAttribute("style", `grid-template-columns: auto`)
         grid.classList.add("high")
     }
     grid.setAttribute("style", `grid-template-columns: ${grid_template_columns}`)
