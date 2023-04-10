@@ -1,25 +1,18 @@
 *
     margin: 0
     padding: 0
+:root
+    --posX: 100
+    --posY: 100
 body
-    display: grid
-    padding: 1vh
-    justify-content: center
+    #cursor_chaser
+        position: fixed
+        width: 40px
+        height: 40px
+        background-color: rgb(0, 0, 0)
+        border-radius: 100%
+        left: calc(calc(var(--posX) - 20) * 1px)
+        top: calc(calc(var(--posY) - 20) * 1px)
     #console
-        padding: 1rem
-        background-color: rgb(249, 255, 172)
-    #grid
-        border: 1px solid rgb(49, 95, 187)
-        #start
-            display: none
-        display: grid
-        .cell
-            border: 1px solid rgb(244, 244, 244)
-        .cursor
-            background-color: rgb(157, 0, 0)
-    .wide
-        width: 95vh
-        height: 95vh
-    .high
-        width: 95vw
-        height: 95vw
+        padding: 20px
+        border: 1px solid
