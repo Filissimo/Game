@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console_break = console.innerHTML.indexOf("-")
         cursorX = console.innerHTML.slice(0, console_break);
         cursorY = console.innerHTML.slice(console_break + 1, console.innerHTML.length);
-        dif_posX = +((cursorX_move - posX) / 300)
+        dif_posX = +((cursorX_move - posX) / 100)
         new_posX = posX + dif_posX
-        dif_posY = +((cursorY_move - posY) / 300)
+        dif_posY = +((cursorY_move - posY) / 100)
         new_posY = posY + dif_posY
         document.documentElement.style.setProperty('--posX', new_posX);
         document.documentElement.style.setProperty('--posY', new_posY);
