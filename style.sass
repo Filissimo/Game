@@ -20,14 +20,35 @@ body
         position: fixed
         padding: 20px
         border: 1px solid
-        #show_debug
-            padding: 2px 7px
-            position: relative
-            height: 23px
-        #debug
+        #menu
+            display: flex
+            flex-direction: column
             position: absolute
-            padding: 7px
-            background-color: rgb(247, 255, 190)
+            border: 1px solid rgb(73, 79, 53)
+            left: -150px
+            top: 38px
+            z-index: 20
+            transition: all 500ms
+            #menu_btn
+                position: fixed
+                left: 12px
+                padding: 3px 10px
+                background-color: rgb(242, 255, 0)
+                border: 1px solid rgb(79, 53, 53)
+            button
+                padding: 2px 7px
+                height: 23px
+            #debug
+                position: fixed
+                top: 20px
+                text-align: center
+                padding: 7px
+                background-color: rgba(250, 249, 249, 0.2)
+        #menu.show
+            left: 10px
+        #play_buttons
+            position: absolute
+            border: 1px solid rgb(139, 66, 17)
         background-color: rgb(241, 255, 134)
 
     #play_field
@@ -40,8 +61,13 @@ body.wide
         height: calc(100vh - 42px)
         width: var(--console_size)
         flex-direction: column
+        #menu_btn
+            top: 12px
         #debug
-            top: 42px
+            left: calc(calc(var(--console_size) + 70px))
+            width: calc(100vw - calc(var(--console_size) + 115px))
+        #play_buttons
+            top: 40px
     #play_field
         height: calc(100vh - 60px)
         width: calc(100vw - calc(var(--console_size) + 102px))
@@ -53,9 +79,13 @@ body.high
         height: calc(100vh - calc(var(--console_size) + 102px))
         top: calc(100vh - calc(var(--console_size) + 42px))
         left: 0
-        #show_debug
+        #menu_btn
+            top: calc(100vh - calc(var(--console_size) + 40px))
         #debug
-            top: 42px
+            left: 102px
+            width: calc(100vw - 202px)
+        #play_buttons
+            left: 50px
     #play_field
         width: calc(100vw - 60px)
         height: calc(100vh - calc(var(--console_size) + 102px))

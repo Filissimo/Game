@@ -11,10 +11,10 @@ function printMousePos(e) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let console_div = document.getElementById("debug")
     let console_debug = document.getElementById("debug")
     let html = document.querySelector("html")
     let body = document.querySelector("body")
+    let menu = document.getElementById("menu")
     let screen_width = screen.availWidth
     let screen_height = screen.availHeight
     document.documentElement.style.setProperty('--posX', screen_width / 2)
@@ -100,5 +100,49 @@ document.addEventListener("DOMContentLoaded", () => {
     let show_debug = document.getElementById('show_debug')
     show_debug.onclick = () => {
         console_debug.classList.toggle('invisible')
+    }
+
+    let menu_btn = document.getElementById("menu_btn")
+    menu_btn.onclick = () => {
+        menu.classList.toggle('show')
+    }
+
+
+    let fullscreen_on_btn = document.querySelector(".fullscreen_on")
+    let fullscreen_off_btn = document.querySelector(".fullscreen_off")
+    fullscreen_on_btn.onclick = () => {
+        fullscreen_on_btn.classList.toggle('invisible')
+        fullscreen_off_btn.classList.toggle('invisible')
+        openFullscreen()
+    }
+    fullscreen_off_btn.onclick = () => {
+        fullscreen_on_btn.classList.toggle('invisible')
+        fullscreen_off_btn.classList.toggle('invisible')
+        closeFullscreen()
+    }
+
+    /* Get the documentElement (<html>) to display the page in fullscreen */
+    var elem = document.documentElement;
+
+    /* View in fullscreen */
+    function openFullscreen() {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+    }
+
+    /* Close fullscreen */
+    function closeFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
     }
 })
