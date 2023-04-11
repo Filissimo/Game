@@ -18,8 +18,8 @@ body
     #console
         display: flex
         position: fixed
-        padding: 20px
-        border: 1px solid
+        padding: 5px
+        border: 3px solid rgb(19, 189, 0)
         #menu
             display: flex
             flex-direction: column
@@ -58,7 +58,7 @@ body
         background-color: rgb(183, 202, 119)
 body.wide
     #console
-        height: calc(100vh - 42px)
+        height: calc(100vh - 16px)
         width: var(--console_size)
         flex-direction: column
         #menu_btn
@@ -70,14 +70,14 @@ body.wide
             top: 40px
     #play_field
         height: calc(100vh - 60px)
-        width: calc(100vw - calc(var(--console_size) + 102px))
-        left: calc(calc(var(--console_size) + 42px))
+        width: calc(100vw - calc(var(--console_size) + 76px))
+        left: calc(calc(var(--console_size) + 16px))
         top: 0
 body.high
     #console
-        width: calc(100vw - 42px)
-        height: calc(100vh - calc(var(--console_size) + 102px))
-        top: calc(100vh - calc(var(--console_size) + 42px))
+        width: calc(100vw - 16px)
+        height: calc(var(--console_size) + 30px)
+        top: calc(100vh - calc(var(--console_size) + 46px))
         left: 0
         #menu_btn
             top: calc(100vh - calc(var(--console_size) + 40px))
@@ -85,10 +85,10 @@ body.high
             left: 102px
             width: calc(100vw - 202px)
         #play_buttons
-            left: 50px
+            left: 80px
     #play_field
         width: calc(100vw - 60px)
-        height: calc(100vh - calc(var(--console_size) + 102px))
+        height: calc(100vh - calc(var(--console_size) + 106px))
 
 .invisible
     display: none
