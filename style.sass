@@ -2,8 +2,9 @@
     margin: 0
     padding: 0
 :root
-    --posX: 100
-    --posY: 100
+    --posX: 500
+    --posY: 500
+    --console_size: 10px
 body
     #cursor_chaser
         position: fixed
@@ -13,6 +14,53 @@ body
         border-radius: 100%
         left: calc(calc(var(--posX) - 20) * 1px)
         top: calc(calc(var(--posY) - 20) * 1px)
+        z-index: 10
     #console
+        display: flex
+        position: fixed
         padding: 20px
         border: 1px solid
+        #show_debug
+            padding: 2px 7px
+            position: relative
+            height: 23px
+        #debug
+            position: absolute
+            padding: 7px
+            background-color: rgb(247, 255, 190)
+        background-color: rgb(241, 255, 134)
+
+    #play_field
+        position: fixed
+        padding: 20px
+        border: 10px solid rgb(132, 152, 68)
+        background-color: rgb(183, 202, 119)
+body.wide
+    #console
+        height: calc(100vh - 42px)
+        width: var(--console_size)
+        flex-direction: column
+        #debug
+            top: 42px
+    #play_field
+        height: calc(100vh - 60px)
+        width: calc(100vw - calc(var(--console_size) + 102px))
+        left: calc(calc(var(--console_size) + 42px))
+        top: 0
+body.high
+    #console
+        width: calc(100vw - 42px)
+        height: calc(100vh - calc(var(--console_size) + 102px))
+        top: calc(100vh - calc(var(--console_size) + 42px))
+        left: 0
+        #show_debug
+        #debug
+            top: 42px
+    #play_field
+        width: calc(100vw - 60px)
+        height: calc(100vh - calc(var(--console_size) + 102px))
+
+.invisible
+    display: none
+
+
