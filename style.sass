@@ -24,13 +24,14 @@ body
         border: 3px solid rgb(19, 189, 0)
         background-color: rgb(241, 255, 134)
         #menu
+            position: fixed
             display: flex
             flex-direction: column
             position: absolute
             border: 1px solid rgb(73, 79, 53)
             width: calc(var(--console_size) + 30px)
             left: calc(-40px - var(--console_size))
-            top: 38px
+            top: 3px
             z-index: 20
             transition: all 500ms
             #menu_btn
@@ -84,8 +85,6 @@ body.wide
         height: calc(calc(var(--screen_height) * 1px) - 16px)
         width: var(--console_size)
         flex-direction: column
-        #menu_btn
-            top: 12px
         #debug
             left: calc(calc(var(--console_size) + 70px))
             width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) + 115px))
@@ -106,8 +105,6 @@ body.high
         height: calc(var(--console_size) + 30px)
         top: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) + 46px))
         left: 0
-        #menu_btn
-            top: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) + 40px))
         #debug
             left: 102px
             width: calc(calc(var(--screen_width) * 1px) - 202px)
