@@ -12,16 +12,20 @@ function printMousePos(e) {
 
 document.addEventListener("DOMContentLoaded", () => {
     let console_debug = document.getElementById("debug")
+    console_debug.innerHTML = 'Nothing to track'
     let html = document.querySelector("html")
     let body = document.querySelector("body")
     let menu = document.getElementById("menu")
     let screen_width = screen.availWidth
     let screen_height = screen.availHeight
-    document.documentElement.style.setProperty('--posX', screen_width / 2)
-    document.documentElement.style.setProperty('--posY', screen_height / 2)
-
     let console_width = 0
     let console_height = 0
+    let orientation = NaN
+    let new_orientation = NaN
+    let joystick = document.getElementById("joystick")
+    let joystick_centerX = 0
+    let joystick_centerY = 0
+    let play_field = document.getElementById("play_field")
 
     setInterval(set_orientation, 200)
     function set_orientation() {
@@ -32,52 +36,73 @@ document.addEventListener("DOMContentLoaded", () => {
             body.classList.add("wide")
             console_width = screen_width * 0.15
             document.documentElement.style.setProperty('--console_size', console_width + "px")
+            joystick_centerX = console_width / 2 + 7
+            joystick_centerY = screen_height - console_width / 2 - 8
+            document.documentElement.style.setProperty('--screen_width', screen_width)
+            document.documentElement.style.setProperty('--screen_height', screen_height)
+            new_orientation = "landscape"
+            if (orientation != new_orientation) {
+                document.documentElement.style.setProperty('--posX', screen_width / 2 + console_width / 2 + 7)
+                document.documentElement.style.setProperty('--posY', screen_height / 2)
+            }
+            orientation = new_orientation
         }
         else {
             body.classList.remove("wide")
             body.classList.add("high")
             console_height = screen_height * 0.15
             document.documentElement.style.setProperty('--console_size', console_height + "px")
+            joystick_centerX = screen_width - console_height / 2 - 22
+            joystick_centerY = screen_height - console_height / 2 - 22
+            document.documentElement.style.setProperty('--screen_width', screen_width)
+            document.documentElement.style.setProperty('--screen_height', screen_height)
+            new_orientation = "portrait"
+            if (orientation != new_orientation) {
+                document.documentElement.style.setProperty('--posX', screen_width / 2)
+                document.documentElement.style.setProperty('--posY', screen_height / 2 - console_height / 2 - 22)
+            }
+            orientation = new_orientation
         }
     }
 
-
-    let play_field = document.getElementById("play_field")
-
     let start_moving = ''
 
-    play_field.onclick = () => {
-        if (cursorX_click && cursorY_click) {
-            if (cursorX_click > 25 + console_width && cursorY_click > 25 &&
-                cursorX_click < screen_width - 25 && cursorY_click < screen_height - 70 - console_height) {
-                cursorX_click_static = cursorX_click
-                cursorY_click_static = cursorY_click
-                clearInterval(start_moving)
-                start_moving = setInterval(move_cursor, 10)
-            }
+    joystick.onclick = () => {
+        cursorX_click_static = cursorX_click
+        cursorY_click_static = cursorY_click
+        clearInterval(start_moving)
+        start_moving = setInterval(move_cursor, 10)
+        setTimeout(stop_moving, 300)
+        function stop_moving() {
+            clearInterval(start_moving)
         }
     }
 
     function move_cursor() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
-        dif_posX = +(cursorX_click_static - posX)
-        dif_posY = +(cursorY_click_static - posY)
-        speed = 0.01
+        if (posX < 25 + console_width || posY < 25 ||
+            posX > screen_width - 25 || posY > screen_height - 70 - console_height) {
+                clearInterval(start_moving)
+        }
+        dif_posX = +(cursorX_click_static - joystick_centerX)
+        dif_posY = +(cursorY_click_static - joystick_centerY)
+        speed = 0.2
         console_debug.innerHTML = "Screen " + screen_width + "x" + screen_height +
             "<br>Cursor X: " + cursorX_click_static + ", Y: " + cursorY_click_static +
             "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
-        if (dif_posX > 3 || dif_posX < -3) {
             ratio_x = get_sin(dif_posX, dif_posY)
             ratio_y = get_sin(dif_posY, dif_posX)
             new_posX = posX + ratio_x * speed
             new_posY = posY + ratio_y * speed
             if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
                 document.documentElement.style.setProperty('--posX', new_posX)
+                console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
+                "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2)
             } else {
+                clearInterval(start_moving)
                 console_debug.innerHTML += "<br>New X: " + new_posX + ", Y: " + new_posY
             }
-        }
         if (dif_posY > 3 || dif_posY < -3) {
             ratio_y = get_sin(dif_posY, dif_posX)
             new_posY = posY + ratio_y * speed
@@ -85,9 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.documentElement.style.setProperty('--posY', new_posY)
             }
         }
-        // else {
-        //     clearInterval(start_moving)
-        // }
     }
     function get_sin(catet1, catet2) {
         catet1_squared = Math.abs(catet1) ^ 2
@@ -115,6 +137,12 @@ document.addEventListener("DOMContentLoaded", () => {
         fullscreen_off_btn.classList.toggle('invisible')
         openFullscreen()
     }
+
+    let joystick_center = document.getElementById("joystick_center")
+    joystick_center.onclick = () => {
+        console_debug.innerHTML += `<br>On joystick_center: X=${cursorX_click}, Y=${cursorY_click}<br>`
+    }
+
     fullscreen_off_btn.onclick = () => {
         fullscreen_on_btn.classList.toggle('invisible')
         fullscreen_off_btn.classList.toggle('invisible')

@@ -2,6 +2,8 @@
     margin: 0
     padding: 0
 :root
+    --screen_width: 100
+    --screen_height: 100
     --posX: 500
     --posY: 500
     --console_size: 10px
@@ -20,6 +22,7 @@ body
         position: fixed
         padding: 5px
         border: 3px solid rgb(19, 189, 0)
+        background-color: rgb(241, 255, 134)
         #menu
             display: flex
             flex-direction: column
@@ -37,7 +40,6 @@ body
                 border: 1px solid rgb(79, 53, 53)
             button
                 padding: 2px 7px
-                height: 23px
             #debug
                 position: fixed
                 top: 20px
@@ -47,9 +49,27 @@ body
         #menu.show
             left: 10px
         #play_buttons
+            display: flex
+            justify-content: space-between
             position: absolute
             border: 1px solid rgb(139, 66, 17)
-        background-color: rgb(241, 255, 134)
+            #shoot
+                font-size: 1.5rem
+                font-weight: 900
+            #joystick
+                display: flex
+                justify-content: center
+                align-items: center
+                border: 1px solid rgb(139, 66, 17)
+                border-radius: 100%
+                background-image: radial-gradient(rgb(255, 255, 255), rgb(98, 55, 0))
+                #joystick_center
+                    background-color: rgb(0, 151, 156)
+                    width: 15px
+                    height: 15px
+                    z-index: 100
+                    border-radius: 100%
+                
 
     #play_field
         position: fixed
@@ -58,37 +78,46 @@ body
         background-color: rgb(183, 202, 119)
 body.wide
     #console
-        height: calc(100vh - 16px)
+        height: calc(calc(var(--screen_height) * 1px) - 16px)
         width: var(--console_size)
         flex-direction: column
         #menu_btn
             top: 12px
         #debug
             left: calc(calc(var(--console_size) + 70px))
-            width: calc(100vw - calc(var(--console_size) + 115px))
+            width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) + 115px))
         #play_buttons
+            flex-direction: column
             top: 40px
+            height: calc(calc(var(--screen_height) * 1px) - 54px)
+            #joystick, #shoot
+                width: calc(var(--console_size) - 6px)
+                height: calc(var(--console_size) - 6px)
     #play_field
-        height: calc(100vh - 60px)
-        width: calc(100vw - calc(var(--console_size) + 76px))
+        height: calc(calc(var(--screen_height) * 1px) - 60px)
+        width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) + 76px))
         left: calc(calc(var(--console_size) + 16px))
-        top: 0
 body.high
     #console
-        width: calc(100vw - 16px)
+        width: calc(calc(var(--screen_width) * 1px) - 16px)
         height: calc(var(--console_size) + 30px)
-        top: calc(100vh - calc(var(--console_size) + 46px))
+        top: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) + 46px))
         left: 0
         #menu_btn
-            top: calc(100vh - calc(var(--console_size) + 40px))
+            top: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) + 40px))
         #debug
             left: 102px
-            width: calc(100vw - 202px)
+            width: calc(calc(var(--screen_width) * 1px) - 202px)
         #play_buttons
-            left: 80px
+            left: 73px
+            width: calc(calc(var(--screen_width) * 1px) - 84px)
+            #joystick, #shoot
+                width: calc(var(--console_size) + 28px)
+                height: calc(var(--console_size) + 28px)
+
     #play_field
-        width: calc(100vw - 60px)
-        height: calc(100vh - calc(var(--console_size) + 106px))
+        width: calc(calc(var(--screen_width) * 1px) - 60px)
+        height: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) + 106px))
 
 .invisible
     display: none
