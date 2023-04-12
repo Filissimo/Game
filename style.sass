@@ -24,13 +24,13 @@ body
         padding: 7px
         background-color: rgba(250, 249, 249, 0.2)
         width: 100vw
+        z-index: 50
     #console
         display: flex
         position: fixed
         padding: 5px
         border: 3px solid rgb(19, 189, 0)
         background-color: rgb(241, 255, 134)
-            z-index: 50
         #menu
             position: fixed
             display: flex
@@ -39,7 +39,7 @@ body
             border: 1px solid rgb(73, 79, 53)
             width: calc(var(--console_size) + 30px)
             left: calc(-40px - var(--console_size))
-            z-index: 0
+            z-index: 100
             transition: all 500ms
             #menu_btn
                 position: fixed
