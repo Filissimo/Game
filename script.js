@@ -65,6 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    
+
     let start_moving = ''
 
     joystick.onclick = () => {

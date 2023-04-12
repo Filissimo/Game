@@ -28,7 +28,8 @@ body
             flex-direction: column
             position: absolute
             border: 1px solid rgb(73, 79, 53)
-            left: -150px
+            width: var(--console_size)
+            left: calc(-10px - var(--console_size))
             top: 38px
             z-index: 20
             transition: all 500ms
@@ -47,7 +48,8 @@ body
                 padding: 7px
                 background-color: rgba(250, 249, 249, 0.2)
         #menu.show
-            left: 10px
+            left: 80px
+            top: 10px
         #play_buttons
             display: flex
             justify-content: space-between
