@@ -4,6 +4,11 @@ document.addEventListener('mousemove', e => {
     cursorY_move = e.y
 }, { passive: true });
 
+document.addEventListener('touchmove', e => {
+    cursorX_move_touch = e.x
+    cursorY_move_touch = e.y
+}, { passive: true });
+
 document.addEventListener('click', printMousePos, true);
 function printMousePos(e) {
     cursorX_click = e.pageX;
@@ -77,9 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
         clearInterval(start_moving)
         start_moving = setInterval(move_cursor_mouse, 7)
     }
+
     joystick.onmouseleave = () => {
         clearInterval(start_moving)
     }
+
     joystick.onclick = () => {
         clearInterval(start_moving)
         start_moving = setInterval(move_cursor_mouse, 5)
@@ -88,7 +95,54 @@ document.addEventListener("DOMContentLoaded", () => {
             clearInterval(start_moving)
         }
     }
+    joystick.ontouchmove = () => {
+        clearInterval(start_moving)
+        start_moving = setInterval(move_cursor_touch, 5)
+    }
+    joystick.ontouchend = () => {
+        clearInterval(start_moving)
+    }
 
+    function move_cursor_touch() {
+        posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
+        posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
+        dif_posX = +(cursorX_move_touch - joystick_centerX)
+        dif_posY = +(cursorY_move_touch - joystick_centerY)
+        console_debug.innerHTML = "Screen " + screen_width + "x" + screen_height +
+            "<br>Cursor X: " + cursorX_move_touch + ", Y: " + cursorY_move_touch +
+            "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
+        ratio_x = get_sin(dif_posX, dif_posY)
+        ratio_y = get_sin(dif_posY, dif_posX)
+        new_posX = posX + ratio_x * speed
+        new_posY = posY + ratio_y * speed
+        additional_margin_X = 0
+        if (console_width > 0) {
+            additional_margin_X = 15
+        }
+        additional_margin_Y = 0
+        if (console_height > 0) {
+            additional_margin_Y = 45
+        }
+        if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
+            if (new_posX > screen_width - 25) {
+                new_posX = screen_width - 25
+            } else if (new_posX < 25 + console_width + additional_margin_X) {
+                new_posX = 25 + console_width + additional_margin_X
+            }
+
+            document.documentElement.style.setProperty('--posX', new_posX)
+        }
+        if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
+            if (new_posY < 25) {
+                new_posY = 25
+            } else if (new_posY > screen_height - 25 - console_height - additional_margin_Y) {
+                new_posY = screen_height - 25 - console_height - additional_margin_Y
+            }
+            document.documentElement.style.setProperty('--posY', new_posY)
+        }
+        console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
+            "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2)
+    }
     function move_cursor_mouse() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
@@ -129,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
             "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2)
     }
+
     function get_sin(catet1, catet2) {
         catet1_squared = Math.abs(catet1) ^ 2
         catet2_squared = Math.abs(catet2) ^ 2
