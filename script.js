@@ -106,10 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function move_cursor_touch() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
-        dif_posX = +(cursorX_move_touch - joystick_centerX)
-        dif_posY = +(cursorY_move_touch - joystick_centerY)
+        dif_posX = +(cursorX_move - joystick_centerX)
+        dif_posY = +(cursorY_move - joystick_centerY)
         console_debug.innerHTML = "Screen " + screen_width + "x" + screen_height +
-            "<br>Cursor X: " + cursorX_move_touch + ", Y: " + cursorY_move_touch +
+            "<br>Cursor X: " + cursorX_move + ", Y: " + cursorY_move +
             "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
         ratio_x = get_sin(dif_posX, dif_posY)
         ratio_y = get_sin(dif_posY, dif_posX)
