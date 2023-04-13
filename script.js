@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    
+
 
     let start_moving = ''
 
@@ -73,45 +73,46 @@ document.addEventListener("DOMContentLoaded", () => {
         cursorX_click_static = cursorX_click
         cursorY_click_static = cursorY_click
         clearInterval(start_moving)
-        start_moving = setInterval(move_cursor, 10)
-        setTimeout(stop_moving, 300)
+        start_moving = setInterval(move_cursor, 7)
+        setTimeout(stop_moving, 400)
         function stop_moving() {
             clearInterval(start_moving)
         }
     }
 
+    let speed = 0.15
+
     function move_cursor() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
-        if (posX < 25 + console_width || posY < 25 ||
-            posX > screen_width - 25 || posY > screen_height - 70 - console_height) {
-                clearInterval(start_moving)
-        }
         dif_posX = +(cursorX_click_static - joystick_centerX)
         dif_posY = +(cursorY_click_static - joystick_centerY)
-        speed = 0.2
         console_debug.innerHTML = "Screen " + screen_width + "x" + screen_height +
             "<br>Cursor X: " + cursorX_click_static + ", Y: " + cursorY_click_static +
             "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
-            ratio_x = get_sin(dif_posX, dif_posY)
-            ratio_y = get_sin(dif_posY, dif_posX)
-            new_posX = posX + ratio_x * speed
-            new_posY = posY + ratio_y * speed
-            if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
-                document.documentElement.style.setProperty('--posX', new_posX)
-                console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
-                "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2)
-            } else {
-                clearInterval(start_moving)
-                console_debug.innerHTML += "<br>New X: " + new_posX + ", Y: " + new_posY
+        ratio_x = get_sin(dif_posX, dif_posY)
+        ratio_y = get_sin(dif_posY, dif_posX)
+        new_posX = posX + ratio_x * speed
+        new_posY = posY + ratio_y * speed
+        if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
+            if (new_posX > screen_width - 25) {
+                new_posX = screen_width - 25
+            } else if (new_posX < 40 + console_width) {
+                new_posX = 40 + console_width
             }
-        if (dif_posY > 3 || dif_posY < -3) {
-            ratio_y = get_sin(dif_posY, dif_posX)
-            new_posY = posY + ratio_y * speed
-            if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
-                document.documentElement.style.setProperty('--posY', new_posY)
-            }
+
+            document.documentElement.style.setProperty('--posX', new_posX)
         }
+        if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
+            if (new_posY < 25) {
+                new_posY = 25
+            } else if (new_posY > screen_height - 25 - console_height) {
+                new_posY = screen_height - 25 - console_height
+            }
+            document.documentElement.style.setProperty('--posY', new_posY)
+        }
+        console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
+            "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2)
     }
     function get_sin(catet1, catet2) {
         catet1_squared = Math.abs(catet1) ^ 2

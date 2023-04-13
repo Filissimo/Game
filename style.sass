@@ -17,20 +17,21 @@ body
         left: calc(calc(var(--posX) - 20) * 1px)
         top: calc(calc(var(--posY) - 20) * 1px)
         z-index: 10
-    #debug
-        position: fixed
-        top: 120px
-        text-align: center
-        padding: 7px
-        background-color: rgba(250, 249, 249, 0.2)
-        width: 100vw
-        z-index: 10
     #console
         display: flex
         position: fixed
         padding: 5px
         border: 3px solid rgb(19, 189, 0)
         background-color: rgb(241, 255, 134)
+        #debug
+            position: fixed
+            top: 0px
+            left: 0px
+            text-align: center
+            padding: 7px
+            background-color: rgba(255, 0, 0, 0.274)
+            width: 100vw
+            z-index: 10
         #menu
             position: fixed
             display: flex
@@ -48,6 +49,7 @@ body
                 padding: 3px 10px
                 background-color: rgb(242, 255, 0)
                 border: 1px solid rgb(79, 53, 53)
+                z-index: 1000
             button
                 padding: 2px 7px
         #play_buttons
