@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.documentElement.style.setProperty('--posX', screen_width / 2 + console_width / 2 + 7)
                 document.documentElement.style.setProperty('--posY', screen_height / 2)
             }
+            console_height = 0
             orientation = new_orientation
         }
         else {
@@ -61,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.documentElement.style.setProperty('--posX', screen_width / 2)
                 document.documentElement.style.setProperty('--posY', screen_height / 2 - console_height / 2 - 22)
             }
+            console_width = 0
             orientation = new_orientation
         }
     }
@@ -94,11 +96,19 @@ document.addEventListener("DOMContentLoaded", () => {
         ratio_y = get_sin(dif_posY, dif_posX)
         new_posX = posX + ratio_x * speed
         new_posY = posY + ratio_y * speed
+        additional_margin_X = 0
+        if (console_width > 0) {
+            additional_margin_X = 15
+        }
+        additional_margin_Y = 0
+        if (console_height > 0) {
+            additional_margin_Y = 45
+        }
         if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
             if (new_posX > screen_width - 25) {
                 new_posX = screen_width - 25
-            } else if (new_posX < 40 + console_width) {
-                new_posX = 40 + console_width
+            } else if (new_posX < 25 + console_width + additional_margin_X) {
+                new_posX = 25 + console_width + additional_margin_X
             }
 
             document.documentElement.style.setProperty('--posX', new_posX)
@@ -106,8 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
             if (new_posY < 25) {
                 new_posY = 25
-            } else if (new_posY > screen_height - 25 - console_height) {
-                new_posY = screen_height - 25 - console_height
+            } else if (new_posY > screen_height - 25 - console_height - additional_margin_Y) {
+                new_posY = screen_height - 25 - console_height - additional_margin_Y
             }
             document.documentElement.style.setProperty('--posY', new_posY)
         }
