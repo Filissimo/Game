@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let start_moving = ''
 
-    let speed = 0.02
+    let speed = 0.09
 
     joystick.onmouseover = () => {
         clearInterval(start_moving)
