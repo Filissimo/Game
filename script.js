@@ -71,15 +71,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let start_moving = ''
 
-    joystick.onclick = () => {
-        cursorX_click_static = cursorX_click
-        cursorY_click_static = cursorY_click
+    joystick.onmouseover = () => {
+        cursorX_click_static = cursorX_move
+        cursorY_click_static = cursorY_move
         clearInterval(start_moving)
         start_moving = setInterval(move_cursor, 7)
-        setTimeout(stop_moving, 400)
-        function stop_moving() {
-            clearInterval(start_moving)
-        }
+    }
+    joystick.onmouseleave = () => {
+        clearInterval(start_moving)
     }
 
     let speed = 0.15
@@ -87,10 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function move_cursor() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
-        dif_posX = +(cursorX_click_static - joystick_centerX)
-        dif_posY = +(cursorY_click_static - joystick_centerY)
+        dif_posX = +(cursorX_move - joystick_centerX)
+        dif_posY = +(cursorY_move - joystick_centerY)
         console_debug.innerHTML = "Screen " + screen_width + "x" + screen_height +
-            "<br>Cursor X: " + cursorX_click_static + ", Y: " + cursorY_click_static +
+            "<br>Cursor X: " + cursorX_move + ", Y: " + cursorY_move +
             "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
         ratio_x = get_sin(dif_posX, dif_posY)
         ratio_y = get_sin(dif_posY, dif_posX)
