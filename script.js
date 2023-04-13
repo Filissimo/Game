@@ -77,7 +77,16 @@ document.addEventListener("DOMContentLoaded", () => {
         clearInterval(start_moving)
         start_moving = setInterval(move_cursor, 7)
     }
+    joystick.ontouchmove = () => {
+        cursorX_click_static = cursorX_move
+        cursorY_click_static = cursorY_move
+        clearInterval(start_moving)
+        start_moving = setInterval(move_cursor, 7)
+    }
     joystick.onmouseleave = () => {
+        clearInterval(start_moving)
+    }
+    joystick.ontouchend = () => {
         clearInterval(start_moving)
     }
 
