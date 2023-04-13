@@ -71,28 +71,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let start_moving = ''
 
+    let speed = 0.15
+
     joystick.onmouseover = () => {
-        cursorX_click_static = cursorX_move
-        cursorY_click_static = cursorY_move
         clearInterval(start_moving)
-        start_moving = setInterval(move_cursor, 7)
-    }
-    joystick.ontouchmove = () => {
-        cursorX_click_static = cursorX_move
-        cursorY_click_static = cursorY_move
-        clearInterval(start_moving)
-        start_moving = setInterval(move_cursor, 7)
+        start_moving = setInterval(move_cursor_mouse, 7)
     }
     joystick.onmouseleave = () => {
         clearInterval(start_moving)
     }
-    joystick.ontouchend = () => {
+    joystick.onclick = () => {
         clearInterval(start_moving)
+        start_moving = setInterval(move_cursor_mouse, 5)
+        setTimeout(stop_moving, 300)
+        function stop_moving() {
+            clearInterval(start_moving)
+        }
     }
 
-    let speed = 0.15
-
-    function move_cursor() {
+    function move_cursor_mouse() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
         dif_posX = +(cursorX_move - joystick_centerX)
