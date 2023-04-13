@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         dif_posX = +(cursorX_move_touch - joystick_centerX)
         dif_posY = +(cursorY_move_touch - joystick_centerY)
-        if ((Math.abs(dif_posX)^2) + (Math.abs(dif_posY)^2) < joystick_radius) {
+        if ((Math.abs(dif_posX) ^ 2) + (Math.abs(dif_posY) ^ 2) < joystick_radius) {
             console_debug.innerHTML = "Screen " + screen_width + "x" + screen_height +
                 "<br>Cursor X: " + cursorX_move_touch + ", Y: " + cursorY_move_touch +
                 "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
                 "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
                 "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y +
-                "<br>Equation: " + ((Math.abs(dif_posX)^2) + (Math.abs(dif_posY)^2))
+                "<br>Equation: " + ((Math.abs(dif_posX) ^ 2) + (Math.abs(dif_posY) ^ 2))
         }
     }
     function move_cursor_mouse() {
