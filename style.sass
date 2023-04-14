@@ -9,8 +9,15 @@
     --console_size: 10px
     --corner: 0
 body
+    #gun
+        position: relative
+        width: 10px
+        height: 20px
+        background-color: rgba(0, 0, 0, 0.242)
+        top: -15px
+        left: 15px
+        z-index: 5
     #cursor_chaser
-        display: flex
         position: fixed
         width: 40px
         height: 40px
@@ -20,13 +27,7 @@ body
         top: calc(calc(var(--posY) - 20) * 1px)
         z-index: 10
         transform: rotate(calc(var(--corner) * 1deg))
-        #gun
-            position: relative
-            width: 10px
-            height: 40px
-            background-color:  rgb(56, 73, 0)
-            top: -5px
-            left: 15px
+
     #console
         display: flex
         position: fixed
@@ -34,6 +35,7 @@ body
         border: 3px solid rgb(19, 189, 0)
         background-color: rgb(241, 255, 134)
         #debug
+            font-size: 1.4rem
             position: fixed
             top: 0px
             left: 0px
@@ -91,6 +93,17 @@ body
         padding: 20px
         border: 10px solid rgb(132, 152, 68)
         background-color: rgb(183, 202, 119)
+        .enemy
+            position: fixed
+            width: 40px
+            height: 40px
+            background-color: rgb(149, 0, 0)
+            border-radius: 20%
+            z-index: 10
+            color: #ffffff02
+            font-size: 35px
+            text-align: center
+
 body.wide
     #console
         height: calc(calc(var(--screen_height) * 1px) - 16px)
