@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let start_moving = ''
 
-    let speed = 0.5
+    let speed = 0.3
 
     joystick.onmouseover = () => {
         clearInterval(start_moving)
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     joystick.ontouchmove = () => {
         clearInterval(start_moving)
-        start_moving = setInterval(move_cursor_touch, 15)
+        start_moving = setInterval(move_cursor_touch, 10)
     }
     joystick.ontouchend = () => {
         clearInterval(start_moving)
@@ -269,7 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             document.documentElement.style.setProperty('--posX', new_posX)
-            document.documentElement.style.setProperty('--corner', Math.round(corner))
         }
         if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
             if (new_posY < margin_top) {
