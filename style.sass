@@ -7,8 +7,10 @@
     --posX: 500
     --posY: 500
     --console_size: 10px
+    --corner: 0
 body
     #cursor_chaser
+        display: flex
         position: fixed
         width: 40px
         height: 40px
@@ -17,6 +19,14 @@ body
         left: calc(calc(var(--posX) - 20) * 1px)
         top: calc(calc(var(--posY) - 20) * 1px)
         z-index: 10
+        transform: rotate(calc(var(--corner) * 1deg))
+        #gun
+            position: relative
+            width: 10px
+            height: 40px
+            background-color:  rgb(56, 73, 0)
+            top: -5px
+            left: 15px
     #console
         display: flex
         position: fixed
