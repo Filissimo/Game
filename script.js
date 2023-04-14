@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
     let play_game = setInterval(game_tick, 20)
-    let spawning_enemies = setInterval(spawn_enemy, 5000)
+    let spawning_enemies = setInterval(spawn_enemy, 3000)
     menu_btn.onclick = () => {
         menu.classList.toggle('show')
         clearInterval(play_game)
@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
     play_btn.onclick = () => {
         menu.classList.toggle('show')
         play_game = setInterval(game_tick, 20)
-        spawning_enemies = setInterval(spawn_enemy, 5000)
+        spawning_enemies = setInterval(spawn_enemy, 3000)
     }
 
 
