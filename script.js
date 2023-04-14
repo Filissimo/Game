@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let start_moving = ''
 
-    let speed = 0.1
+    let speed = 0.3
 
     joystick.onmouseover = () => {
         clearInterval(start_moving)
@@ -149,37 +149,37 @@ document.addEventListener("DOMContentLoaded", () => {
         dif_posY = +(cursorY_move_touch - joystick_centerY)
         dif_posX_abs = Math.abs(dif_posX)
         dif_posY_abs = Math.abs(dif_posY)
-        if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius) {
-            corner = 0
-            hipotenuse = Math.sqrt((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2))
-            if (dif_posX > 0 && dif_posY > 0) {
-                basic_corner = 9 * dif_posY_abs / hipotenuse
-                if (basic_corner > 90) {
-                    basic_corner = 90
-                }
-                corner = basic_corner + 90
-            }
-            if (dif_posX < 0 && dif_posY > 0) {
-                basic_corner = 9 * dif_posX_abs / hipotenuse
-                if (basic_corner > 90) {
-                    basic_corner = 90
-                }
-                corner = basic_corner + 180
-            }
-            if (dif_posX < 0 && dif_posY < 0) {
-                basic_corner = 9 * dif_posY_abs / hipotenuse
-                if (basic_corner > 90) {
-                    basic_corner = 90
-                }
-                corner = basic_corner + 270
-            }
-            if (dif_posX > 0 && dif_posY < 0) {
-                basic_corner = 9 * dif_posX_abs / hipotenuse
-                if (basic_corner > 90) {
-                    basic_corner = 90
-                }
-                corner = basic_corner
-            }
+        if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.2) {
+            // corner = 0
+            // hipotenuse = Math.sqrt((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2))
+            // if (dif_posX > 0 && dif_posY > 0) {
+            //     basic_corner = 9 * dif_posY_abs / hipotenuse
+            //     if (basic_corner > 90) {
+            //         basic_corner = 90
+            //     }
+            //     corner = basic_corner + 90
+            // }
+            // if (dif_posX < 0 && dif_posY > 0) {
+            //     basic_corner = 9 * dif_posX_abs / hipotenuse
+            //     if (basic_corner > 90) {
+            //         basic_corner = 90
+            //     }
+            //     corner = basic_corner + 180
+            // }
+            // if (dif_posX < 0 && dif_posY < 0) {
+            //     basic_corner = 9 * dif_posY_abs / hipotenuse
+            //     if (basic_corner > 90) {
+            //         basic_corner = 90
+            //     }
+            //     corner = basic_corner + 270
+            // }
+            // if (dif_posX > 0 && dif_posY < 0) {
+            //     basic_corner = 9 * dif_posX_abs / hipotenuse
+            //     if (basic_corner > 90) {
+            //         basic_corner = 90
+            //     }
+            //     corner = basic_corner
+            // }
             console_debug.innerHTML += "<br>Screen " + screen_width + "x" + screen_height +
                 "<br>Cursor X: " + cursorX_move_touch + ", Y: " + cursorY_move_touch +
                 "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
@@ -215,38 +215,38 @@ document.addEventListener("DOMContentLoaded", () => {
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
         dif_posX = +(cursorX_move - joystick_centerX)
         dif_posY = +(cursorY_move - joystick_centerY)
-        corner = 0
         dif_posX_abs = Math.abs(dif_posX)
         dif_posY_abs = Math.abs(dif_posY)
-        hipotenuse = Math.sqrt((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2))
-        if (dif_posX > 0 && dif_posY > 0) {
-            basic_corner = 9 * dif_posY_abs / hipotenuse
-            if (basic_corner > 90) {
-                basic_corner = 90
-            }
-            corner = basic_corner + 90
-        }
-        if (dif_posX < 0 && dif_posY > 0) {
-            basic_corner = 9 * dif_posX_abs / hipotenuse
-            if (basic_corner > 90) {
-                basic_corner = 90
-            }
-            corner = basic_corner + 180
-        }
-        if (dif_posX < 0 && dif_posY < 0) {
-            basic_corner = 9 * dif_posY_abs / hipotenuse
-            if (basic_corner > 90) {
-                basic_corner = 90
-            }
-            corner = basic_corner + 270
-        }
-        if (dif_posX > 0 && dif_posY < 0) {
-            basic_corner = 9 * dif_posX_abs / hipotenuse
-            if (basic_corner > 90) {
-                basic_corner = 90
-            }
-            corner = basic_corner
-        }
+        // corner = 0
+        // hipotenuse = Math.sqrt((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2))
+        // if (dif_posX > 0 && dif_posY > 0) {
+        //     basic_corner = 9 * dif_posY_abs / hipotenuse
+        //     if (basic_corner > 90) {
+        //         basic_corner = 90
+        //     }
+        //     corner = basic_corner + 90
+        // }
+        // if (dif_posX < 0 && dif_posY > 0) {
+        //     basic_corner = 9 * dif_posX_abs / hipotenuse
+        //     if (basic_corner > 90) {
+        //         basic_corner = 90
+        //     }
+        //     corner = basic_corner + 180
+        // }
+        // if (dif_posX < 0 && dif_posY < 0) {
+        //     basic_corner = 9 * dif_posY_abs / hipotenuse
+        //     if (basic_corner > 90) {
+        //         basic_corner = 90
+        //     }
+        //     corner = basic_corner + 270
+        // }
+        // if (dif_posX > 0 && dif_posY < 0) {
+        //     basic_corner = 9 * dif_posX_abs / hipotenuse
+        //     if (basic_corner > 90) {
+        //         basic_corner = 90
+        //     }
+        //     corner = basic_corner
+        // }
         console_debug.innerHTML += "Screen " + screen_width + "x" + screen_height +
             "<br>Cursor X: " + cursorX_move + ", Y: " + cursorY_move +
             "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
