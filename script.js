@@ -298,13 +298,16 @@ document.addEventListener("DOMContentLoaded", () => {
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
     let play_game = setInterval(game_tick, 20)
+    let spawning_enemies = setInterval(spawn_enemy, 5000)
     menu_btn.onclick = () => {
         menu.classList.toggle('show')
         clearInterval(play_game)
+        clearInterval(spawning_enemies)
     }
     play_btn.onclick = () => {
         menu.classList.toggle('show')
         play_game = setInterval(game_tick, 20)
+        spawning_enemies = setInterval(spawn_enemy, 5000)
     }
 
 
@@ -343,7 +346,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function getRndInteger(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    setInterval(spawn_enemy, 2000)
     let spawnX = 0
     let spawnY = 0
     console_debug.innerHTML += "<br>Margins: top: " + margin_top + ", bottom: " + margin_bottom +
