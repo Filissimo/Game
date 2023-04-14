@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dif_posY = +(cursorY_move_touch - joystick_centerY)
         dif_posX_abs = Math.abs(dif_posX)
         dif_posY_abs = Math.abs(dif_posY)
-        if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.2) {
+        if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
             // corner = 0
             // hipotenuse = Math.sqrt((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2))
             // if (dif_posX > 0 && dif_posY > 0) {
