@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
-    let game_speed = 25
+    let game_speed = 20
     let play_game = setInterval(game_tick, game_speed)
     let spawning_enemies = setInterval(spawn_enemy, 3000)
     menu_btn.onclick = () => {
@@ -724,7 +724,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 real_dif_Y = this_e_posY - other_e_Y
                 dif_X = Math.abs(real_dif_X)
                 dif_Y = Math.abs(real_dif_Y)
-                if (dif_X < 40 && dif_Y < 40) {
+                if (dif_X < 35 && dif_Y < 35) {
                     // console_debug.innerHTML += '<br>Collision detected with: ' + other_enemy_id +
                     //     ". Dif_X: " + dif_X + ", dif_Y: " + dif_Y
                     switch (other_e_direction) {
