@@ -70,9 +70,11 @@ body
             justify-content: space-between
             position: absolute
             border: 1px solid rgb(139, 66, 17)
-            #shoot
+            #shoot, #melee
                 font-size: 1.5rem
                 font-weight: 900
+                border-radius: 100%
+                background-image: radial-gradient(rgb(255, 255, 255)55%, rgb(0, 0, 0))
             #joystick
                 display: flex
                 justify-content: center
@@ -141,7 +143,7 @@ body.high
         #play_buttons
             left: 3px
             width: calc(calc(var(--screen_width) * 1px) - 14px)
-            #joystick, #shoot
+            #joystick, #shoot, #melee
                 width: calc(var(--console_size) + 28px)
                 height: calc(var(--console_size) + 28px)
 
