@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let orientation = NaN
     let new_orientation = NaN
     let joystick = document.getElementById("joystick")
+    let shoot_btn = document.getElementById("shoot")
+    let melee_btn = document.getElementById("melee")
     let joystick_centerX = 0
     let joystick_centerY = 0
     let play_field = document.getElementById("play_field")
@@ -43,6 +45,15 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="enemy invisible">
                 <div class="id">${i}</div>
                 <div class="direction invisible"></div>
+            </div>
+        `
+    }
+    for (i = 0; i < 10; i++) {
+        play_field.innerHTML += `
+            <div class="bullet invisible">
+                <div class="id">${i}</div>
+                <div class="dirX"></div>
+                <div class="dirY"></div>
             </div>
         `
     }
@@ -141,11 +152,16 @@ document.addEventListener("DOMContentLoaded", () => {
         margin_bottom = screen_height - 25 - console_height - additional_margin_Y
     }
 
+    shoot_x = 0
+    shoot_y = 0
+
     function move_cursor_touch() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
         dif_posX = +(cursorX_move_touch - joystick_centerX)
         dif_posY = +(cursorY_move_touch - joystick_centerY)
+        shoot_x = dif_posX
+        shoot_y = dif_posY
         dif_posX_abs = Math.abs(dif_posX)
         dif_posY_abs = Math.abs(dif_posY)
         if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
@@ -290,6 +306,26 @@ document.addEventListener("DOMContentLoaded", () => {
         return sin
     }
 
+    let all_bullets = document.querySelectorAll('.bullet')
+    shoot_btn.onclick = () => {
+        let invisible_bullet = ''
+        for (bullet of all_bullets) {
+            if (bullet.classList.contains("invisible")) {
+                invisible_bullet = bullet
+                break
+            }
+        }
+        if (invisible_bullet) {
+            player_posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
+            player_posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
+            invisible_bullet.classList.remove('invisible')
+            invisible_bullet.classList.add('visible')
+            invisible_bullet.setAttribute('style', `top: ${Math.round(player_posY - 5)}px; left: ${Math.round(player_posX - 5)}px`)
+            invisible_bullet.querySelector('.dirX').innerHTML = shoot_x
+            invisible_bullet.querySelector('.dirY').innerHTML = shoot_y
+        }
+    }
+
     let show_debug = document.getElementById('show_debug')
     show_debug.onclick = () => {
         console_debug.classList.toggle("invisible")
@@ -397,6 +433,25 @@ document.addEventListener("DOMContentLoaded", () => {
         enemy_moves()
         enemies_collide()
         collide_with_me()
+        bullet_flies()
+    }
+    function bullet_flies() {
+        for (bullet of all_bullets) {
+            if (bullet.classList.contains('visible')) {
+                dirX = bullet.querySelector('.dirX').innerHTML
+                dirY = bullet.querySelector('.dirY').innerHTML
+                if (dirX == '0' && dirY == '0') {
+                    dirY = - joystick_radius * speed * 5
+                }
+                posX_px = bullet.style.left
+                posY_px = bullet.style.top
+                posX = +posX_px.slice(0, posX_px.length - 2)
+                posY = +posY_px.slice(0, posY_px.length - 2)
+                new_posX = posX + (dirX / 30)
+                new_posY = posY + (dirY / 30)
+                bullet.setAttribute('style', `top: ${new_posY}px; left: ${new_posX}px`)
+            }
+        }
     }
     function enemy_moves() {
         for (enemy of all_enemies) {
