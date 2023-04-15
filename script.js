@@ -27,9 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let enemy_limit = 20
     let bullet_limit = 20
-    let speed = 0.1
+    let player_speed = 2
     let game_speed = 20
-    let bullet_speed = 10
+    let bullet_speed = 3
     let spawn_interval = 1000
 
     let console_debug = document.getElementById("debug")
@@ -160,55 +160,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     shoot_x = 0
-    shoot_y = 0
+    shoot_y = - bullet_speed * player_speed
+    dif_posX = 0
+    dif_posY = player_speed
 
     function move_cursor_touch() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
-        dif_posX = +(cursorX_move_touch - joystick_centerX)
-        dif_posY = +(cursorY_move_touch - joystick_centerY)
-        shoot_x = dif_posX
-        shoot_y = dif_posY
+        dif_posX_raw = +(cursorX_move_touch - joystick_centerX)
+        dif_posY_raw = +(cursorY_move_touch - joystick_centerY)
+        hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
+        dif_posX = dif_posX_raw / hepotinuse * player_speed
+        dif_posY = dif_posY_raw / hepotinuse * player_speed
+        console_debug.innerHTML += "dif_posX: " + dif_posX.toFixed(2) + ", dif_posY: " + dif_posY.toFixed(2) + "<br>"
+        shoot_x = dif_posX * bullet_speed
+        shoot_y = dif_posY * bullet_speed
         dif_posX_abs = Math.abs(dif_posX)
         dif_posY_abs = Math.abs(dif_posY)
         if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
-            // corner = 0
-            // hipotenuse = Math.sqrt((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2))
-            // if (dif_posX > 0 && dif_posY > 0) {
-            //     basic_corner = 9 * dif_posY_abs / hipotenuse
-            //     if (basic_corner > 90) {
-            //         basic_corner = 90
-            //     }
-            //     corner = basic_corner + 90
-            // }
-            // if (dif_posX < 0 && dif_posY > 0) {
-            //     basic_corner = 9 * dif_posX_abs / hipotenuse
-            //     if (basic_corner > 90) {
-            //         basic_corner = 90
-            //     }
-            //     corner = basic_corner + 180
-            // }
-            // if (dif_posX < 0 && dif_posY < 0) {
-            //     basic_corner = 9 * dif_posY_abs / hipotenuse
-            //     if (basic_corner > 90) {
-            //         basic_corner = 90
-            //     }
-            //     corner = basic_corner + 270
-            // }
-            // if (dif_posX > 0 && dif_posY < 0) {
-            //     basic_corner = 9 * dif_posX_abs / hipotenuse
-            //     if (basic_corner > 90) {
-            //         basic_corner = 90
-            //     }
-            //     corner = basic_corner
-            // }
-            // console_debug.innerHTML += "<br>Screen " + screen_width + "x" + screen_height +
-            //     "<br>Cursor X: " + cursorX_move_touch + ", Y: " + cursorY_move_touch +
-            //     "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
-            ratio_x = get_sin(dif_posX, dif_posY)
-            ratio_y = get_sin(dif_posY, dif_posX)
-            new_posX = posX + ratio_x * speed
-            new_posY = posY + ratio_y * speed
+            new_posX = posX + dif_posX
+            new_posY = posY + dif_posY
             if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
                 if (new_posX > margin_right) {
                     new_posX = margin_right
@@ -217,7 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 document.documentElement.style.setProperty('--posX', new_posX)
-                // document.documentElement.style.setProperty('--corner', Math.round(corner))
             }
             if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
                 if (new_posY < margin_top) {
@@ -274,8 +244,8 @@ document.addEventListener("DOMContentLoaded", () => {
         //     "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
         ratio_x = get_sin(dif_posX, dif_posY)
         ratio_y = get_sin(dif_posY, dif_posX)
-        new_posX = posX + ratio_x * speed
-        new_posY = posY + ratio_y * speed
+        new_posX = posX + ratio_x * player_speed
+        new_posY = posY + ratio_y * player_speed
         additional_margin_X = 0
         if (console_width > 0) {
             additional_margin_X = 15
@@ -311,6 +281,12 @@ document.addEventListener("DOMContentLoaded", () => {
         hepotinuse = Math.sqrt(catet1_squared + catet2_squared)
         sin = catet1 / hepotinuse
         return sin
+    }
+    function get_hepotinuse(catet1, catet2) {
+        catet1_squared = catet1 * catet1
+        catet2_squared = catet2 * catet2
+        hepotinuse = Math.sqrt(catet1_squared + catet2_squared)
+        return hepotinuse
     }
 
     let all_bullets = document.querySelectorAll('.bullet')
@@ -450,11 +426,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function bullet_flies() {
         for (bullet of all_bullets) {
             if (bullet.classList.contains('visible')) {
-                dirX = bullet.querySelector('.dirX').innerHTML
-                dirY = bullet.querySelector('.dirY').innerHTML
-                if (dirX == '0' && dirY == '0') {
-                    dirY = - joystick_radius * speed * 4
-                }
+                dirX = +bullet.querySelector('.dirX').innerHTML
+                dirY = +bullet.querySelector('.dirY').innerHTML
                 posX_px = bullet.style.left
                 posY_px = bullet.style.top
                 posX = +posX_px.slice(0, posX_px.length - 2)
@@ -473,8 +446,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 bullet.querySelector('.dirX').innerHTML = dirX
                 bullet.querySelector('.dirY').innerHTML = dirY
-                new_posX = posX + (dirX / bullet_speed)
-                new_posY = posY + (dirY / bullet_speed)
+                new_posX = posX + (dirX)
+                new_posY = posY + (dirY)
                 bullet.setAttribute('style', `top: ${new_posY}px; left: ${new_posX}px`)
             }
         }
