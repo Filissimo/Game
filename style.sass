@@ -27,7 +27,6 @@ body
         top: calc(calc(var(--posY) - 20) * 1px)
         z-index: 10
         transform: rotate(calc(var(--corner) * 1deg))
-
     #console
         display: flex
         position: fixed
@@ -35,14 +34,14 @@ body
         border: 3px solid rgb(19, 189, 0)
         background-color: rgb(241, 255, 134)
         #debug
-            font-size: 1.4rem
+            font-size: 1rem
             position: fixed
             top: 0px
-            left: 0px
+            left: 20px
+            width: calc(calc(var(--screen_width) * 1px) - 55px)
             text-align: center
             padding: 7px
             background-color: rgba(255, 0, 0, 0.274)
-            width: 100vw
             z-index: 10
         #menu
             position: fixed
@@ -88,7 +87,6 @@ body
                     z-index: 100
                     border-radius: 100%
                 
-
     #play_field
         position: fixed
         padding: 20px
@@ -122,9 +120,6 @@ body.wide
         flex-direction: column
         #menu.show
             left: 80px
-        #debug
-            left: calc(calc(var(--console_size) + 70px))
-            width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) + 115px))
         #play_buttons
             flex-direction: column
             align-items: center
@@ -150,9 +145,6 @@ body.high
             top: calc(calc(0px - var(--screen_height) * 1px) + calc(var(--console_size) + 46px))
         #menu.show
             left: 80px
-        #debug
-            left: 102px
-            width: calc(calc(var(--screen_width) * 1px) - 202px)
         #play_buttons
             left: 3px
             width: calc(calc(var(--screen_width) * 1px) - 14px)

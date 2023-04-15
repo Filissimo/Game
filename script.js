@@ -195,9 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
             //     }
             //     corner = basic_corner
             // }
-            console_debug.innerHTML += "<br>Screen " + screen_width + "x" + screen_height +
-                "<br>Cursor X: " + cursorX_move_touch + ", Y: " + cursorY_move_touch +
-                "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
+            // console_debug.innerHTML += "<br>Screen " + screen_width + "x" + screen_height +
+            //     "<br>Cursor X: " + cursorX_move_touch + ", Y: " + cursorY_move_touch +
+            //     "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
             ratio_x = get_sin(dif_posX, dif_posY)
             ratio_y = get_sin(dif_posY, dif_posX)
             new_posX = posX + ratio_x * speed
@@ -220,9 +220,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 document.documentElement.style.setProperty('--posY', new_posY)
             }
-            console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
-                "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
-                "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
+            // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
+            //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
+            //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
         }
     }
     function move_cursor_mouse() {
@@ -262,9 +262,9 @@ document.addEventListener("DOMContentLoaded", () => {
         //     }
         //     corner = basic_corner
         // }
-        console_debug.innerHTML += "Screen " + screen_width + "x" + screen_height +
-            "<br>Cursor X: " + cursorX_move + ", Y: " + cursorY_move +
-            "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
+        // console_debug.innerHTML += "Screen " + screen_width + "x" + screen_height +
+        //     "<br>Cursor X: " + cursorX_move + ", Y: " + cursorY_move +
+        //     "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
         ratio_x = get_sin(dif_posX, dif_posY)
         ratio_y = get_sin(dif_posY, dif_posX)
         new_posX = posX + ratio_x * speed
@@ -294,9 +294,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             document.documentElement.style.setProperty('--posY', new_posY)
         }
-        console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
-            "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
-            "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
+        // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
+        //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
+        //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
     }
     function get_sin(catet1, catet2) {
         catet1_squared = Math.abs(catet1) ^ 2
@@ -333,7 +333,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
-    let play_game = setInterval(game_tick, 20)
+    let game_speed = 100
+    let play_game = setInterval(game_tick, game_speed)
     let spawning_enemies = setInterval(spawn_enemy, 3000)
     menu_btn.onclick = () => {
         menu.classList.toggle('show')
@@ -342,7 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     play_btn.onclick = () => {
         menu.classList.toggle('show')
-        play_game = setInterval(game_tick, 20)
+        play_game = setInterval(game_tick, game_speed)
         spawning_enemies = setInterval(spawn_enemy, 3000)
     }
 
@@ -384,8 +385,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     let spawnX = 0
     let spawnY = 0
-    console_debug.innerHTML += "<br>Margins: top: " + margin_top + ", bottom: " + margin_bottom +
-        ", left: " + margin_left + ", right: " + margin_right
+    // console_debug.innerHTML += "<br>Margins: top: " + margin_top + ", bottom: " + margin_bottom +
+    //     ", left: " + margin_left + ", right: " + margin_right
     function spawn_enemy() {
         let invisible_enemy = ''
         for (enemy of all_enemies) {
@@ -427,13 +428,19 @@ document.addEventListener("DOMContentLoaded", () => {
             invisible_enemy.querySelector('.direction').innerHTML = direction
         }
     }
-
+    
     function game_tick() {
-        console_debug.innerHTML = ""
+        let console_debug_HTML = console_debug.innerHTML
+        let console_debug_length = console_debug_HTML.length
+        if (console_debug_length > 200) {
+            console_debug_HTML = console_debug_HTML.slice(1, console_debug_length)
+        }
+        console_debug.innerHTML = console_debug_HTML
         enemy_moves()
         enemies_collide()
         collide_with_me()
         bullet_flies()
+        bullet_collides()
     }
     function bullet_flies() {
         for (bullet of all_bullets) {
@@ -441,15 +448,60 @@ document.addEventListener("DOMContentLoaded", () => {
                 dirX = bullet.querySelector('.dirX').innerHTML
                 dirY = bullet.querySelector('.dirY').innerHTML
                 if (dirX == '0' && dirY == '0') {
-                    dirY = - joystick_radius * speed * 5
+                    dirY = - joystick_radius * speed * 4
                 }
                 posX_px = bullet.style.left
                 posY_px = bullet.style.top
                 posX = +posX_px.slice(0, posX_px.length - 2)
                 posY = +posY_px.slice(0, posY_px.length - 2)
+                if (posX < margin_left - 15) {
+                    dirX = - dirX
+                }
+                if (posX > margin_right + 5) {
+                    dirX = - dirX
+                }
+                if (posY < margin_top - 15) {
+                    dirY = - dirY
+                }
+                if (posY > margin_bottom + 5) {
+                    dirY = - dirY
+                }
+                bullet.querySelector('.dirX').innerHTML = dirX
+                bullet.querySelector('.dirY').innerHTML = dirY
                 new_posX = posX + (dirX / 30)
                 new_posY = posY + (dirY / 30)
                 bullet.setAttribute('style', `top: ${new_posY}px; left: ${new_posX}px`)
+            }
+        }
+    }
+    function bullet_collides() {
+        for (bullet of all_bullets) {
+            if (bullet.classList.contains('visible')) {
+                for (enemy of all_enemies) {
+                    if (enemy.classList.contains('visible')) {
+                        bullet_X_px = bullet.style.left
+                        bullet_Y_px = bullet.style.top
+                        bullet_X = +bullet_X_px.slice(0, bullet_X_px.length - 2)
+                        bullet_Y = +bullet_Y_px.slice(0, bullet_Y_px.length - 2)
+                        enemy_X_px = enemy.style.left
+                        enemy_Y_px = enemy.style.top
+                        enemy_X = +enemy_X_px.slice(0, enemy_X_px.length - 2)
+                        enemy_Y = +enemy_Y_px.slice(0, enemy_Y_px.length - 2)
+                        real_dif_X = bullet_X - enemy_X
+                        real_dif_Y = bullet_Y - enemy_Y
+                        dif_X = Math.abs(real_dif_X)
+                        dif_Y = Math.abs(real_dif_Y)
+                        if (real_dif_X < 35 && real_dif_Y < 35 &&
+                            real_dif_X > - 5 && real_dif_Y > - 5) {
+                            console_debug.innerHTML += '<br>Collision detected. Dif_X: ' +
+                            real_dif_X.toFixed(2) + ", dif_Y: " + real_dif_Y.toFixed(2)
+                            bullet.classList.add("invisible")
+                            bullet.classList.remove("visible")
+                            enemy.classList.add("invisible")
+                            enemy.classList.remove("visible")
+                        }
+                    }
+                }
             }
         }
     }
@@ -514,148 +566,143 @@ document.addEventListener("DOMContentLoaded", () => {
     function enemies_collide() {
         for (this_enemy of all_enemies) {
             if (this_enemy.classList.contains('visible')) {
-                collide_with_this(this_enemy)
-            }
-        }
-    }
-    function collide_with_this(this_enemy) {
-        if (!this_enemy.classList.contains('just_collided')) {
-            this_e_direction = this_enemy.querySelector('.direction').innerHTML
-            this_e_posX_px = this_enemy.style.left
-            this_e_posY_px = this_enemy.style.top
-            this_e_posX = +this_e_posX_px.slice(0, this_e_posX_px.length - 2)
-            this_e_posY = +this_e_posY_px.slice(0, this_e_posY_px.length - 2)
-            for (other_enemy of all_enemies) {
-                if (other_enemy.classList.contains('visible')) {
-                    other_enemy_id = other_enemy.querySelector('.id').innerHTML
-                    this_enemy_id = this_enemy.querySelector('.id').innerHTML
-                    if (this_enemy_id != other_enemy_id) {
-                        other_e_direction = other_enemy.querySelector('.direction').innerHTML
-                        other_e_X_px = other_enemy.style.left
-                        other_e_Y_px = other_enemy.style.top
-                        other_e_X = +other_e_X_px.slice(0, other_e_X_px.length - 2)
-                        other_e_Y = +other_e_Y_px.slice(0, other_e_Y_px.length - 2)
-                        real_dif_X = this_e_posX - other_e_X
-                        real_dif_Y = this_e_posY - other_e_Y
-                        dif_X = Math.abs(real_dif_X)
-                        dif_Y = Math.abs(real_dif_Y)
-                        // console_debug.innerHTML += "<br>Enemy Id: " + this_enemy_id + " X: " + this_e_posX + " Y: " + this_e_posY +
-                        //     ", direction: " + this_e_direction +
-                        //     "<br>Other enemy Id: " + other_enemy_id + " X: " + other_e_X + " Y: " + other_e_Y
-                        if (dif_X < 40 && dif_Y < 40) {
-                            console_debug.innerHTML += '<br>Collision detected with: ' + other_enemy_id +
-                                ". Dif_X: " + dif_X + ", dif_Y: " + dif_Y
-                            // let bounce = 1
-                            switch (this_e_direction) {
-                                case "0":
-                                    if (dif_X > dif_Y) {
-                                        if (real_dif_X < 0) {
-                                            this_e_direction = 3
-                                            if (other_e_direction == 2) {
-                                                other_e_direction = 1
+                this_e_direction = this_enemy.querySelector('.direction').innerHTML
+                this_e_posX_px = this_enemy.style.left
+                this_e_posY_px = this_enemy.style.top
+                this_e_posX = +this_e_posX_px.slice(0, this_e_posX_px.length - 2)
+                this_e_posY = +this_e_posY_px.slice(0, this_e_posY_px.length - 2)
+                for (other_enemy of all_enemies) {
+                    if (other_enemy.classList.contains('visible')) {
+                        other_enemy_id = other_enemy.querySelector('.id').innerHTML
+                        this_enemy_id = this_enemy.querySelector('.id').innerHTML
+                        if (this_enemy_id != other_enemy_id) {
+                            other_e_direction = other_enemy.querySelector('.direction').innerHTML
+                            other_e_X_px = other_enemy.style.left
+                            other_e_Y_px = other_enemy.style.top
+                            other_e_X = +other_e_X_px.slice(0, other_e_X_px.length - 2)
+                            other_e_Y = +other_e_Y_px.slice(0, other_e_Y_px.length - 2)
+                            real_dif_X = this_e_posX - other_e_X
+                            real_dif_Y = this_e_posY - other_e_Y
+                            dif_X = Math.abs(real_dif_X)
+                            dif_Y = Math.abs(real_dif_Y)
+                            // console_debug.innerHTML += "<br>Enemy Id: " + this_enemy_id + " X: " + this_e_posX + " Y: " + this_e_posY +
+                            //     ", direction: " + this_e_direction +
+                            //     "<br>Other enemy Id: " + other_enemy_id + " X: " + other_e_X + " Y: " + other_e_Y
+                            if (dif_X < 40 && dif_Y < 40) {
+                                // console_debug.innerHTML += '<br>Collision detected with: ' + other_enemy_id +
+                                //     ". Dif_X: " + dif_X + ", dif_Y: " + dif_Y
+                                // let bounce = 1
+                                switch (this_e_direction) {
+                                    case "0":
+                                        if (dif_X > dif_Y) {
+                                            if (real_dif_X < 0) {
+                                                this_e_direction = 3
+                                                if (other_e_direction == 2) {
+                                                    other_e_direction = 1
+                                                }
+                                                if (other_e_direction == 3) {
+                                                    other_e_direction = 0
+                                                }
+                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
                                             }
-                                            if (other_e_direction == 3) {
-                                                other_e_direction = 0
+                                        } else {
+                                            if (real_dif_Y > 0) {
+                                                this_e_direction = 1
+                                                if (other_e_direction == 2) {
+                                                    other_e_direction = 3
+                                                }
+                                                if (other_e_direction == 1) {
+                                                    other_e_direction = 0
+                                                }
+                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
                                             }
-                                            // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
                                         }
-                                    } else {
-                                        if (real_dif_Y > 0) {
-                                            this_e_direction = 1
-                                            if (other_e_direction == 2) {
-                                                other_e_direction = 3
+                                        break
+                                    case "1":
+                                        if (dif_X > dif_Y) {
+                                            if (real_dif_X < 0) {
+                                                this_e_direction = 2
+                                                if (other_e_direction == 2) {
+                                                    other_e_direction = 1
+                                                }
+                                                if (other_e_direction == 1) {
+                                                    other_e_direction = 0
+                                                }
+                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
                                             }
-                                            if (other_e_direction == 1) {
-                                                other_e_direction = 0
+                                        } else {
+                                            if (real_dif_Y < 0) {
+                                                this_e_direction = 0
+                                                if (other_e_direction == 0) {
+                                                    other_e_direction = 1
+                                                }
+                                                if (other_e_direction == 3) {
+                                                    other_e_direction = 2
+                                                }
+                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
                                             }
-                                            // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
                                         }
-                                    }
-                                    break
-                                case "1":
-                                    if (dif_X > dif_Y) {
-                                        if (real_dif_X < 0) {
-                                            this_e_direction = 2
-                                            if (other_e_direction == 2) {
-                                                other_e_direction = 1
+                                        break
+                                    case "2":
+                                        if (dif_X > dif_Y) {
+                                            if (real_dif_X > 0) {
+                                                this_e_direction = 1
+                                                if (other_e_direction == 1) {
+                                                    other_e_direction = 2
+                                                }
+                                                if (other_e_direction == 0) {
+                                                    other_e_direction = 3
+                                                }
+                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
                                             }
-                                            if (other_e_direction == 1) {
-                                                other_e_direction = 0
+                                        } else {
+                                            if (real_dif_Y < 0) {
+                                                this_e_direction = 3
+                                                if (other_e_direction == 0) {
+                                                    other_e_direction = 1
+                                                }
+                                                if (other_e_direction == 3) {
+                                                    other_e_direction = 2
+                                                }
+                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
                                             }
-                                            // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
                                         }
-                                    } else {
-                                        if (real_dif_Y < 0) {
-                                            this_e_direction = 0
-                                            if (other_e_direction == 0) {
-                                                other_e_direction = 1
+                                        break
+                                    case "3":
+                                        if (dif_X > dif_Y) {
+                                            if (real_dif_X > 0) {
+                                                this_e_direction = 0
+                                                if (other_e_direction == 0) {
+                                                    other_e_direction = 3
+                                                }
+                                                if (other_e_direction == 1) {
+                                                    other_e_direction = 2
+                                                }
+                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
                                             }
-                                            if (other_e_direction == 3) {
-                                                other_e_direction = 2
+                                        } else {
+                                            if (real_dif_Y > 0) {
+                                                this_e_direction = 2
+                                                if (other_e_direction == 1) {
+                                                    other_e_direction = 0
+                                                }
+                                                if (other_e_direction == 2) {
+                                                    other_e_direction = 3
+                                                }
+                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
                                             }
-                                            // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
                                         }
-                                    }
-                                    break
-                                case "2":
-                                    if (dif_X > dif_Y) {
-                                        if (real_dif_X > 0) {
-                                            this_e_direction = 1
-                                            if (other_e_direction == 1) {
-                                                other_e_direction = 2
-                                            }
-                                            if (other_e_direction == 0) {
-                                                other_e_direction = 3
-                                            }
-                                            // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
-                                        }
-                                    } else {
-                                        if (real_dif_Y < 0) {
-                                            this_e_direction = 3
-                                            if (other_e_direction == 0) {
-                                                other_e_direction = 1
-                                            }
-                                            if (other_e_direction == 3) {
-                                                other_e_direction = 2
-                                            }
-                                            // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
-                                        }
-                                    }
-                                    break
-                                case "3":
-                                    if (dif_X > dif_Y) {
-                                        if (real_dif_X > 0) {
-                                            this_e_direction = 0
-                                            if (other_e_direction == 0) {
-                                                other_e_direction = 3
-                                            }
-                                            if (other_e_direction == 1) {
-                                                other_e_direction = 2
-                                            }
-                                            // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
-                                        }
-                                    } else {
-                                        if (real_dif_Y > 0) {
-                                            this_e_direction = 2
-                                            if (other_e_direction == 1) {
-                                                other_e_direction = 0
-                                            }
-                                            if (other_e_direction == 2) {
-                                                other_e_direction = 3
-                                            }
-                                            // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
-                                        }
-                                    }
-                                    break
+                                        break
+                                }
+                                if (other_e_direction == -1) {
+                                    other_e_direction = 3
+                                }
+                                if (other_e_direction == 4) {
+                                    other_e_direction = 0
+                                }
+                                this_enemy.querySelector('.direction').innerHTML = this_e_direction
+                                other_enemy.querySelector('.direction').innerHTML = other_e_direction
                             }
-                            if (other_e_direction == -1) {
-                                other_e_direction = 3
-                            }
-                            if (other_e_direction == 4) {
-                                other_e_direction = 0
-                            }
-                            this_enemy.querySelector('.direction').innerHTML = this_e_direction
-                            other_enemy.querySelector('.direction').innerHTML = other_e_direction
                         }
                     }
                 }
@@ -678,8 +725,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 dif_X = Math.abs(real_dif_X)
                 dif_Y = Math.abs(real_dif_Y)
                 if (dif_X < 40 && dif_Y < 40) {
-                    console_debug.innerHTML += '<br>Collision detected with: ' + other_enemy_id +
-                        ". Dif_X: " + dif_X + ", dif_Y: " + dif_Y
+                    // console_debug.innerHTML += '<br>Collision detected with: ' + other_enemy_id +
+                    //     ". Dif_X: " + dif_X + ", dif_Y: " + dif_Y
                     switch (other_e_direction) {
                         case "0":
                             if (dif_X > dif_Y) {
