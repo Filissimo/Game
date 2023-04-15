@@ -24,6 +24,13 @@ function printMousePos(e) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    let enemy_limit = 20
+    let bullet_limit = 20
+    let speed = 0.1
+    let game_speed = 20
+    let bullet_speed = 10
+
     let console_debug = document.getElementById("debug")
     let html = document.querySelector("html")
     let body = document.querySelector("body")
@@ -40,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let joystick_centerX = 0
     let joystick_centerY = 0
     let play_field = document.getElementById("play_field")
-    let enemy_limit = 20
     for (i = 0; i < enemy_limit; i++) {
         play_field.innerHTML += `
             <div class="enemy invisible">
@@ -49,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `
     }
-    let bullet_limit = 20
     for (i = 0; i < bullet_limit; i++) {
         play_field.innerHTML += `
             <div class="bullet invisible">
@@ -119,7 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let start_moving = ''
 
-    let speed = 0.1
 
     joystick.onmouseover = () => {
         clearInterval(start_moving)
@@ -335,7 +339,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
-    let game_speed = 20
     let play_game = ''
     let spawning_enemies = ''
     menu_btn.onclick = () => {
@@ -348,7 +351,6 @@ document.addEventListener("DOMContentLoaded", () => {
         play_game = setInterval(game_tick, game_speed)
         spawning_enemies = setInterval(spawn_enemy, 3000)
     }
-
 
     let fullscreen_on_btn = document.querySelector(".fullscreen_on")
     let fullscreen_off_btn = document.querySelector(".fullscreen_off")
@@ -470,8 +472,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 bullet.querySelector('.dirX').innerHTML = dirX
                 bullet.querySelector('.dirY').innerHTML = dirY
-                new_posX = posX + (dirX / 20)
-                new_posY = posY + (dirY / 20)
+                new_posX = posX + (dirX / bullet_speed)
+                new_posY = posY + (dirY / bullet_speed)
                 bullet.setAttribute('style', `top: ${new_posY}px; left: ${new_posX}px`)
             }
         }
