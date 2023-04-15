@@ -432,7 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function game_tick() {
         let console_debug_HTML = console_debug.innerHTML
         let console_debug_length = console_debug_HTML.length
-        if (console_debug_length > 200) {
+        if (console_debug_length > 1000) {
             console_debug_HTML = console_debug_HTML.slice(1, console_debug_length)
         }
         console_debug.innerHTML = console_debug_HTML
