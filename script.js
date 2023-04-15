@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
-    let game_speed = 100
+    let game_speed = 25
     let play_game = setInterval(game_tick, game_speed)
     let spawning_enemies = setInterval(spawn_enemy, 3000)
     menu_btn.onclick = () => {
