@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let speed = 0.1
     let game_speed = 20
     let bullet_speed = 10
+    let spawn_interval = 1000
 
     let console_debug = document.getElementById("debug")
     let html = document.querySelector("html")
@@ -349,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
     play_btn.onclick = () => {
         menu.classList.toggle('show')
         play_game = setInterval(game_tick, game_speed)
-        spawning_enemies = setInterval(spawn_enemy, 3000)
+        spawning_enemies = setInterval(spawn_enemy, spawn_interval)
     }
 
     let fullscreen_on_btn = document.querySelector(".fullscreen_on")
