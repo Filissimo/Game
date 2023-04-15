@@ -334,8 +334,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
     let game_speed = 20
-    let play_game = setInterval(game_tick, game_speed)
-    let spawning_enemies = setInterval(spawn_enemy, 3000)
+    let play_game = ''
+    let spawning_enemies = ''
     menu_btn.onclick = () => {
         menu.classList.toggle('show')
         clearInterval(play_game)
@@ -468,8 +468,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 bullet.querySelector('.dirX').innerHTML = dirX
                 bullet.querySelector('.dirY').innerHTML = dirY
-                new_posX = posX + (dirX / 30)
-                new_posY = posY + (dirY / 30)
+                new_posX = posX + (dirX / 20)
+                new_posY = posY + (dirY / 20)
                 bullet.setAttribute('style', `top: ${new_posY}px; left: ${new_posX}px`)
             }
         }

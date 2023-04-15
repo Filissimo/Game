@@ -48,11 +48,24 @@ body
             display: flex
             flex-direction: column
             position: absolute
-            border: 1px solid rgb(73, 79, 53)
-            width: calc(var(--console_size) + 30px)
-            left: calc(-40px - var(--console_size))
+            width: calc(calc(var(--screen_width) - 100) * 1px)
+            left:  calc(calc(var(--screen_width) - 50) * calc(0px - 1px))
             z-index: 1000
             transition: all 500ms
+            p
+                position: relative
+                left: - 30px
+                width: calc(calc(var(--screen_width) - 59) * 1px)
+                background-color: #000000d7
+                color: #ffffff
+                padding: 0.5rem
+                text-align: center
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+                border: 3px solid #d90000
+                span
+                    font-weight: bold
+                    font-size: 1.2rem
+                    color: #ffffff
             #menu_btn
                 position: fixed
                 left: 2px
@@ -87,6 +100,7 @@ body
                     z-index: 100
                     border-radius: 100%
                 
+
     #play_field
         position: fixed
         padding: 20px
@@ -119,7 +133,7 @@ body.wide
         width: var(--console_size)
         flex-direction: column
         #menu.show
-            left: 80px
+            left: 45px
         #play_buttons
             flex-direction: column
             align-items: center
@@ -144,7 +158,7 @@ body.high
         #menu
             top: calc(calc(0px - var(--screen_height) * 1px) + calc(var(--console_size) + 46px))
         #menu.show
-            left: 80px
+            left: 45px
         #play_buttons
             left: 3px
             width: calc(calc(var(--screen_width) * 1px) - 14px)
