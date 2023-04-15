@@ -172,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
         hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
         dif_posX = dif_posX_raw / hepotinuse * player_speed
         dif_posY = dif_posY_raw / hepotinuse * player_speed
-        console_debug.innerHTML += "dif_posX: " + dif_posX.toFixed(2) + ", dif_posY: " + dif_posY.toFixed(2) + "<br>"
         shoot_x = dif_posX * bullet_speed
         shoot_y = dif_posY * bullet_speed
         dif_posX_abs = Math.abs(dif_posX)
