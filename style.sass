@@ -71,7 +71,6 @@ body
             position: absolute
             border: 1px solid rgb(139, 66, 17)
             #shoot, #melee
-                font-size: 1.5rem
                 font-weight: 900
                 border-radius: 100%
                 background-image: radial-gradient(rgb(255, 255, 255)55%, rgb(0, 0, 0))
@@ -118,11 +117,15 @@ body.wide
             width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) + 115px))
         #play_buttons
             flex-direction: column
+            align-items: center
             top: 40px
             height: calc(calc(var(--screen_height) * 1px) - 54px)
             #joystick, #shoot
                 width: calc(var(--console_size) - 6px)
                 height: calc(var(--console_size) - 6px)
+            #shoot, #melee
+                width: calc(var(--console_size) / 2 - 6px)
+                height: calc(var(--console_size) / 2 - 6px)
     #play_field
         height: calc(calc(var(--screen_height) * 1px) - 60px)
         width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) + 76px))
@@ -143,9 +146,13 @@ body.high
         #play_buttons
             left: 3px
             width: calc(calc(var(--screen_width) * 1px) - 14px)
-            #joystick, #shoot, #melee
+            align-items: center
+            #joystick
                 width: calc(var(--console_size) + 28px)
                 height: calc(var(--console_size) + 28px)
+            #shoot, #melee
+                width: calc(var(--console_size) / 2 + 28px)
+                height: calc(var(--console_size) / 2 + 28px)
 
     #play_field
         width: calc(calc(var(--screen_width) * 1px) - 60px)
