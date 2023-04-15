@@ -40,7 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let joystick_centerX = 0
     let joystick_centerY = 0
     let play_field = document.getElementById("play_field")
-    for (i = 0; i < 10; i++) {
+    let enemy_limit = 20
+    for (i = 0; i < enemy_limit; i++) {
         play_field.innerHTML += `
             <div class="enemy invisible">
                 <div class="id">${i}</div>
@@ -48,7 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `
     }
-    for (i = 0; i < 10; i++) {
+    let bullet_limit = 20
+    for (i = 0; i < bullet_limit; i++) {
         play_field.innerHTML += `
             <div class="bullet invisible">
                 <div class="id">${i}</div>
