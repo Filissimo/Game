@@ -50,14 +50,23 @@ document.addEventListener("DOMContentLoaded", () => {
     player_text_display.style.left = 27 - (player_text_display.innerHTML.length * 7) + 'px'
     reset_player_visuals()
     function player_health_upgr(percentage) {
+        if (percentage < 0.1) {
+            percentage = 0.1
+        }
         player_health_max = player_health_max + (player_health_max_upgr * player_regen / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_health_bonus_upgr(damage, percentage) {
-        player_health_max = player_health_max + (player_health_max_upgr * player_regen * damage * 5 / (percentage))
+        if (percentage < 0.1) {
+            percentage = 0.1
+        }
+        player_health_max = player_health_max + (player_health_max_upgr * player_regen * damage / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_regeneration_upgr(percentage) {
+        if (percentage < 0.1) {
+            percentage = 0.1
+        }
         player_regen = player_regen + (player_regen_upgr * player_regen / (percentage))
         player.querySelector(".regen").innerHTML = player_regen
         console_debug.innerHTML = "Regen upgraded: " + (player_regen_upgr * player_regen / (percentage)).toFixed(7) +
