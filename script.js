@@ -25,7 +25,7 @@ function printMousePos(e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    let game_speed = 30
+    let game_speed = 15
     let player = document.getElementById("cursor_chaser")
     let player_speed
     let player_health
@@ -550,12 +550,12 @@ document.addEventListener("DOMContentLoaded", () => {
             console_debug_HTML = console_debug_HTML.slice(1, console_debug_length)
         }
         console_debug.innerHTML = console_debug_HTML
+        player_regenerates()
         enemy_moves()
         enemies_collide()
         collide_with_me()
         bullet_flies()
         bullet_collides()
-        player_regenerates()
     }
     function player_regenerates() {
         health_div = player.querySelector('.health')
@@ -666,10 +666,10 @@ document.addEventListener("DOMContentLoaded", () => {
         health = +health_div.innerHTML
         health_max = +player.querySelector(".health_max").innerHTML
         health = health - damage
-        if (health <= 0) {
+        if (Math.round(health) <= 0) {
             total_reset()
         } else {
-            text_display.innerHTML = health
+            text_display.innerHTML = Math.round(health)
             text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
             health_div.innerHTML = health
             percentage = health / health_max
