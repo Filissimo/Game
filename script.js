@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let shooting_speed_upgr
     function reset_bullet_stats() {
         bullet_limit = 70
-        bullet_speed = 10
+        bullet_speed = 3
         bullet_speed_upgr = 0.01
         bullet_damage = 1
         bullet_damage_upgr = 0.05
