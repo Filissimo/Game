@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let game_speed = 30
     let bullet_speed = 3
     let spawn_interval = 2000
-    let enemy_health = 3
+    let enemy_health_max = 3
 
     let console_debug = document.getElementById("debug")
     let html = document.querySelector("html")
@@ -57,8 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="dirX invisible"></div>
                 <div class="dirY invisible"></div>
                 <div class="colided invisible">0</div>
-                <div class="health invisible">${enemy_health}</div>
-                <div class="health_max invisible">${enemy_health}</div>
+                <div class="health invisible">${enemy_health_max}</div>
+                <div class="health_max invisible">${enemy_health_max}</div>
             </div>
         `
     }
@@ -489,15 +489,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     function enemy_takes_damage(enemy) {
-        health = +enemy.querySelector(".health").innerHTML
+        health_div = enemy.querySelector(".health")
+        health = +health_div.innerHTML
         health_max = +enemy.querySelector(".health_max").innerHTML
         health--
         if (health <= 0) {
             enemy.classList.add("invisible")
             enemy.classList.remove("visible")
+            health_div.innerHTML = enemy_health_max
         } else {
-            enemy.querySelector(".health").innerHTML = health
-            health_div = enemy.querySelector(".health")
+            health_div.innerHTML = health
             percent = health / health_max
             health_div.style.width = (40 * percent) + "px"
             health_div.style.height = (40 * percent) + "px"
