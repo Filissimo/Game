@@ -113,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let enemy_speed
     let enemy_speed_upgr
     let spawn_interval
+    let spawn_interval_upgr
     let enemy_health_max
     let enemy_health_max_upgr
     let enemy_damage
@@ -121,11 +122,15 @@ document.addEventListener("DOMContentLoaded", () => {
         enemy_limit = 20
         enemy_speed = 1
         enemy_speed_upgr = 0.01
-        spawn_interval = 3000
+        spawn_interval = 1000
+        spawn_interval_upgr = 0.01
         enemy_health_max = 1
         enemy_health_max_upgr = 0.05
         enemy_damage = 1
         enemy_damage_upgr = 0.03
+    }
+    function spawn_interval_increased() {
+        spawn_interval = spawn_interval * spawn_interval_upgr
     }
     reset_enemy_stats()
     function enemy_upgr() {
@@ -679,6 +684,7 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.height = 40 + "px"
             health_div.style.left = 0
             health_div.style.top = 0
+            spawn_interval_increased()
         } else {
             text_display.innerHTML = health
             text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
