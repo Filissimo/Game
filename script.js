@@ -25,12 +25,14 @@ function printMousePos(e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    let enemy_limit = 20
-    let bullet_limit = 20
-    let player_speed = 2
-    let game_speed = 20
+    let enemy_limit = 30
+    let bullet_limit = 30
+    let player_speed = 1
+    let enemy_speed = 4
+    let game_speed = 30
     let bullet_speed = 3
-    let spawn_interval = 1000
+    let spawn_interval = 2000
+    let enemy_health = 3
 
     let console_debug = document.getElementById("debug")
     let html = document.querySelector("html")
@@ -51,8 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
     for (i = 0; i < enemy_limit; i++) {
         play_field.innerHTML += `
             <div class="enemy invisible">
-                <div class="id">${i}</div>
-                <div class="direction invisible"></div>
+                <div class="id" invisible>${i}</div>
+                <div class="dirX invisible"></div>
+                <div class="dirY invisible"></div>
+                <div class="colided invisible">0</div>
+                <div class="health invisible">${enemy_health}</div>
+                <div class="health_max invisible">${enemy_health}</div>
             </div>
         `
     }
@@ -62,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="id">${i}</div>
                 <div class="dirX"></div>
                 <div class="dirY"></div>
+                <div class="damage">1</div>
             </div>
         `
     }
@@ -126,14 +133,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let start_moving = ''
 
 
-    joystick.onmouseover = () => {
-        clearInterval(start_moving)
-        start_moving = setInterval(move_cursor_mouse, 15)
-    }
+    // joystick.onmouseover = () => {
+    //     clearInterval(start_moving)
+    //     start_moving = setInterval(move_cursor_mouse, 15)
+    // }
 
-    joystick.onmouseleave = () => {
-        clearInterval(start_moving)
-    }
+    // joystick.onmouseleave = () => {
+    //     clearInterval(start_moving)
+    // }
     joystick.ontouchmove = () => {
         clearInterval(start_moving)
         start_moving = setInterval(move_cursor_touch, 10)
@@ -365,8 +372,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     let spawnX = 0
     let spawnY = 0
-    // console_debug.innerHTML += "<br>Margins: top: " + margin_top + ", bottom: " + margin_bottom +
-    //     ", left: " + margin_left + ", right: " + margin_right
     function spawn_enemy() {
         let invisible_enemy = ''
         for (enemy of all_enemies) {
@@ -376,15 +381,19 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         if (invisible_enemy) {
+            health = invisible_enemy.querySelector('.health')
             invisible_enemy.classList.remove('invisible')
+            health.classList.remove('invisible')
             invisible_enemy.classList.add('visible')
             let play_field_side = Math.floor(Math.random() * 4)
             let direction = getRndInteger(0, 1)
+            dirX = (Math.random()) * enemy_speed
+            dirY = (Math.random()) * enemy_speed
             switch (play_field_side) {
                 case 0:
                     spawnY = margin_top - 15
                     spawnX = getRndInteger(margin_left, margin_right) - 15
-                    direction = direction + 1
+                    dirY = - dirY
                     break
                 case 1:
                     spawnY = getRndInteger(margin_top, margin_bottom) - 15
@@ -394,21 +403,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 case 2:
                     spawnY = margin_bottom - 25
                     spawnX = getRndInteger(margin_left, margin_right) - 15
-                    direction = direction + 3
+                    dirX = - dirX
                     break
                 case 3:
                     spawnY = getRndInteger(margin_top, margin_bottom) - 15
                     spawnX = margin_left - 15
+                    dirX = - dirX
+                    dirY = - dirY
                     break
             }
-            if (direction == 4) {
-                direction = 0
-            }
             invisible_enemy.setAttribute('style', `top: ${Math.round(spawnY)}px; left: ${Math.round(spawnX)}px`)
-            invisible_enemy.querySelector('.direction').innerHTML = direction
+            invisible_enemy.querySelector('.dirX').innerHTML = dirX
+            invisible_enemy.querySelector('.dirY').innerHTML = dirY
         }
     }
-    
+
     function game_tick() {
         let console_debug_HTML = console_debug.innerHTML
         let console_debug_length = console_debug_HTML.length
@@ -470,215 +479,125 @@ document.addEventListener("DOMContentLoaded", () => {
                         dif_Y = Math.abs(real_dif_Y)
                         if (real_dif_X < 35 && real_dif_Y < 35 &&
                             real_dif_X > - 5 && real_dif_Y > - 5) {
-                            console_debug.innerHTML += '<br>Collision detected. Dif_X: ' +
-                            real_dif_X.toFixed(2) + ", dif_Y: " + real_dif_Y.toFixed(2)
                             bullet.classList.add("invisible")
                             bullet.classList.remove("visible")
-                            enemy.classList.add("invisible")
-                            enemy.classList.remove("visible")
+                            enemy_takes_damage(enemy)
                         }
                     }
                 }
             }
         }
     }
+    function enemy_takes_damage(enemy) {
+        health = +enemy.querySelector(".health").innerHTML
+        health_max = +enemy.querySelector(".health_max").innerHTML
+        health--
+        if (health <= 0) {
+            enemy.classList.add("invisible")
+            enemy.classList.remove("visible")
+        } else {
+            enemy.querySelector(".health").innerHTML = health
+            health_div = enemy.querySelector(".health")
+            percent = health / health_max
+            health_div.style.width = (40 * percent) + "px"
+            health_div.style.height = (40 * percent) + "px"
+            health_div.style.top = (- 20 - 20 * percent) + "px"
+            health_div.style.left = (20 - 20 * percent) + "px"
+        }
+    }
     function enemy_moves() {
         for (enemy of all_enemies) {
             if (enemy.classList.contains('visible')) {
-                direction = enemy.querySelector('.direction').innerHTML
+                dirX = +enemy.querySelector('.dirX').innerHTML
+                dirY = +enemy.querySelector('.dirY').innerHTML
                 e_posX_px = enemy.style.left
                 e_posY_px = enemy.style.top
-                e_posX = +e_posX_px.slice(0, e_posX_px.length - 2)
-                e_posY = +e_posY_px.slice(0, e_posY_px.length - 2)
-                // console_debug.innerHTML += "<br>Enemy X: " + e_posX + " Y: " + e_posY + ", direction: " + direction
-                switch (direction) {
-                    case "0":
-                        if (e_posX > margin_right - 25) {
-                            direction = 3
-                        } else if (e_posY < margin_top - 15) {
-                            direction = 1
-                        }
-                        e_posX = e_posX + 1
-                        e_posY = e_posY - 1
-                        enemy.setAttribute('style', `top: ${Math.round(e_posY)}px; left: ${Math.round(e_posX)}px`)
-                        enemy.querySelector('.direction').innerHTML = direction
-                        break
-                    case "1":
-                        if (e_posX > margin_right - 25) {
-                            direction = 2
-                        } else if (e_posY > margin_bottom - 25) {
-                            direction = 0
-                        }
-                        e_posX = e_posX + 1
-                        e_posY = e_posY + 1
-                        enemy.setAttribute('style', `top: ${Math.round(e_posY)}px; left: ${Math.round(e_posX)}px`)
-                        enemy.querySelector('.direction').innerHTML = direction
-                        break
-                    case "2":
-                        if (e_posX < margin_left - 15) {
-                            direction = 1
-                        } else if (e_posY > margin_bottom - 25) {
-                            direction = 3
-                        }
-                        e_posX = e_posX - 1
-                        e_posY = e_posY + 1
-                        enemy.setAttribute('style', `top: ${Math.round(e_posY)}px; left: ${Math.round(e_posX)}px`)
-                        enemy.querySelector('.direction').innerHTML = direction
-                        break
-                    case "3":
-                        if (e_posX < margin_left - 15) {
-                            direction = 0
-                        } else if (e_posY < margin_top - 15) {
-                            direction = 2
-                        }
-                        e_posX = e_posX - 1
-                        e_posY = e_posY - 1
-                        enemy.setAttribute('style', `top: ${Math.round(e_posY)}px; left: ${Math.round(e_posX)}px`)
-                        enemy.querySelector('.direction').innerHTML = direction
-                        break
+                posX = +e_posX_px.slice(0, e_posX_px.length - 2)
+                posY = +e_posY_px.slice(0, e_posY_px.length - 2)
+                if (posX < margin_left - 15) {
+                    dirX = Math.abs(dirX)
                 }
+                if (posX > margin_right - 25) {
+                    dirX = - Math.abs(dirX)
+                }
+                if (posY < margin_top - 15) {
+                    dirY = Math.abs(dirY)
+                }
+                if (posY > margin_bottom - 25) {
+                    dirY = - Math.abs(dirY)
+                }
+                enemy.querySelector('.dirX').innerHTML = dirX
+                enemy.querySelector('.dirY').innerHTML = dirY
+                colided = +enemy.querySelector('.colided').innerHTML
+                if (colided > 0 ) {
+                    colided--
+                }
+                enemy.querySelector('.colided').innerHTML = colided
+                new_posX = posX + (dirX)
+                new_posY = posY + (dirY)
+                enemy.style.left = new_posX + 'px'
+                enemy.style.top = new_posY + 'px'
             }
         }
     }
     function enemies_collide() {
         for (this_enemy of all_enemies) {
             if (this_enemy.classList.contains('visible')) {
-                this_e_direction = this_enemy.querySelector('.direction').innerHTML
-                this_e_posX_px = this_enemy.style.left
-                this_e_posY_px = this_enemy.style.top
-                this_e_posX = +this_e_posX_px.slice(0, this_e_posX_px.length - 2)
-                this_e_posY = +this_e_posY_px.slice(0, this_e_posY_px.length - 2)
-                for (other_enemy of all_enemies) {
-                    if (other_enemy.classList.contains('visible')) {
-                        other_enemy_id = other_enemy.querySelector('.id').innerHTML
-                        this_enemy_id = this_enemy.querySelector('.id').innerHTML
-                        if (this_enemy_id != other_enemy_id) {
-                            other_e_direction = other_enemy.querySelector('.direction').innerHTML
-                            other_e_X_px = other_enemy.style.left
-                            other_e_Y_px = other_enemy.style.top
-                            other_e_X = +other_e_X_px.slice(0, other_e_X_px.length - 2)
-                            other_e_Y = +other_e_Y_px.slice(0, other_e_Y_px.length - 2)
-                            real_dif_X = this_e_posX - other_e_X
-                            real_dif_Y = this_e_posY - other_e_Y
-                            dif_X = Math.abs(real_dif_X)
-                            dif_Y = Math.abs(real_dif_Y)
-                            // console_debug.innerHTML += "<br>Enemy Id: " + this_enemy_id + " X: " + this_e_posX + " Y: " + this_e_posY +
-                            //     ", direction: " + this_e_direction +
-                            //     "<br>Other enemy Id: " + other_enemy_id + " X: " + other_e_X + " Y: " + other_e_Y
-                            if (dif_X < 40 && dif_Y < 40) {
-                                // console_debug.innerHTML += '<br>Collision detected with: ' + other_enemy_id +
-                                //     ". Dif_X: " + dif_X + ", dif_Y: " + dif_Y
-                                // let bounce = 1
-                                switch (this_e_direction) {
-                                    case "0":
-                                        if (dif_X > dif_Y) {
-                                            if (real_dif_X < 0) {
-                                                this_e_direction = 3
-                                                if (other_e_direction == 2) {
-                                                    other_e_direction = 1
-                                                }
-                                                if (other_e_direction == 3) {
-                                                    other_e_direction = 0
-                                                }
-                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
-                                            }
-                                        } else {
-                                            if (real_dif_Y > 0) {
-                                                this_e_direction = 1
-                                                if (other_e_direction == 2) {
-                                                    other_e_direction = 3
-                                                }
-                                                if (other_e_direction == 1) {
-                                                    other_e_direction = 0
-                                                }
-                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
-                                            }
+                colided = +this_enemy.querySelector(".colided").innerHTML
+                if (colided == 0) {
+                    for (other_enemy of all_enemies) {
+                        if (other_enemy.classList.contains('visible')) {
+                            other_enemy_id = other_enemy.querySelector('.id').innerHTML
+                            this_enemy_id = this_enemy.querySelector('.id').innerHTML
+                            if (this_enemy_id != other_enemy_id) {
+                                this_dirX = this_enemy.querySelector('.dirX').innerHTML
+                                this_dirY = this_enemy.querySelector('.dirY').innerHTML
+                                this_e_posX_px = this_enemy.style.left
+                                this_e_posY_px = this_enemy.style.top
+                                this_e_posX = +this_e_posX_px.slice(0, this_e_posX_px.length - 2)
+                                this_e_posY = +this_e_posY_px.slice(0, this_e_posY_px.length - 2)
+                                other_dirX = other_enemy.querySelector('.dirX').innerHTML
+                                other_dirY = other_enemy.querySelector('.dirY').innerHTML
+                                other_e_X_px = other_enemy.style.left
+                                other_e_Y_px = other_enemy.style.top
+                                other_e_X = +other_e_X_px.slice(0, other_e_X_px.length - 2)
+                                other_e_Y = +other_e_Y_px.slice(0, other_e_Y_px.length - 2)
+                                dif_X = this_e_posX - other_e_X
+                                dif_Y = this_e_posY - other_e_Y
+                                dif_X_abs = Math.abs(dif_X)
+                                dif_Y_abs = Math.abs(dif_Y)
+                                if (dif_X_abs < 40 && dif_Y_abs < 40) {
+                                    new_this_dirX = this_dirX
+                                    new_this_dirY = this_dirY
+                                    new_other_dirX = other_dirX
+                                    new_other_dirY = other_dirY
+
+                                    if (dif_X_abs > dif_Y_abs) {
+                                        if (this_e_posX < other_e_X) {
+                                            new_this_dirX = - Math.abs(other_dirX)
+                                            new_other_dirX = Math.abs(this_dirX)
                                         }
-                                        break
-                                    case "1":
-                                        if (dif_X > dif_Y) {
-                                            if (real_dif_X < 0) {
-                                                this_e_direction = 2
-                                                if (other_e_direction == 2) {
-                                                    other_e_direction = 1
-                                                }
-                                                if (other_e_direction == 1) {
-                                                    other_e_direction = 0
-                                                }
-                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
-                                            }
-                                        } else {
-                                            if (real_dif_Y < 0) {
-                                                this_e_direction = 0
-                                                if (other_e_direction == 0) {
-                                                    other_e_direction = 1
-                                                }
-                                                if (other_e_direction == 3) {
-                                                    other_e_direction = 2
-                                                }
-                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
-                                            }
+                                        if (this_e_posX > other_e_X) {
+                                            new_this_dirX = Math.abs(other_dirX)
+                                            new_other_dirX = - Math.abs(this_dirX)
                                         }
-                                        break
-                                    case "2":
-                                        if (dif_X > dif_Y) {
-                                            if (real_dif_X > 0) {
-                                                this_e_direction = 1
-                                                if (other_e_direction == 1) {
-                                                    other_e_direction = 2
-                                                }
-                                                if (other_e_direction == 0) {
-                                                    other_e_direction = 3
-                                                }
-                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
-                                            }
-                                        } else {
-                                            if (real_dif_Y < 0) {
-                                                this_e_direction = 3
-                                                if (other_e_direction == 0) {
-                                                    other_e_direction = 1
-                                                }
-                                                if (other_e_direction == 3) {
-                                                    other_e_direction = 2
-                                                }
-                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
-                                            }
+                                    } else if (dif_Y_abs > dif_X_abs) {
+                                        if (this_e_posY < other_e_Y) {
+                                            new_this_dirY = - Math.abs(other_dirY)
+                                            new_other_dirY = Math.abs(this_dirY)
                                         }
-                                        break
-                                    case "3":
-                                        if (dif_X > dif_Y) {
-                                            if (real_dif_X > 0) {
-                                                this_e_direction = 0
-                                                if (other_e_direction == 0) {
-                                                    other_e_direction = 3
-                                                }
-                                                if (other_e_direction == 1) {
-                                                    other_e_direction = 2
-                                                }
-                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY - bounce)}px; left: ${Math.round(this_e_posX + bounce)}px`)
-                                            }
-                                        } else {
-                                            if (real_dif_Y > 0) {
-                                                this_e_direction = 2
-                                                if (other_e_direction == 1) {
-                                                    other_e_direction = 0
-                                                }
-                                                if (other_e_direction == 2) {
-                                                    other_e_direction = 3
-                                                }
-                                                // this_enemy.setAttribute('style', `top: ${Math.round(this_e_posY + bounce)}px; left: ${Math.round(this_e_posX - bounce)}px`)
-                                            }
+                                        if (this_e_posY > other_e_Y) {
+                                            new_this_dirY = Math.abs(other_dirY)
+                                            new_other_dirY = - Math.abs(this_dirY)
                                         }
-                                        break
+                                    }
+
+                                    this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
+                                    this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
+                                    this_enemy.querySelector('.colided').innerHTML = 5
+                                    other_enemy.querySelector('.dirX').innerHTML = new_other_dirX
+                                    other_enemy.querySelector('.dirY').innerHTML = new_other_dirY
                                 }
-                                if (other_e_direction == -1) {
-                                    other_e_direction = 3
-                                }
-                                if (other_e_direction == 4) {
-                                    other_e_direction = 0
-                                }
-                                this_enemy.querySelector('.direction').innerHTML = this_e_direction
-                                other_enemy.querySelector('.direction').innerHTML = other_e_direction
                             }
                         }
                     }
@@ -688,69 +607,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function collide_with_me() {
-        this_e_posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX") - 20
-        this_e_posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY") - 20
-        for (other_enemy of all_enemies) {
-            if (other_enemy.classList.contains('visible')) {
-                other_e_direction = other_enemy.querySelector('.direction').innerHTML
-                other_e_X_px = other_enemy.style.left
-                other_e_Y_px = other_enemy.style.top
-                other_e_X = +other_e_X_px.slice(0, other_e_X_px.length - 2)
-                other_e_Y = +other_e_Y_px.slice(0, other_e_Y_px.length - 2)
-                real_dif_X = this_e_posX - other_e_X
-                real_dif_Y = this_e_posY - other_e_Y
-                dif_X = Math.abs(real_dif_X)
-                dif_Y = Math.abs(real_dif_Y)
-                if (dif_X < 35 && dif_Y < 35) {
-                    // console_debug.innerHTML += '<br>Collision detected with: ' + other_enemy_id +
-                    //     ". Dif_X: " + dif_X + ", dif_Y: " + dif_Y
-                    switch (other_e_direction) {
-                        case "0":
-                            if (dif_X > dif_Y) {
-                                if (real_dif_X > 0) {
-                                    other_e_direction = 3
-                                }
-                            } else {
-                                if (real_dif_Y < 0) {
-                                    other_e_direction = 1
-                                }
-                            }
-                            break
-                        case "1":
-                            if (dif_X > dif_Y) {
-                                if (real_dif_X > 0) {
-                                    other_e_direction = 2
-                                }
-                            } else {
-                                if (real_dif_Y > 0) {
-                                    other_e_direction = 0
-                                }
-                            }
-                            break
-                        case "2":
-                            if (dif_X > dif_Y) {
-                                if (real_dif_X < 0) {
-                                    other_e_direction = 1
-                                }
-                            } else {
-                                if (real_dif_Y > 0) {
-                                    other_e_direction = 3
-                                }
-                            }
-                            break
-                        case "3":
-                            if (dif_X > dif_Y) {
-                                if (real_dif_X < 0) {
-                                    other_e_direction = 0
-                                }
-                            } else {
-                                if (real_dif_Y < 0) {
-                                    other_e_direction = 2
-                                }
-                            }
-                            break
+        for (this_enemy of all_enemies) {
+            if (this_enemy.classList.contains('visible')) {
+                other_e_X = +getComputedStyle(document.documentElement).getPropertyValue("--posX") - 20
+                other_e_Y = +getComputedStyle(document.documentElement).getPropertyValue("--posY") - 20
+                this_dirX = this_enemy.querySelector('.dirX').innerHTML
+                this_dirY = this_enemy.querySelector('.dirY').innerHTML
+                this_e_posX_px = this_enemy.style.left
+                this_e_posY_px = this_enemy.style.top
+                this_e_posX = +this_e_posX_px.slice(0, this_e_posX_px.length - 2)
+                this_e_posY = +this_e_posY_px.slice(0, this_e_posY_px.length - 2)
+                dif_X = this_e_posX - other_e_X
+                dif_Y = this_e_posY - other_e_Y
+                dif_X_abs = Math.abs(dif_X)
+                dif_Y_abs = Math.abs(dif_Y)
+                if (dif_X_abs < 40 && dif_Y_abs < 40) {
+                    new_this_dirX = this_dirX
+                    new_this_dirY = this_dirY
+                    new_other_dirX = other_dirX
+                    new_other_dirY = other_dirY
+
+                    if (dif_X_abs > dif_Y_abs) {
+                        if (this_e_posX < other_e_X) {
+                            new_this_dirX = - Math.abs(this_dirX)
+                        }
+                        if (this_e_posX > other_e_X) {
+                            new_this_dirX = Math.abs(this_dirX)
+                        }
+                    } else if (dif_Y_abs > dif_X_abs) {
+                        if (this_e_posY < other_e_Y) {
+                            new_this_dirY = - Math.abs(this_dirY)
+                        }
+                        if (this_e_posY > other_e_Y) {
+                            new_this_dirY = Math.abs(this_dirY)
+                        }
                     }
-                    other_enemy.querySelector('.direction').innerHTML = other_e_direction
+
+                    this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
+                    this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
                 }
             }
         }
