@@ -129,9 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     reset_enemy_stats()
     function enemy_upgr() {
-        enemy_health_max = enemy_health_max + enemy_health_max_upgr
+        enemy_health_max = enemy_health_max + (enemy_health_max * enemy_health_max_upgr)
         enemy_speed = enemy_speed + enemy_speed_upgr
-        enemy_damage = enemy_damage + enemy_damage_upgr
+        enemy_damage = enemy_damage + (enemy_damage * enemy_damage_upgr)
     }
 
     let console_debug = document.getElementById("debug")
