@@ -25,7 +25,7 @@ function printMousePos(e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    let game_speed = 15
+    let game_speed = 30
     let player = document.getElementById("cursor_chaser")
     let player_speed
     let player_health
@@ -65,14 +65,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function reset_player_visuals() {
         health_div = player.querySelector(".health")
+        health_max_div = player.querySelector(".health_max")
         text_display = player.querySelector(".text_display")
-        health = +health_div.innerHTML
-        health_max = +player.querySelector(".health_max").innerHTML
+        text_display.innerHTML = player_health_max
         health_div.innerHTML = player_health_max
+        health_max_div.innerHTML = player_health_max
         health_div.style.width = 50 + "px"
         health_div.style.height = 50 + "px"
         health_div.style.left = 0
         health_div.style.top = 0
+        text_display.style.width = 50 + "px"
+        text_display.style.height = 50 + "px"
+        text_display.style.left = 0
+        text_display.style.top = 10
         text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
     }
     let bullet_limit
@@ -114,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let enemy_damage_upgr
     function reset_enemy_stats() {
         enemy_limit = 20
-        enemy_speed = 2
+        enemy_speed = 1
         enemy_speed_upgr = 0.05
         spawn_interval = 2000
         enemy_health_max = 4
@@ -669,7 +674,7 @@ document.addEventListener("DOMContentLoaded", () => {
         health = +health_div.innerHTML
         health_max = +player.querySelector(".health_max").innerHTML
         health = health - damage
-        if (Math.round(health) <= 0 || health > health_max + 1) {
+        if (health < 0.5 || health == Infinity || health == NaN) {
             total_reset()
         } else {
             text_display.innerHTML = Math.round(health)
