@@ -497,6 +497,10 @@ document.addEventListener("DOMContentLoaded", () => {
             enemy.classList.add("invisible")
             enemy.classList.remove("visible")
             health_div.innerHTML = enemy_health_max
+            health_div.style.width = 40 + "px"
+            health_div.style.height = 40 + "px"
+            health_div.style.left = 0
+            health_div.style.top = - 40 + "px"
         } else {
             health_div.innerHTML = health
             percent = health / health_max
@@ -530,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 enemy.querySelector('.dirX').innerHTML = dirX
                 enemy.querySelector('.dirY').innerHTML = dirY
                 colided = +enemy.querySelector('.colided').innerHTML
-                if (colided > 0 ) {
+                if (colided > 0) {
                     colided--
                 }
                 enemy.querySelector('.colided').innerHTML = colided
