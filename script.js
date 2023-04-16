@@ -575,6 +575,9 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.left = (25 - 25 * percentage) + "px"
             player_health_upgr(percentage)
             player_regeneration_upgr(percentage)
+            if (health > health_max) {
+                health = health_max
+            }
         }
     }
     function bullet_flies() {
@@ -666,7 +669,7 @@ document.addEventListener("DOMContentLoaded", () => {
         health = +health_div.innerHTML
         health_max = +player.querySelector(".health_max").innerHTML
         health = health - damage
-        if (Math.round(health) <= 0) {
+        if (Math.round(health) <= 0 || health > health_max + 1) {
             total_reset()
         } else {
             text_display.innerHTML = Math.round(health)
