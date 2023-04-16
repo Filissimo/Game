@@ -25,7 +25,7 @@ function printMousePos(e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    let game_speed = 30
+    let game_speed = 40
     let player = document.getElementById("cursor_chaser")
     let player_speed
     let player_health
@@ -34,11 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let player_regen
     let player_regen_upgr
     function reset_player_stats() {
-        player_speed = 1
+        player_speed = 2
         player_health = 10
-        player_health_max = 10
+        player_health_max = 100
         player_health_max_upgr = 0.2
-        player_regen = 0.0008
+        player_regen = 0.001
         player_regen_upgr = 0.0002
     }
     reset_player_stats()
@@ -96,15 +96,15 @@ document.addEventListener("DOMContentLoaded", () => {
         bullet_damage = 1
         bullet_damage_upgr = 0.05
         bullet_count = 1
-        bullet_count_upgr = 0.007
+        bullet_count_upgr = 0.01
         shooting_speed = 100
-        shooting_speed_upgr = 0.02
+        shooting_speed_upgr = 0.05
     }
     reset_bullet_stats()
     function bullet_upgr() {
         bullet_damage = bullet_damage + bullet_damage_upgr
         bullet_count = bullet_count + bullet_count_upgr
-        if (shooting_speed > 10) {
+        if (shooting_speed > 2) {
             shooting_speed = shooting_speed - shooting_speed_upgr
         }
         bullet_speed = bullet_speed + bullet_speed_upgr
@@ -120,12 +120,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function reset_enemy_stats() {
         enemy_limit = 20
         enemy_speed = 1
-        enemy_speed_upgr = 0.03
-        spawn_interval = 2000
+        enemy_speed_upgr = 0.02
+        spawn_interval = 1500
         enemy_health_max = 1
-        enemy_health_max_upgr = 1
+        enemy_health_max_upgr = 0.1
         enemy_damage = 1
-        enemy_damage_upgr = 0.02
+        enemy_damage_upgr = 0.1
     }
     reset_enemy_stats()
     function enemy_upgr() {
