@@ -95,8 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
         bullet_speed_upgr = 0.01
         bullet_damage = 1
         bullet_damage_upgr = 0.05
-        bullet_count = 3
-        bullet_count_upgr = 0.002
+        bullet_count = 1
+        bullet_count_upgr = 0.005
         shooting_speed = 100
         shooting_speed_upgr = 0.02
     }
