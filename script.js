@@ -123,14 +123,14 @@ document.addEventListener("DOMContentLoaded", () => {
         enemy_speed = 1
         enemy_speed_upgr = 0.01
         spawn_interval = 1000
-        spawn_interval_upgr = 0.01
+        spawn_interval_upgr = 0.05
         enemy_health_max = 1
         enemy_health_max_upgr = 0.05
         enemy_damage = 1
         enemy_damage_upgr = 0.03
     }
     function spawn_interval_increased() {
-        spawn_interval = spawn_interval * spawn_interval_upgr
+        spawn_interval = spawn_interval + (spawn_interval * spawn_interval_upgr)
     }
     reset_enemy_stats()
     function enemy_upgr() {
