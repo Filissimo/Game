@@ -227,6 +227,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         define_joystick_radius_and_margins()
     }
+    function reset_bullets() {
+        for (bullet of all_bullets) {
+            if (bullet.classList.contains("visible")) {
+                bullet.classList.remove("visible")
+                bullet.classList.add("invisible")
+            }
+        }
+    }
     function reset_enemies() {
         for (enemy of all_enemies) {
             if (enemy.classList.contains("visible")) {
@@ -252,6 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reset_bullet_stats()
         reset_enemy_stats()
         reset_enemies()
+        reset_bullets()
     }
 
     let start_moving = ''
