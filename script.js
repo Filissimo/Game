@@ -25,16 +25,112 @@ function printMousePos(e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    let enemy_limit = 30
-    let bullet_limit = 30
-    let player_speed = 1
-    let enemy_speed = 4
     let game_speed = 30
-    let bullet_speed = 3
-    let spawn_interval = 2000
-    let enemy_health_max = 3
+    let player = document.getElementById("cursor_chaser")
+    let player_speed
+    let player_health
+    let player_health_max
+    let player_health_max_upgr
+    let player_regen
+    let player_regen_upgr
+    function reset_player_stats() {
+        player_speed = 1
+        player_health = 10
+        player_health_max = 10
+        player_health_max_upgr = 0.2
+        player_regen = 0.0008
+        player_regen_upgr = 0.0002
+    }
+    reset_player_stats()
+    player.querySelector(".health").innerHTML = player_health
+    player.querySelector(".health_max").innerHTML = player_health_max
+    player.querySelector(".regen").innerHTML = player_regen
+    player_text_display = player.querySelector(".text_display")
+    player_text_display.innerHTML = player_health
+    player_text_display.style.left = 27 - (player_text_display.innerHTML.length * 7) + 'px'
+    reset_player_visuals()
+    function player_health_upgr(percentage) {
+        player_health_max = player_health_max + (player_health_max_upgr * player_regen / (percentage * percentage * percentage))
+        player.querySelector(".health_max").innerHTML = player_health_max
+    }
+    function player_health_bonus_upgr(damage, percentage) {
+        player_health_max = player_health_max + (player_health_max_upgr * player_regen * damage / (percentage * percentage * percentage))
+        player.querySelector(".health_max").innerHTML = player_health_max
+    }
+    function player_regeneration_upgr(percentage) {
+        player_regen = player_regen + (player_regen_upgr * player_regen / (percentage * percentage * percentage))
+        player.querySelector(".regen").innerHTML = player_regen
+        console_debug.innerHTML = "Regen upgraded: " + (player_regen_upgr * player_regen / (percentage * percentage * percentage)).toFixed(7) +
+            "<br>Percentage: " + percentage.toFixed(2)
+    }
+    function reset_player_visuals() {
+        health_div = player.querySelector(".health")
+        text_display = player.querySelector(".text_display")
+        health = +health_div.innerHTML
+        health_max = +player.querySelector(".health_max").innerHTML
+        health_div.innerHTML = player_health_max
+        health_div.style.width = 50 + "px"
+        health_div.style.height = 50 + "px"
+        health_div.style.left = 0
+        health_div.style.top = 0
+        text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
+    }
+    let bullet_limit
+    let bullet_speed
+    let bullet_speed_upgr
+    let bullet_damage
+    let bullet_damage_upgr
+    let bullet_count
+    let bullet_count_upgr
+    let shooting_speed
+    let shooting_speed_upgr
+    function reset_bullet_stats() {
+        bullet_limit = 70
+        bullet_speed = 10
+        bullet_speed_upgr = 0.01
+        bullet_damage = 1
+        bullet_damage_upgr = 0.05
+        bullet_count = 3
+        bullet_count_upgr = 0.002
+        shooting_speed = 100
+        shooting_speed_upgr = 0.02
+    }
+    reset_bullet_stats()
+    function bullet_upgr() {
+        bullet_damage = bullet_damage + bullet_damage_upgr
+        bullet_count = bullet_count + bullet_count_upgr
+        if (shooting_speed > 10) {
+            shooting_speed = shooting_speed - shooting_speed_upgr
+        }
+        bullet_speed = bullet_speed + bullet_speed_upgr
+    }
+    let enemy_limit
+    let enemy_speed
+    let enemy_speed_upgr
+    let spawn_interval
+    let enemy_health_max
+    let enemy_health_max_upgr
+    let enemy_damage
+    let enemy_damage_upgr
+    function reset_enemy_stats() {
+        enemy_limit = 20
+        enemy_speed = 2
+        enemy_speed_upgr = 0.05
+        spawn_interval = 2000
+        enemy_health_max = 4
+        enemy_health_max_upgr = 0.3
+        enemy_damage = 1
+        enemy_damage_upgr = 0.1
+    }
+    reset_enemy_stats()
+    function enemy_upgr() {
+        enemy_health_max = enemy_health_max + enemy_health_max_upgr
+        enemy_speed = enemy_speed + enemy_speed_upgr
+        enemy_damage = enemy_damage + enemy_damage_upgr
+    }
 
     let console_debug = document.getElementById("debug")
+    let anticlick = document.getElementById("anticlick")
     let html = document.querySelector("html")
     let body = document.querySelector("body")
     let menu = document.getElementById("menu")
@@ -57,8 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="dirX invisible"></div>
                 <div class="dirY invisible"></div>
                 <div class="colided invisible">0</div>
-                <div class="health invisible">${enemy_health_max}</div>
-                <div class="health_max invisible">${enemy_health_max}</div>
+                <div class="health invisible"></div>
+                <div class="health_max invisible"></div>
+                <div class="damage"></div>
+                <div class="text_display"></div>
             </div>
         `
     }
@@ -68,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="id">${i}</div>
                 <div class="dirX"></div>
                 <div class="dirY"></div>
-                <div class="damage">1</div>
+                <div class="damage"></div>
             </div>
         `
     }
@@ -96,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (orientation != new_orientation) {
                 document.documentElement.style.setProperty('--posX', screen_width / 2 + console_width / 2 + 7)
                 document.documentElement.style.setProperty('--posY', screen_height / 2)
-                reset_enemies()
+                total_reset()
             }
             console_height = 0
             orientation = new_orientation
@@ -114,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (orientation != new_orientation) {
                 document.documentElement.style.setProperty('--posX', screen_width / 2)
                 document.documentElement.style.setProperty('--posY', screen_height / 2 - console_height / 2 - 22)
-                reset_enemies()
+                total_reset()
             }
             console_width = 0
             orientation = new_orientation
@@ -128,6 +226,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 enemy.classList.add("invisible")
             }
         }
+    }
+
+    function total_reset() {
+        reset_player_stats()
+        reset_player_visuals()
+        reset_bullet_stats()
+        reset_enemy_stats()
+        reset_enemies()
     }
 
     let start_moving = ''
@@ -297,6 +403,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let all_bullets = document.querySelectorAll('.bullet')
     shoot_btn.onclick = () => {
+        anticlick.classList.remove("invisible")
+        shooting_barrage = setInterval(shoot_bullet, Math.round(shooting_speed))
+        setTimeout(end_barrage, Math.round(shooting_speed) * Math.round(bullet_count) + 1)
+        function end_barrage() {
+            clearInterval(shooting_barrage)
+            anticlick.classList.add("invisible")
+        }
+    }
+    function shoot_bullet() {
         let invisible_bullet = ''
         for (bullet of all_bullets) {
             if (bullet.classList.contains("invisible")) {
@@ -312,6 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
             invisible_bullet.setAttribute('style', `top: ${Math.round(player_posY - 5)}px; left: ${Math.round(player_posX - 5)}px`)
             invisible_bullet.querySelector('.dirX').innerHTML = shoot_x
             invisible_bullet.querySelector('.dirY').innerHTML = shoot_y
+            invisible_bullet.querySelector('.damage').innerHTML = Math.round(bullet_damage)
         }
     }
 
@@ -381,9 +497,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         if (invisible_enemy) {
-            health = invisible_enemy.querySelector('.health')
+            health_div = invisible_enemy.querySelector('.health')
+            health_max_div = invisible_enemy.querySelector('.health_max')
+            text_display = enemy.querySelector(".text_display")
+            damage_div = enemy.querySelector(".damage")
             invisible_enemy.classList.remove('invisible')
-            health.classList.remove('invisible')
+            health_div.classList.remove('invisible')
+            health_max_div.innerHTML = Math.round(enemy_health_max)
+            health_div.innerHTML = Math.round(enemy_health_max)
+            text_display.innerHTML = Math.round(enemy_health_max)
+            damage_div.innerHTML = Math.round(enemy_damage)
+            text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
+            enemy_upgr()
             invisible_enemy.classList.add('visible')
             let play_field_side = Math.floor(Math.random() * 4)
             let direction = getRndInteger(0, 1)
@@ -430,6 +555,27 @@ document.addEventListener("DOMContentLoaded", () => {
         collide_with_me()
         bullet_flies()
         bullet_collides()
+        player_regenerates()
+    }
+    function player_regenerates() {
+        health_div = player.querySelector('.health')
+        health = +health_div.innerHTML
+        health_max = +player.querySelector('.health_max').innerHTML
+        if (health < health_max) {
+            regen = +player.querySelector('.regen').innerHTML
+            health = health + regen
+            player.querySelector('.health').innerHTML = health
+            text_display = player.querySelector('.text_display')
+            text_display.innerHTML = Math.round(health)
+            text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
+            percentage = health / health_max
+            health_div.style.width = (50 * percentage) + "px"
+            health_div.style.height = (50 * percentage) + "px"
+            health_div.style.top = (25 - 25 * percentage) + "px"
+            health_div.style.left = (25 - 25 * percentage) + "px"
+            player_health_upgr(percentage)
+            player_regeneration_upgr(percentage)
+        }
     }
     function bullet_flies() {
         for (bullet of all_bullets) {
@@ -479,20 +625,22 @@ document.addEventListener("DOMContentLoaded", () => {
                         dif_Y = Math.abs(real_dif_Y)
                         if (real_dif_X < 35 && real_dif_Y < 35 &&
                             real_dif_X > - 5 && real_dif_Y > - 5) {
-                            bullet.classList.add("invisible")
-                            bullet.classList.remove("visible")
-                            enemy_takes_damage(enemy)
+                            damage = +bullet.querySelector(".damage").innerHTML
+                            enemy_takes_damage(enemy, damage)
+                            bullet_shows_damage(bullet, damage)
+                            bullet_upgr()
                         }
                     }
                 }
             }
         }
     }
-    function enemy_takes_damage(enemy) {
+    function enemy_takes_damage(enemy, damage) {
         health_div = enemy.querySelector(".health")
+        text_display = enemy.querySelector(".text_display")
         health = +health_div.innerHTML
         health_max = +enemy.querySelector(".health_max").innerHTML
-        health--
+        health = health - damage
         if (health <= 0) {
             enemy.classList.add("invisible")
             enemy.classList.remove("visible")
@@ -500,14 +648,46 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.width = 40 + "px"
             health_div.style.height = 40 + "px"
             health_div.style.left = 0
-            health_div.style.top = - 40 + "px"
+            health_div.style.top = 0
         } else {
+            text_display.innerHTML = health
+            text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
             health_div.innerHTML = health
             percent = health / health_max
             health_div.style.width = (40 * percent) + "px"
             health_div.style.height = (40 * percent) + "px"
-            health_div.style.top = (- 20 - 20 * percent) + "px"
+            health_div.style.top = (20 - 20 * percent) + "px"
             health_div.style.left = (20 - 20 * percent) + "px"
+        }
+    }
+    function player_takes_damage(damage) {
+        health_div = player.querySelector(".health")
+        text_display = player.querySelector(".text_display")
+        health = +health_div.innerHTML
+        health_max = +player.querySelector(".health_max").innerHTML
+        health = health - damage
+        if (health <= 0) {
+            total_reset()
+        } else {
+            text_display.innerHTML = health
+            text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
+            health_div.innerHTML = health
+            percentage = health / health_max
+            health_div.style.width = (50 * percentage) + "px"
+            health_div.style.height = (50 * percentage) + "px"
+            health_div.style.top = (25 - 25 * percentage) + "px"
+            health_div.style.left = (25 - 25 * percentage) + "px"
+            player_health_bonus_upgr(damage, percentage)
+        }
+    }
+    function bullet_shows_damage(bullet, damage) {
+        bullet.classList.remove("visible")
+        damage_div = bullet.querySelector(".damage")
+        bullet.classList.add("show_damage")
+        setTimeout(end_of_bullet, 2000)
+        function end_of_bullet() {
+            bullet.classList.remove("show_damage")
+            bullet.classList.add("invisible")
         }
     }
     function enemy_moves() {
@@ -629,8 +809,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (dif_X_abs < 40 && dif_Y_abs < 40) {
                     new_this_dirX = this_dirX
                     new_this_dirY = this_dirY
-                    new_other_dirX = other_dirX
-                    new_other_dirY = other_dirY
 
                     if (dif_X_abs > dif_Y_abs) {
                         if (this_e_posX < other_e_X) {
@@ -650,6 +828,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
                     this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
+                    damage = Math.round(+this_enemy.querySelector('.damage').innerHTML)
+                    player_takes_damage(damage)
                 }
             }
         }
