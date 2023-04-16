@@ -37,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
         player_speed = 2
         player_health = 10
         player_health_max = 100
-        player_health_max_upgr = 0.2
-        player_regen = 0.001
+        player_health_max_upgr = 0.5
+        player_regen = 0.01
         player_regen_upgr = 0.0002
     }
     reset_player_stats()
