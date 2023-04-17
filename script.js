@@ -34,14 +34,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let player_regen
     let player_regen_upgr
     let player_regen_speed
+    let player_melee_dmg
+    let player_melee_dmg_upgr
     function reset_player_stats() {
         player_speed = 2
         player_health = 100
         player_health_max = 100
-        player_health_max_upgr = 0.01
+        player_health_max_upgr = 0.001
         player_regen = 1
-        player_regen_upgr = 0.03
-        player_regen_speed = 300
+        player_regen_upgr = 0.01
+        player_regen_speed = 80
+        player_melee_dmg = 3
+        player_melee_dmg_upgr = 0.01
     }
     reset_player_stats()
     player.querySelector(".health").innerHTML = player_health
@@ -201,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let joystick_radius = 0
     let all_enemies = play_field.querySelectorAll('.enemy')
 
-    setInterval(set_orientation, 200)
+    setInterval(set_orientation, 1000)
     function set_orientation() {
         screen_width = screen.availWidth
         screen_height = screen.availHeight
@@ -613,8 +617,8 @@ document.addEventListener("DOMContentLoaded", () => {
             regen = +player.querySelector('.regen').innerHTML
             percentage = health / health_max
             bonus_regen = percentage
-            if (percentage < 0.1) {
-                bonus_regen = 0.1
+            if (percentage < 0.2) {
+                bonus_regen = 0.2
             }
             health = health + (regen / bonus_regen)
             player.querySelector('.health').innerHTML = health
@@ -884,8 +888,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
                     this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
-                    damage = Math.round(+this_enemy.querySelector('.damage').innerHTML)
-                    player_takes_damage(damage)
+                    damage_to_player = Math.round(+this_enemy.querySelector('.damage').innerHTML)
+                    player_takes_damage(damage_to_player)
+                    damage_to_enemy = Math.round(Math.round(player_melee_dmg / 3))
+                    enemy_takes_damage(this_enemy, damage_to_enemy)
                 }
             }
         }
