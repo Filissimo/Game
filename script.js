@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
         player_speed = 2
         player_health = 100
         player_health_max = 100
-        player_health_max_upgr = 0.001
+        player_health_max_upgr = 0.003
         player_regen = 1
-        player_regen_upgr = 0.01
-        player_regen_speed = 80
+        player_regen_upgr = 0.003
+        player_regen_speed = 30
         player_melee_dmg = 3
         player_melee_dmg_upgr = 0.03
     }
@@ -849,7 +849,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
                                     this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
-                                    this_enemy.querySelector('.colided').innerHTML = 5
+                                    this_enemy.querySelector('.colided').innerHTML = 0
                                     other_enemy.querySelector('.dirX').innerHTML = new_other_dirX
                                     other_enemy.querySelector('.dirY').innerHTML = new_other_dirY
                                 }
