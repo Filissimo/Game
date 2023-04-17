@@ -38,13 +38,23 @@
 
 body
     #anticlick
-        position: fixed
+        position: absolute
         background-color: #00000000
         top: 0
         left: 0
         z-index: 1000
         width: 100vw
         height: 100vh
+    #score_bar
+        position: fixed
+        top: 0
+        left: 62px
+        z-index: 5
+        width: calc(100vw - 62px)
+        text-align: center
+        font-size: 15px
+        background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.382), rgba(0, 0, 0, 0))
+        text-shadow: 0px 0px 5px rgb(255, 255, 255)
     #gun
         position: relative
         width: 10px
@@ -94,13 +104,12 @@ body
             background-color: rgba(255, 0, 0, 0.274)
             z-index: 10
         #menu
-            position: fixed
             display: flex
-            flex-direction: column
             position: absolute
+            flex-direction: column
             width: calc(calc(var(--screen_width) - 100) * 1px)
             left:  calc(calc(var(--screen_width) - 50) * calc(0px - 1px))
-            z-index: 100
+            z-index: 100 !important
             transition: all 500ms
             p
                 position: relative
@@ -194,6 +203,7 @@ body
             z-index: 40
             background-color: #00000000
             .damage
+                border-radius: 100%
                 position: absolute
                 z-index: 40
                 animation-name: show_damage

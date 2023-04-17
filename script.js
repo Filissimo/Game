@@ -25,7 +25,10 @@ function printMousePos(e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    let game_speed = 50
+    let game_speed = 30
+    let last_game_score = 0
+    let present_game_score = 0
+    let best_game_score = 0
     let player = document.getElementById("cursor_chaser")
     let player_speed
     let player_health
@@ -45,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player_regen_upgr = 0.003
         player_regen_speed = 30
         player_melee_dmg = 3
-        player_melee_dmg_upgr = 0.03
+        player_melee_dmg_upgr = 0.08
     }
     reset_player_stats()
     player.querySelector(".health").innerHTML = player_health
@@ -158,6 +161,26 @@ document.addEventListener("DOMContentLoaded", () => {
         enemy_health_max = enemy_health_max + (enemy_health_max * enemy_health_max_upgr)
         enemy_speed = enemy_speed + enemy_speed_upgr
         enemy_damage = enemy_damage + (enemy_damage * enemy_damage_upgr)
+    }
+
+    function show_big_number(number) {
+        number = number.toString()
+        number_to_show = number
+        if (number.length > 4) {
+            number_to_show = number.slice(0, number.length - 3) + "k"
+        }
+        if (number.length > 7) {
+            number_to_show = number.slice(0,  number.length - 6) + "m"
+        }
+        return number_to_show
+    }
+    
+    let score_bar = document.getElementById("score_bar")
+    function show_scores(score) {
+        score_to_show = show_big_number(score)
+        last_game_score_to_show = show_big_number(last_game_score)
+        best_game_score_to_show = show_big_number(best_game_score)
+        score_bar.innerHTML = `Last game score: ${last_game_score_to_show}, Current score: ${score_to_show}, Best score: ${best_game_score_to_show}`
     }
 
     let console_debug = document.getElementById("debug")
@@ -279,6 +302,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+    function reset_score() {
+        if (best_game_score < present_game_score) {
+            best_game_score = Math.round(present_game_score)
+            last_game_score = Math.round(present_game_score)
+            present_game_score = 0
+        }
+        
+    }
 
     function total_reset() {
         reset_player_stats()
@@ -287,6 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
         reset_enemy_stats()
         reset_enemies()
         reset_bullets()
+        reset_score()
     }
 
     let start_moving = ''
@@ -496,12 +528,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let spawning_enemies = ''
     menu_btn.onclick = () => {
         menu.classList.toggle('show')
+        score_bar.classList.toggle('invisible')
         clearInterval(play_game_movement)
         clearInterval(play_game_regen)
         clearInterval(spawning_enemies)
     }
     play_btn.onclick = () => {
         menu.classList.toggle('show')
+        score_bar.classList.toggle('invisible')
         play_game_movement = setInterval(game_tick_movement, game_speed)
         play_game_regen = setInterval(game_tick_regen, game_speed * player_regen_speed)
         spawning_enemies = setInterval(spawn_enemy, spawn_interval)
@@ -719,6 +753,8 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.left = 0
             health_div.style.top = 0
             spawn_interval_increased()
+            present_game_score = present_game_score + (health_max * player_health / player_health_max)
+            show_scores(Math.round(present_game_score))
         } else {
             text_display.innerHTML = health
             text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
