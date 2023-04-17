@@ -170,11 +170,11 @@ document.addEventListener("DOMContentLoaded", () => {
             number_to_show = number.slice(0, number.length - 3) + "k"
         }
         if (number.length > 7) {
-            number_to_show = number.slice(0,  number.length - 6) + "m"
+            number_to_show = number.slice(0, number.length - 6) + "m"
         }
         return number_to_show
     }
-    
+
     let score_bar = document.getElementById("score_bar")
     function show_scores(score) {
         score_to_show = show_big_number(score)
@@ -305,10 +305,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function reset_score() {
         if (best_game_score < present_game_score) {
             best_game_score = Math.round(present_game_score)
-            last_game_score = Math.round(present_game_score)
-            present_game_score = 0
         }
-        
+        last_game_score = Math.round(present_game_score)
+        present_game_score = 0
     }
 
     function total_reset() {
