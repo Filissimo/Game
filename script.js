@@ -770,16 +770,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 posX = +e_posX_px.slice(0, e_posX_px.length - 2)
                 posY = +e_posY_px.slice(0, e_posY_px.length - 2)
                 if (posX < margin_left - 15) {
-                    dirX = Math.abs(dirX)
+                    dirX = Math.abs(dirX) * (1 + enemy_speed_upgr)
                 }
                 if (posX > margin_right - 25) {
-                    dirX = - Math.abs(dirX)
+                    dirX = - Math.abs(dirX) * (1 + enemy_speed_upgr)
                 }
                 if (posY < margin_top - 15) {
-                    dirY = Math.abs(dirY)
+                    dirY = Math.abs(dirY) * (1 + enemy_speed_upgr)
                 }
                 if (posY > margin_bottom - 25) {
-                    dirY = - Math.abs(dirY)
+                    dirY = - Math.abs(dirY) * (1 + enemy_speed_upgr)
                 }
                 enemy.querySelector('.dirX').innerHTML = dirX
                 enemy.querySelector('.dirY').innerHTML = dirY
@@ -829,21 +829,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     if (dif_X_abs > dif_Y_abs) {
                                         if (this_e_posX < other_e_X) {
-                                            new_this_dirX = - Math.abs(other_dirX)
-                                            new_other_dirX = Math.abs(this_dirX)
+                                            new_this_dirX = - Math.abs(other_dirX) * (1 + enemy_speed_upgr)
+                                            new_other_dirX = Math.abs(this_dirX) * (1 + enemy_speed_upgr)
                                         }
                                         if (this_e_posX > other_e_X) {
-                                            new_this_dirX = Math.abs(other_dirX)
-                                            new_other_dirX = - Math.abs(this_dirX)
+                                            new_this_dirX = Math.abs(other_dirX) * (1 + enemy_speed_upgr)
+                                            new_other_dirX = - Math.abs(this_dirX) * (1 + enemy_speed_upgr)
                                         }
                                     } else if (dif_Y_abs > dif_X_abs) {
                                         if (this_e_posY < other_e_Y) {
-                                            new_this_dirY = - Math.abs(other_dirY)
-                                            new_other_dirY = Math.abs(this_dirY)
+                                            new_this_dirY = - Math.abs(other_dirY) * (1 + enemy_speed_upgr)
+                                            new_other_dirY = Math.abs(this_dirY) * (1 + enemy_speed_upgr)
                                         }
                                         if (this_e_posY > other_e_Y) {
-                                            new_this_dirY = Math.abs(other_dirY)
-                                            new_other_dirY = - Math.abs(this_dirY)
+                                            new_this_dirY = Math.abs(other_dirY) * (1 + enemy_speed_upgr)
+                                            new_other_dirY = - Math.abs(this_dirY) * (1 + enemy_speed_upgr)
                                         }
                                     }
 
