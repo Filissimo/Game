@@ -25,7 +25,7 @@ function printMousePos(e) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    let game_speed = 40
+    let game_speed = 50
     let player = document.getElementById("cursor_chaser")
     let player_speed
     let player_health
@@ -33,13 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let player_health_max_upgr
     let player_regen
     let player_regen_upgr
+    let player_regen_speed
     function reset_player_stats() {
         player_speed = 2
-        player_health = 10
+        player_health = 100
         player_health_max = 100
-        player_health_max_upgr = 0.07
-        player_regen = 0.01
-        player_regen_upgr = 0.001
+        player_health_max_upgr = 0.01
+        player_regen = 1
+        player_regen_upgr = 0.03
+        player_regen_speed = 300
     }
     reset_player_stats()
     player.querySelector(".health").innerHTML = player_health
@@ -64,8 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_regeneration_upgr(percentage) {
-        if (percentage < 0.1) {
-            percentage = 0.1
+        if (percentage < 0.02) {
+            percentage = 0.02
         }
         player_regen = player_regen + (player_regen_upgr * player_regen / (percentage))
         player.querySelector(".regen").innerHTML = player_regen
@@ -103,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
         bullet_speed = 3
         bullet_speed_upgr = 0.01
         bullet_damage = 1
-        bullet_damage_upgr = 0.07
+        bullet_damage_upgr = 0.02
         bullet_count = 1
         bullet_count_upgr = 0.005
         shooting_speed = 100
@@ -131,10 +133,10 @@ document.addEventListener("DOMContentLoaded", () => {
         enemy_limit = 20
         enemy_speed = 1
         enemy_speed_upgr = 0.01
-        spawn_interval = 50
-        spawn_interval_upgr = 50
+        spawn_interval = 1000
+        spawn_interval_upgr = 30
         enemy_health_max = 1
-        enemy_health_max_upgr = 0.05
+        enemy_health_max_upgr = 0.025
         enemy_damage = 1
         enemy_damage_upgr = 0.03
     }
@@ -479,16 +481,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
-    let play_game = ''
+    let play_game_regen = ''
+    let play_game_movement = ''
     let spawning_enemies = ''
     menu_btn.onclick = () => {
         menu.classList.toggle('show')
-        clearInterval(play_game)
+        clearInterval(play_game_movement)
+        clearInterval(play_game_regen)
         clearInterval(spawning_enemies)
     }
     play_btn.onclick = () => {
         menu.classList.toggle('show')
-        play_game = setInterval(game_tick, game_speed)
+        play_game_movement = setInterval(game_tick_movement, game_speed)
+        play_game_regen = setInterval(game_tick_regen, game_speed * player_regen_speed)
         spawning_enemies = setInterval(spawn_enemy, spawn_interval)
     }
 
@@ -584,14 +589,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function game_tick() {
+    function game_tick_regen() {
+        player_regenerates()
+    }
+    function game_tick_movement() {
         let console_debug_HTML = console_debug.innerHTML
         let console_debug_length = console_debug_HTML.length
         if (console_debug_length > 1000) {
             console_debug_HTML = console_debug_HTML.slice(1, console_debug_length)
         }
         console_debug.innerHTML = console_debug_HTML
-        player_regenerates()
         enemy_moves()
         enemies_collide()
         collide_with_me()
@@ -604,12 +611,16 @@ document.addEventListener("DOMContentLoaded", () => {
         health_max = +player.querySelector('.health_max').innerHTML
         if (health < health_max) {
             regen = +player.querySelector('.regen').innerHTML
-            health = health + regen
+            percentage = health / health_max
+            bonus_regen = percentage
+            if (percentage < 0.1) {
+                bonus_regen = 0.1
+            }
+            health = health + (regen / bonus_regen)
             player.querySelector('.health').innerHTML = health
             text_display = player.querySelector('.text_display')
             text_display.innerHTML = Math.round(health)
             text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
-            percentage = health / health_max
             health_div.style.width = (50 * percentage) + "px"
             health_div.style.height = (50 * percentage) + "px"
             health_div.style.top = (25 - 25 * percentage) + "px"
