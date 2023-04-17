@@ -180,9 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
         score_to_show = show_big_number(score)
         last_game_score_to_show = show_big_number(last_game_score)
         best_game_score_to_show = show_big_number(best_game_score)
-        score_bar.innerHTML = `<span>Last game score: ${last_game_score_to_show},</span> 
-        Current score: ${score_to_show}, 
-        <span>Best score: ${best_game_score_to_show}</span>`
+        score_bar.innerHTML = `<span>Last game score: ${last_game_score_to_show} --- </span> 
+        Current score: ${score_to_show} 
+        <span> --- Best score: ${best_game_score_to_show}</span>`
     }
 
     let console_debug = document.getElementById("debug")
