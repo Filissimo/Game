@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player_regen_upgr = 0.01
         player_regen_speed = 80
         player_melee_dmg = 3
-        player_melee_dmg_upgr = 0.01
+        player_melee_dmg_upgr = 0.03
     }
     reset_player_stats()
     player.querySelector(".health").innerHTML = player_health
@@ -78,6 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
         console_debug.innerHTML = "Regen upgraded: " + (player_regen_upgr * player_regen / (percentage)).toFixed(7) +
             "<br>Percentage: " + percentage.toFixed(2)
     }
+    function player_melee_dmg_upgrade(percentage) {
+        if (percentage < 0.2) {
+            percentage = 0.2
+        }
+        player_melee_dmg = player_melee_dmg + (player_melee_dmg_upgr / percentage)
+    }
     function reset_player_visuals() {
         health_div = player.querySelector(".health")
         health_max_div = player.querySelector(".health_max")
@@ -93,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         text_display.style.height = 50 + "px"
         text_display.style.left = 0
         text_display.style.top = 10
-        text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
+        text_display.style.left = 25 - (text_display.innerHTML.length * 6) + 'px'
     }
     let bullet_limit
     let bullet_speed
@@ -555,6 +561,10 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.classList.remove('invisible')
             health_max_div.innerHTML = Math.round(enemy_health_max)
             health_div.innerHTML = Math.round(enemy_health_max)
+            rgb1 = 255 - (Math.random() * 50)
+            rgb2 = 0 + (Math.random() * 100)
+            rgb3 = 25 + (Math.random() * 75)
+            health_div.style.background = `rgb(${rgb1},${rgb2},${rgb3})`
             text_display.innerHTML = Math.round(enemy_health_max)
             damage_div.innerHTML = Math.round(enemy_damage)
             text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
@@ -617,18 +627,18 @@ document.addEventListener("DOMContentLoaded", () => {
             regen = +player.querySelector('.regen').innerHTML
             percentage = health / health_max
             bonus_regen = percentage
-            if (percentage < 0.2) {
-                bonus_regen = 0.2
+            health_div.style.width = (50 * percentage) + "px"
+            health_div.style.height = (50 * percentage) + "px"
+            health_div.style.top = (25 - 25 * percentage) + "px"
+            health_div.style.left = (25 - 25 * percentage) + "px"
+            if (percentage < 0.5) {
+                bonus_regen = 0.5
             }
             health = health + (regen / bonus_regen)
             player.querySelector('.health').innerHTML = health
             text_display = player.querySelector('.text_display')
             text_display.innerHTML = Math.round(health)
-            text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
-            health_div.style.width = (50 * percentage) + "px"
-            health_div.style.height = (50 * percentage) + "px"
-            health_div.style.top = (25 - 25 * percentage) + "px"
-            health_div.style.left = (25 - 25 * percentage) + "px"
+            text_display.style.left = 25 - (text_display.innerHTML.length * 6) + 'px'
             player_health_upgr(percentage)
             player_regeneration_upgr(percentage)
             if (health > health_max) {
@@ -730,7 +740,7 @@ document.addEventListener("DOMContentLoaded", () => {
             total_reset()
         } else {
             text_display.innerHTML = Math.round(health)
-            text_display.style.left = 25 - (text_display.innerHTML.length * 7) + 'px'
+            text_display.style.left = 25 - (text_display.innerHTML.length * 6) + 'px'
             health_div.innerHTML = health
             percentage = health / health_max
             health_div.style.width = (50 * percentage) + "px"
@@ -889,6 +899,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
                     this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
                     damage_to_player = Math.round(+this_enemy.querySelector('.damage').innerHTML)
+                    player_melee_dmg_upgrade(1)
                     player_takes_damage(damage_to_player)
                     damage_to_enemy = Math.round(Math.round(player_melee_dmg / 3))
                     enemy_takes_damage(this_enemy, damage_to_enemy)
