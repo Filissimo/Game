@@ -866,21 +866,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     if (dif_X_abs > dif_Y_abs) {
                                         if (this_e_posX < other_e_X) {
-                                            new_this_dirX = - Math.abs(other_dirX) * (1 + enemy_speed_upgr)
-                                            new_other_dirX = Math.abs(this_dirX) * (1 + enemy_speed_upgr)
+                                            new_this_dirX = - Math.abs(other_dirX) + enemy_speed_upgr
+                                            new_other_dirX = Math.abs(this_dirX) + enemy_speed_upgr
                                         }
                                         if (this_e_posX > other_e_X) {
-                                            new_this_dirX = Math.abs(other_dirX) * (1 + enemy_speed_upgr)
-                                            new_other_dirX = - Math.abs(this_dirX) * (1 + enemy_speed_upgr)
+                                            new_this_dirX = Math.abs(other_dirX) + enemy_speed_upgr
+                                            new_other_dirX = - Math.abs(this_dirX) + enemy_speed_upgr
                                         }
                                     } else if (dif_Y_abs > dif_X_abs) {
                                         if (this_e_posY < other_e_Y) {
-                                            new_this_dirY = - Math.abs(other_dirY) * (1 + enemy_speed_upgr)
-                                            new_other_dirY = Math.abs(this_dirY) * (1 + enemy_speed_upgr)
+                                            new_this_dirY = - Math.abs(other_dirY) + enemy_speed_upgr
+                                            new_other_dirY = Math.abs(this_dirY) + enemy_speed_upgr
                                         }
                                         if (this_e_posY > other_e_Y) {
-                                            new_this_dirY = Math.abs(other_dirY) * (1 + enemy_speed_upgr)
-                                            new_other_dirY = - Math.abs(this_dirY) * (1 + enemy_speed_upgr)
+                                            new_this_dirY = Math.abs(other_dirY) + enemy_speed_upgr
+                                            new_other_dirY = - Math.abs(this_dirY) + enemy_speed_upgr
                                         }
                                     }
 
