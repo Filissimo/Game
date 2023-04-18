@@ -403,75 +403,39 @@ document.addEventListener("DOMContentLoaded", () => {
     function move_cursor_mouse() {
         posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
         posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
-        dif_posX = +(cursorX_move - joystick_centerX)
-        dif_posY = +(cursorY_move - joystick_centerY)
+        dif_posX_raw = +(cursorX_move - joystick_centerX)
+        dif_posY_raw = +(cursorY_move - joystick_centerY)
+        hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
+        dif_posX = dif_posX_raw / hepotinuse * player_speed
+        dif_posY = dif_posY_raw / hepotinuse * player_speed
+        shoot_x = dif_posX * bullet_speed
+        shoot_y = dif_posY * bullet_speed
         dif_posX_abs = Math.abs(dif_posX)
         dif_posY_abs = Math.abs(dif_posY)
-        // corner = 0
-        // hipotenuse = Math.sqrt((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2))
-        // if (dif_posX > 0 && dif_posY > 0) {
-        //     basic_corner = 9 * dif_posY_abs / hipotenuse
-        //     if (basic_corner > 90) {
-        //         basic_corner = 90
-        //     }
-        //     corner = basic_corner + 90
-        // }
-        // if (dif_posX < 0 && dif_posY > 0) {
-        //     basic_corner = 9 * dif_posX_abs / hipotenuse
-        //     if (basic_corner > 90) {
-        //         basic_corner = 90
-        //     }
-        //     corner = basic_corner + 180
-        // }
-        // if (dif_posX < 0 && dif_posY < 0) {
-        //     basic_corner = 9 * dif_posY_abs / hipotenuse
-        //     if (basic_corner > 90) {
-        //         basic_corner = 90
-        //     }
-        //     corner = basic_corner + 270
-        // }
-        // if (dif_posX > 0 && dif_posY < 0) {
-        //     basic_corner = 9 * dif_posX_abs / hipotenuse
-        //     if (basic_corner > 90) {
-        //         basic_corner = 90
-        //     }
-        //     corner = basic_corner
-        // }
-        // console_debug.innerHTML += "Screen " + screen_width + "x" + screen_height +
-        //     "<br>Cursor X: " + cursorX_move + ", Y: " + cursorY_move +
-        //     "<br>Character X: " + Math.round(posX) + ", Y: " + Math.round(posY)
-        ratio_x = get_sin(dif_posX, dif_posY)
-        ratio_y = get_sin(dif_posY, dif_posX)
-        new_posX = posX + ratio_x * player_speed
-        new_posY = posY + ratio_y * player_speed
-        additional_margin_X = 0
-        if (console_width > 0) {
-            additional_margin_X = 15
-        }
-        additional_margin_Y = 0
-        if (console_height > 0) {
-            additional_margin_Y = 45
-        }
-        if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
-            if (new_posX > margin_right) {
-                new_posX = margin_right
-            } else if (new_posX < margin_left) {
-                new_posX = margin_left
-            }
+        if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
+            new_posX = posX + dif_posX
+            new_posY = posY + dif_posY
+            if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
+                if (new_posX > margin_right) {
+                    new_posX = margin_right
+                } else if (new_posX < margin_left) {
+                    new_posX = margin_left
+                }
 
-            document.documentElement.style.setProperty('--posX', new_posX)
-        }
-        if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
-            if (new_posY < margin_top) {
-                new_posY = margin_top
-            } else if (new_posY > margin_bottom) {
-                new_posY = margin_bottom
+                document.documentElement.style.setProperty('--posX', new_posX)
             }
-            document.documentElement.style.setProperty('--posY', new_posY)
+            if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
+                if (new_posY < margin_top) {
+                    new_posY = margin_top
+                } else if (new_posY > margin_bottom) {
+                    new_posY = margin_bottom
+                }
+                document.documentElement.style.setProperty('--posY', new_posY)
+            }
+            // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
+            //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
+            //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
         }
-        // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
-        //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
-        //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
     }
     function get_sin(catet1, catet2) {
         catet1_squared = Math.abs(catet1) ^ 2
