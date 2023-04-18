@@ -835,13 +835,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function enemies_collide() {
         for (this_enemy of all_enemies) {
             if (this_enemy.classList.contains('visible')) {
-                colided = +this_enemy.querySelector(".colided").innerHTML
-                if (colided == 0) {
-                    for (other_enemy of all_enemies) {
-                        if (other_enemy.classList.contains('visible')) {
-                            other_enemy_id = other_enemy.querySelector('.id').innerHTML
-                            this_enemy_id = this_enemy.querySelector('.id').innerHTML
-                            if (this_enemy_id != other_enemy_id) {
+                for (other_enemy of all_enemies) {
+                    if (other_enemy.classList.contains('visible')) {
+                        other_enemy_id = other_enemy.querySelector('.id').innerHTML
+                        this_enemy_id = this_enemy.querySelector('.id').innerHTML
+                        if (this_enemy_id != other_enemy_id) {
+                            this_colided = +this_enemy.querySelector(".colided").innerHTML
+                            other_colided = +other_enemy.querySelector(".colided").innerHTML
+                            if (this_colided <= 0 && other_colided <= 0) {
                                 this_dirX = this_enemy.querySelector('.dirX').innerHTML
                                 this_dirY = this_enemy.querySelector('.dirY').innerHTML
                                 this_e_posX_px = this_enemy.style.left
@@ -886,7 +887,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
                                     this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
-                                    this_enemy.querySelector('.colided').innerHTML = 0
+                                    this_enemy.querySelector('.colided').innerHTML = 2
+                                    this_enemy.querySelector('.colided').innerHTML = 2
                                     other_enemy.querySelector('.dirX').innerHTML = new_other_dirX
                                     other_enemy.querySelector('.dirY').innerHTML = new_other_dirY
                                 }
