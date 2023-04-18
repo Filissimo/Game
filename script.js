@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     player.querySelector(".health_max").innerHTML = player_health_max
     player.querySelector(".regen").innerHTML = player_regen
     player_text_display = player.querySelector(".text_display")
-    player_text_display.innerHTML = player_health
+    player_text_display.innerHTML = (player_health)
     player_text_display.style.left = 27 - (player_text_display.innerHTML.length * 7) + 'px'
     reset_player_visuals()
     function player_health_upgr(percentage) {
@@ -149,9 +149,9 @@ document.addEventListener("DOMContentLoaded", () => {
         spawn_interval = 50
         spawn_interval_upgr = 50
         enemy_health_max = 1
-        enemy_health_max_upgr = 0.05
+        enemy_health_max_upgr = 0.04
         enemy_damage = 1
-        enemy_damage_upgr = 0.05
+        enemy_damage_upgr = 0.04
     }
     function spawn_interval_increased() {
         spawn_interval = Math.round(spawn_interval + (spawn_interval_upgr))
@@ -564,7 +564,7 @@ document.addEventListener("DOMContentLoaded", () => {
             rgb2 = 0 + (Math.random() * 100)
             rgb3 = 25 + (Math.random() * 75)
             health_div.style.background = `rgb(${rgb1},${rgb2},${rgb3})`
-            text_display.innerHTML = Math.round(enemy_health_max)
+            text_display.innerHTML = show_big_number(Math.round(enemy_health_max))
             damage_div.innerHTML = Math.round(enemy_damage)
             text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
             enemy_upgr()
@@ -636,8 +636,8 @@ document.addEventListener("DOMContentLoaded", () => {
             health = health + (regen / bonus_regen)
             player.querySelector('.health').innerHTML = health
             text_display = player.querySelector('.text_display')
-            text_display.innerHTML = Math.round(health)
-            text_display.style.left = 25 - (text_display.innerHTML.length * 6) + 'px'
+            text_display.innerHTML = show_big_number(Math.round(health))
+            text_display.style.left = 25 - (text_display.innerHTML.length * 5) + 'px'
             player_health_upgr(percentage)
             player_regeneration_upgr(percentage)
             if (health > health_max) {
@@ -710,6 +710,8 @@ document.addEventListener("DOMContentLoaded", () => {
         health_max = +enemy.querySelector(".health_max").innerHTML
         health = health - damage
         if (health <= 0) {
+            present_game_score = present_game_score + (100 * health_max * (player_health / player_health_max))
+            show_scores(Math.round(present_game_score))
             enemy.classList.add("invisible")
             enemy.classList.remove("visible")
             health_div.innerHTML = enemy_health_max
@@ -718,10 +720,9 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.left = 0
             health_div.style.top = 0
             spawn_interval_increased()
-            present_game_score = present_game_score + (100 * health_max * player_health / player_health_max)
-            show_scores(Math.round(present_game_score))
+            
         } else {
-            text_display.innerHTML = health
+            text_display.innerHTML = show_big_number(health)
             text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
             health_div.innerHTML = health
             percent = health / health_max
@@ -740,7 +741,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (health < 0.5 || health == Infinity || health == NaN) {
             total_reset()
         } else {
-            text_display.innerHTML = Math.round(health)
+            text_display.innerHTML = show_big_number(Math.round(health))
             text_display.style.left = 25 - (text_display.innerHTML.length * 6) + 'px'
             health_div.innerHTML = health
             percentage = health / health_max
