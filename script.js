@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
         spawn_interval = 50
         spawn_interval_upgr = 50
         enemy_health_max = 1
-        enemy_health_max_upgr = 0.01
+        enemy_health_max_upgr = 0.05
         enemy_damage = 1
         enemy_damage_upgr = 0.05
     }
@@ -325,14 +325,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let start_moving = ''
 
 
-    // joystick.onmouseover = () => {
-    //     clearInterval(start_moving)
-    //     start_moving = setInterval(move_cursor_mouse, 15)
-    // }
+    joystick.onmouseover = () => {
+        clearInterval(start_moving)
+        start_moving = setInterval(move_cursor_mouse, 15)
+    }
 
-    // joystick.onmouseleave = () => {
-    //     clearInterval(start_moving)
-    // }
+    joystick.onmouseleave = () => {
+        clearInterval(start_moving)
+    }
     joystick.ontouchmove = () => {
         clearInterval(start_moving)
         start_moving = setInterval(move_cursor_touch, 10)
