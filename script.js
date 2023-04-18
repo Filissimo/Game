@@ -41,12 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let player_melee_dmg_upgr
     function reset_player_stats() {
         player_speed = 2
-        player_health = 100
-        player_health_max = 100
-        player_health_max_upgr = 0.003
+        player_health = 10
+        player_health_max = 10
+        player_health_max_upgr = 0.05
         player_regen = 1
-        player_regen_upgr = 0.003
-        player_regen_speed = 30
+        player_regen_upgr = 0.01
+        player_regen_speed = 10
         player_melee_dmg = 3
         player_melee_dmg_upgr = 0.01
     }
