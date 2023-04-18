@@ -121,8 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
         bullet_damage_upgr = 0.005
         bullet_count = 1
         bullet_count_upgr = 0.01
-        shooting_speed = 500
-        shooting_speed_upgr = 0.02
+        shooting_speed = 300
+        shooting_speed_upgr = 0.01
     }
     reset_bullet_stats()
     function bullet_upgr() {
