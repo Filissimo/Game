@@ -43,12 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
         player_speed = 2
         player_health = 10
         player_health_max = 10
-        player_health_max_upgr = 0.05
+        player_health_max_upgr = 0.1
         player_regen = 1
         player_regen_upgr = 0.001
-        player_regen_speed = 20
+        player_regen_speed = 10
         player_melee_dmg = 3
-        player_melee_dmg_upgr = 0.01
+        player_melee_dmg_upgr = 0.005
     }
     reset_player_stats()
     player.querySelector(".health").innerHTML = player_health
@@ -59,15 +59,15 @@ document.addEventListener("DOMContentLoaded", () => {
     player_text_display.style.left = 27 - (player_text_display.innerHTML.length * 7) + 'px'
     reset_player_visuals()
     function player_health_upgr(percentage) {
-        if (percentage < 0.1) {
-            percentage = 0.1
+        if (percentage < 0.05) {
+            percentage = 0.05
         }
         player_health_max = player_health_max + (player_health_max_upgr / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_health_bonus_upgr(damage, percentage) {
-        if (percentage < 0.1) {
-            percentage = 0.1
+        if (percentage < 0.01) {
+            percentage = 0.01
         }
         player_health_max = player_health_max + (player_health_max_upgr * damage / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let shooting_speed
     let shooting_speed_upgr
     function reset_bullet_stats() {
-        bullet_limit = 50
+        bullet_limit = 70
         bullet_speed = 2
         bullet_speed_upgr = 0.001
         bullet_damage = 1
@@ -833,62 +833,61 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     function enemies_collide() {
-            if (this_enemy.classList.contains('visible')) {
-                colided = +this_enemy.querySelector(".colided").innerHTML
-                if (colided == 0) {
-                    for (other_enemy of all_enemies) {
-                        if (other_enemy.classList.contains('visible')) {
-                            other_enemy_id = other_enemy.querySelector('.id').innerHTML
-                            this_enemy_id = this_enemy.querySelector('.id').innerHTML
-                            if (this_enemy_id != other_enemy_id) {
-                                this_dirX = this_enemy.querySelector('.dirX').innerHTML
-                                this_dirY = this_enemy.querySelector('.dirY').innerHTML
-                                this_e_posX_px = this_enemy.style.left
-                                this_e_posY_px = this_enemy.style.top
-                                this_e_posX = +this_e_posX_px.slice(0, this_e_posX_px.length - 2)
-                                this_e_posY = +this_e_posY_px.slice(0, this_e_posY_px.length - 2)
-                                other_dirX = other_enemy.querySelector('.dirX').innerHTML
-                                other_dirY = other_enemy.querySelector('.dirY').innerHTML
-                                other_e_X_px = other_enemy.style.left
-                                other_e_Y_px = other_enemy.style.top
-                                other_e_X = +other_e_X_px.slice(0, other_e_X_px.length - 2)
-                                other_e_Y = +other_e_Y_px.slice(0, other_e_Y_px.length - 2)
-                                dif_X = this_e_posX - other_e_X
-                                dif_Y = this_e_posY - other_e_Y
-                                dif_X_abs = Math.abs(dif_X)
-                                dif_Y_abs = Math.abs(dif_Y)
-                                if (dif_X_abs < 40 && dif_Y_abs < 40) {
-                                    new_this_dirX = this_dirX
-                                    new_this_dirY = this_dirY
-                                    new_other_dirX = other_dirX
-                                    new_other_dirY = other_dirY
+        if (this_enemy.classList.contains('visible')) {
+            colided = +this_enemy.querySelector(".colided").innerHTML
+            if (colided == 0) {
+                for (other_enemy of all_enemies) {
+                    if (other_enemy.classList.contains('visible')) {
+                        other_enemy_id = other_enemy.querySelector('.id').innerHTML
+                        this_enemy_id = this_enemy.querySelector('.id').innerHTML
+                        if (this_enemy_id != other_enemy_id) {
+                            this_dirX = this_enemy.querySelector('.dirX').innerHTML
+                            this_dirY = this_enemy.querySelector('.dirY').innerHTML
+                            this_e_posX_px = this_enemy.style.left
+                            this_e_posY_px = this_enemy.style.top
+                            this_e_posX = +this_e_posX_px.slice(0, this_e_posX_px.length - 2)
+                            this_e_posY = +this_e_posY_px.slice(0, this_e_posY_px.length - 2)
+                            other_dirX = other_enemy.querySelector('.dirX').innerHTML
+                            other_dirY = other_enemy.querySelector('.dirY').innerHTML
+                            other_e_X_px = other_enemy.style.left
+                            other_e_Y_px = other_enemy.style.top
+                            other_e_X = +other_e_X_px.slice(0, other_e_X_px.length - 2)
+                            other_e_Y = +other_e_Y_px.slice(0, other_e_Y_px.length - 2)
+                            dif_X = this_e_posX - other_e_X
+                            dif_Y = this_e_posY - other_e_Y
+                            dif_X_abs = Math.abs(dif_X)
+                            dif_Y_abs = Math.abs(dif_Y)
+                            if (dif_X_abs < 40 && dif_Y_abs < 40) {
+                                new_this_dirX = this_dirX
+                                new_this_dirY = this_dirY
+                                new_other_dirX = other_dirX
+                                new_other_dirY = other_dirY
 
-                                    if (dif_X_abs > dif_Y_abs) {
-                                        if (this_e_posX < other_e_X) {
-                                            new_this_dirX = - Math.abs(other_dirX) + enemy_speed_upgr
-                                            new_other_dirX = Math.abs(this_dirX) + enemy_speed_upgr
-                                        }
-                                        if (this_e_posX > other_e_X) {
-                                            new_this_dirX = Math.abs(other_dirX) + enemy_speed_upgr
-                                            new_other_dirX = - Math.abs(this_dirX) + enemy_speed_upgr
-                                        }
-                                    } else if (dif_Y_abs > dif_X_abs) {
-                                        if (this_e_posY < other_e_Y) {
-                                            new_this_dirY = - Math.abs(other_dirY) + enemy_speed_upgr
-                                            new_other_dirY = Math.abs(this_dirY) + enemy_speed_upgr
-                                        }
-                                        if (this_e_posY > other_e_Y) {
-                                            new_this_dirY = Math.abs(other_dirY) + enemy_speed_upgr
-                                            new_other_dirY = - Math.abs(this_dirY) + enemy_speed_upgr
-                                        }
+                                if (dif_X_abs > dif_Y_abs) {
+                                    if (this_e_posX < other_e_X) {
+                                        new_this_dirX = - Math.abs(other_dirX) + enemy_speed_upgr
+                                        new_other_dirX = Math.abs(this_dirX) + enemy_speed_upgr
                                     }
-
-                                    this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
-                                    this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
-                                    this_enemy.querySelector('.colided').innerHTML = 0
-                                    other_enemy.querySelector('.dirX').innerHTML = new_other_dirX
-                                    other_enemy.querySelector('.dirY').innerHTML = new_other_dirY
+                                    if (this_e_posX > other_e_X) {
+                                        new_this_dirX = Math.abs(other_dirX) + enemy_speed_upgr
+                                        new_other_dirX = - Math.abs(this_dirX) + enemy_speed_upgr
+                                    }
+                                } else if (dif_Y_abs > dif_X_abs) {
+                                    if (this_e_posY < other_e_Y) {
+                                        new_this_dirY = - Math.abs(other_dirY) + enemy_speed_upgr
+                                        new_other_dirY = Math.abs(this_dirY) + enemy_speed_upgr
+                                    }
+                                    if (this_e_posY > other_e_Y) {
+                                        new_this_dirY = Math.abs(other_dirY) + enemy_speed_upgr
+                                        new_other_dirY = - Math.abs(this_dirY) + enemy_speed_upgr
+                                    }
                                 }
+
+                                this_enemy.querySelector('.dirX').innerHTML = new_this_dirX
+                                this_enemy.querySelector('.dirY').innerHTML = new_this_dirY
+                                this_enemy.querySelector('.colided').innerHTML = 0
+                                other_enemy.querySelector('.dirX').innerHTML = new_other_dirX
+                                other_enemy.querySelector('.dirY').innerHTML = new_other_dirY
                             }
                         }
                     }
