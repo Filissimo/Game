@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player_regen_upgr = 0.003
         player_regen_speed = 30
         player_melee_dmg = 3
-        player_melee_dmg_upgr = 0.08
+        player_melee_dmg_upgr = 0.01
     }
     reset_player_stats()
     player.querySelector(".health").innerHTML = player_health
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         bullet_speed = 3
         bullet_speed_upgr = 0.001
         bullet_damage = 1
-        bullet_damage_upgr = 0.02
+        bullet_damage_upgr = 0.005
         bullet_count = 1
         bullet_count_upgr = 0.005
         shooting_speed = 100
