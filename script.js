@@ -62,14 +62,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (percentage < 0.1) {
             percentage = 0.1
         }
-        player_health_max = player_health_max + (player_health_max_upgr * player_regen / (percentage))
+        player_health_max = player_health_max + (player_health_max_upgr / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_health_bonus_upgr(damage, percentage) {
         if (percentage < 0.1) {
             percentage = 0.1
         }
-        player_health_max = player_health_max + (player_health_max_upgr * player_regen * damage / (percentage))
+        player_health_max = player_health_max + (player_health_max_upgr * damage / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_regeneration_upgr(percentage) {
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (percentage < 0.2) {
             percentage = 0.2
         }
-        player_melee_dmg = player_melee_dmg + (player_melee_dmg_upgr / percentage)
+        player_melee_dmg = player_melee_dmg + (player_melee_dmg_upgr * player_melee_dmg / percentage)
     }
     function reset_player_visuals() {
         health_div = player.querySelector(".health")
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function reset_bullet_stats() {
         bullet_limit = 30
         bullet_speed = 3
-        bullet_speed_upgr = 0.01
+        bullet_speed_upgr = 0.001
         bullet_damage = 1
         bullet_damage_upgr = 0.02
         bullet_count = 1
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     reset_bullet_stats()
     function bullet_upgr() {
-        bullet_damage = bullet_damage + bullet_damage_upgr
+        bullet_damage = bullet_damage + (bullet_damage_upgr * bullet_damage)
         bullet_count = bullet_count + bullet_count_upgr
         if (shooting_speed > 2) {
             shooting_speed = shooting_speed - shooting_speed_upgr
