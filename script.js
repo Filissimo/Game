@@ -114,15 +114,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let shooting_speed
     let shooting_speed_upgr
     function reset_bullet_stats() {
-        bullet_limit = 30
-        bullet_speed = 3
+        bullet_limit = 50
+        bullet_speed = 2
         bullet_speed_upgr = 0.001
         bullet_damage = 1
         bullet_damage_upgr = 0.005
         bullet_count = 1
-        bullet_count_upgr = 0.005
+        bullet_count_upgr = 0.01
         shooting_speed = 100
-        shooting_speed_upgr = 0.05
+        shooting_speed_upgr = 0.02
     }
     reset_bullet_stats()
     function bullet_upgr() {
@@ -143,11 +143,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let enemy_damage
     let enemy_damage_upgr
     function reset_enemy_stats() {
-        enemy_limit = 20
+        enemy_limit = 50
         enemy_speed = 1
         enemy_speed_upgr = 0.01
-        spawn_interval = 30
-        spawn_interval_upgr = 30
+        spawn_interval = 50
+        spawn_interval_upgr = 50
         enemy_health_max = 1
         enemy_health_max_upgr = 0.01
         enemy_damage = 1
@@ -754,7 +754,7 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.left = 0
             health_div.style.top = 0
             spawn_interval_increased()
-            present_game_score = present_game_score + (health_max * player_health / player_health_max)
+            present_game_score = present_game_score + (100 * health_max * player_health / player_health_max)
             show_scores(Math.round(present_game_score))
         } else {
             text_display.innerHTML = health
@@ -833,7 +833,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     function enemies_collide() {
-        for (this_enemy of all_enemies) {
             if (this_enemy.classList.contains('visible')) {
                 colided = +this_enemy.querySelector(".colided").innerHTML
                 if (colided == 0) {
