@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
         player_health_max = 10
         player_health_max_upgr = 0.05
         player_regen = 1
-        player_regen_upgr = 0.01
-        player_regen_speed = 10
+        player_regen_upgr = 0.001
+        player_regen_speed = 20
         player_melee_dmg = 3
         player_melee_dmg_upgr = 0.01
     }
