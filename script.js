@@ -114,14 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let shooting_speed
     let shooting_speed_upgr
     function reset_bullet_stats() {
-        bullet_limit = 70
+        bullet_limit = 30
         bullet_speed = 2
         bullet_speed_upgr = 0.001
         bullet_damage = 1
         bullet_damage_upgr = 0.005
         bullet_count = 1
         bullet_count_upgr = 0.01
-        shooting_speed = 300
+        shooting_speed = 250
         shooting_speed_upgr = 0.01
     }
     reset_bullet_stats()
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let enemy_damage
     let enemy_damage_upgr
     function reset_enemy_stats() {
-        enemy_limit = 50
+        enemy_limit = 10
         enemy_speed = 1
         enemy_speed_upgr = 0.01
         spawn_interval = 50
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
         enemy_health_max = 1
         enemy_health_max_upgr = 0.01
         enemy_damage = 1
-        enemy_damage_upgr = 0.01
+        enemy_damage_upgr = 0.05
     }
     function spawn_interval_increased() {
         spawn_interval = Math.round(spawn_interval + (spawn_interval_upgr))
