@@ -374,6 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
         margin_top = 25
         margin_bottom = screen_height - 25 - console_height - additional_margin_Y
     }
+    changeDirections(player)
     dif_posX = 0
     dif_posY = player_speed
 
