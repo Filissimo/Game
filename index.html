@@ -15,6 +15,9 @@
     <div id="score_bar" class="invisible"></div>
     <div id="cursor_chaser">
         <div id="gun"></div>
+        <div class="dirX invisible">0</div>
+        <div class="dirY invisible">1</div>
+        <div class="speed invisible"></div>
         <div class="text_display"></div>
         <div class="health"></div>
         <div class="health_max invisible"></div>
@@ -35,17 +38,24 @@
             <!-- <a href="scary_page.html">Scary page</a> -->
             <p>
                 <span>Important tips:<br></span>
-                The game is paused (if this page is freshly loaded). If you can't see buttons and "joystick" properly, turn on fullcreen.
+                The game is paused (if this page is freshly loaded). If you can't see buttons and "joystick" properly,
+                turn on fullcreen.
                 To start (or resume) game press "play" button in menu. You can pause game by pressing menu.
                 Shoot button works only when you stand still. Melee doesn't work yet.
             </p>
         </div>
         <div id="play_buttons">
             <button id="shoot">Shoot</button>
-            <button id="melee">Melee</button>
-            <div id="joystick">
-                <div id="joystick_center"></div>
+
+            <div id="directions">
+                <button id="up">&#128314</button>
+                <button id="right">&#128314</button>
+                <button id="left">&#128314</button>
+                <button id="down">&#128314</button>
             </div>
+            <!-- <div id="joystick">
+                <div id="joystick_center"></div>
+            </div> -->
         </div>
     </div>
 </body>

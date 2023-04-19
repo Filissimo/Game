@@ -1,27 +1,27 @@
 
-document.addEventListener('mousemove', e => {
-    cursorX_move = e.x
-    cursorY_move = e.y
-}, { passive: true });
+// document.addEventListener('mousemove', e => {
+//     cursorX_move = e.x
+//     cursorY_move = e.y
+// }, { passive: true });
 
-document.addEventListener('touchmove', e => {
-    var touch = e.touches[0];
-    // get the DOM element
-    var checkbox = document.elementFromPoint(touch.clientX, touch.clientY);
-    // make sure an element was found - some areas on the page may have no elements
-    if (checkbox) {
-        // interact with the DOM element
-        checkbox.checked = !checkbox.checked;
-    }
-    cursorX_move_touch = touch.clientX
-    cursorY_move_touch = touch.clientY
-})
+// document.addEventListener('touchmove', e => {
+//     var touch = e.touches[0];
+//     // get the DOM element
+//     var checkbox = document.elementFromPoint(touch.clientX, touch.clientY);
+//     // make sure an element was found - some areas on the page may have no elements
+//     if (checkbox) {
+//         // interact with the DOM element
+//         checkbox.checked = !checkbox.checked;
+//     }
+//     cursorX_move_touch = touch.clientX
+//     cursorY_move_touch = touch.clientY
+// })
 
-document.addEventListener('click', printMousePos, true);
-function printMousePos(e) {
-    cursorX_click = e.pageX;
-    cursorY_click = e.pageY;
-}
+// document.addEventListener('click', printMousePos, true);
+// function printMousePos(e) {
+//     cursorX_click = e.pageX;
+//     cursorY_click = e.pageY;
+// }
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let present_game_score = 0
     let best_game_score = 0
     let player = document.getElementById("cursor_chaser")
+    let corner
+    let turnSpeed
     let player_speed
     let player_health
     let player_health_max
@@ -40,7 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let player_melee_dmg
     let player_melee_dmg_upgr
     function reset_player_stats() {
-        player_speed = 2
+        corner = 0 // It's angle, but I was dumb, and now I'm too lazy to change the name of the variable
+        turnSpeed = 5
+        player_speed = 0.04
+        player.querySelector('.speed').innerHTML = player_speed
         player_health = 10
         player_health_max = 10
         player_health_max_upgr = 0.1
@@ -51,13 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
         player_melee_dmg_upgr = 0.01
     }
     reset_player_stats()
+    reset_player_visuals()
     player.querySelector(".health").innerHTML = player_health
     player.querySelector(".health_max").innerHTML = player_health_max
     player.querySelector(".regen").innerHTML = player_regen
     player_text_display = player.querySelector(".text_display")
     player_text_display.innerHTML = (player_health)
     player_text_display.style.left = 27 - (player_text_display.innerHTML.length * 7) + 'px'
-    reset_player_visuals()
     function player_health_upgr(percentage) {
         if (percentage < 0.2) {
             percentage = 0.2
@@ -113,9 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let bullet_count_upgr
     let shooting_speed
     let shooting_speed_upgr
+    reset_bullet_stats()
     function reset_bullet_stats() {
         bullet_limit = 30
-        bullet_speed = 2
+        bullet_speed = 0.1
         bullet_speed_upgr = 0.001
         bullet_damage = 1
         bullet_damage_upgr = 0.005
@@ -124,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
         shooting_speed = 250
         shooting_speed_upgr = 0.01
     }
-    reset_bullet_stats()
     function bullet_upgr() {
         bullet_damage = bullet_damage + (bullet_damage_upgr * bullet_damage)
         bullet_count = bullet_count + bullet_count_upgr
@@ -142,9 +147,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let enemy_health_max_upgr
     let enemy_damage
     let enemy_damage_upgr
+    reset_enemy_stats()
     function reset_enemy_stats() {
         enemy_limit = 10
-        enemy_speed = 1
+        enemy_speed = 0.3
         enemy_speed_upgr = 0.01
         spawn_interval = 50
         spawn_interval_upgr = 50
@@ -156,13 +162,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function spawn_interval_increased() {
         spawn_interval = Math.round(spawn_interval + (spawn_interval_upgr))
     }
-    reset_enemy_stats()
     function enemy_upgr() {
         enemy_health_max = enemy_health_max + (enemy_health_max * enemy_health_max_upgr)
         enemy_speed = enemy_speed + enemy_speed_upgr
         enemy_damage = enemy_damage + (enemy_damage * enemy_damage_upgr)
     }
-
     function show_big_number(number) {
         number = number.toString()
         number_to_show = number
@@ -174,8 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return number_to_show
     }
-
-    let score_bar = document.getElementById("score_bar")
     function show_scores(score) {
         score_to_show = show_big_number(score)
         last_game_score_to_show = show_big_number(last_game_score)
@@ -184,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Current score: ${score_to_show} 
         <span> --- Best score: ${best_game_score_to_show}</span>`
     }
-
+    let score_bar = document.getElementById("score_bar")
     let console_debug = document.getElementById("debug")
     let anticlick = document.getElementById("anticlick")
     let html = document.querySelector("html")
@@ -196,11 +198,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let console_height = 0
     let orientation = NaN
     let new_orientation = NaN
-    let joystick = document.getElementById("joystick")
+    // let joystick = document.getElementById("joystick")
     let shoot_btn = document.getElementById("shoot")
-    let melee_btn = document.getElementById("melee")
-    let joystick_centerX = 0
-    let joystick_centerY = 0
+    let up_btn = document.getElementById("up")
+    let down_btn = document.getElementById("down")
+    let right_btn = document.getElementById("right")
+    let left_btn = document.getElementById("left")
+    // let joystick_centerX = 0
+    // let joystick_centerY = 0
     let play_field = document.getElementById("play_field")
     function render_enemies_and_bullets() {
         for (i = 0; i < enemy_limit; i++) {
@@ -209,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="id" invisible>${i}</div>
                 <div class="dirX invisible"></div>
                 <div class="dirY invisible"></div>
+                <div class="speed invisible"></div>
                 <div class="colided invisible">0</div>
                 <div class="health invisible"></div>
                 <div class="health_max invisible"></div>
@@ -223,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="id">${i}</div>
                 <div class="dirX"></div>
                 <div class="dirY"></div>
+                <div class="speed invisible"></div>
                 <div class="damage"></div>
             </div>
         `
@@ -235,6 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let margin_bottom = 0
     let joystick_radius = 0
     let all_enemies = play_field.querySelectorAll('.enemy')
+    let all_bullets = document.querySelectorAll('.bullet')
 
     setInterval(set_orientation, 1000)
     function set_orientation() {
@@ -244,15 +252,22 @@ document.addEventListener("DOMContentLoaded", () => {
             body.classList.remove("high")
             body.classList.add("wide")
             console_width = screen_width * 0.15
-            document.documentElement.style.setProperty('--console_size', console_width + "px")
+            document.documentElement.style.setProperty('--console_size', console_width)
+            document.documentElement.style.setProperty('--dir_btn-size', 2.7)
+            document.documentElement.style.setProperty('--dir_btn-horizontal', -6)
+            document.documentElement.style.setProperty('--dir_btn-vertical', -5.5)
+            document.documentElement.style.setProperty('--dir_btn-bottom', 15)
+            document.documentElement.style.setProperty('--dir_btn-right', 20)
+            document.documentElement.style.setProperty('--dir_btn-additional_bottom', 2)
+            document.documentElement.style.setProperty("--corner", corner)
             joystick_centerX = console_width / 2 + 7
             joystick_centerY = screen_height - console_width / 2 - 8
             document.documentElement.style.setProperty('--screen_width', screen_width)
             document.documentElement.style.setProperty('--screen_height', screen_height)
             new_orientation = "landscape"
             if (orientation != new_orientation) {
-                document.documentElement.style.setProperty('--posX', screen_width / 2 + console_width / 2 + 7)
-                document.documentElement.style.setProperty('--posY', screen_height / 2)
+                player.style.left = (screen_width / 2 + console_width / 2 + 7) + "px"
+                player.style.top = (screen_height / 2) + "px"
                 total_reset()
             }
             console_height = 0
@@ -262,15 +277,22 @@ document.addEventListener("DOMContentLoaded", () => {
             body.classList.remove("wide")
             body.classList.add("high")
             console_height = screen_height * 0.15
-            document.documentElement.style.setProperty('--console_size', console_height + "px")
+            document.documentElement.style.setProperty('--console_size', console_height)
+            document.documentElement.style.setProperty('--dir_btn-size', 2.3)
+            document.documentElement.style.setProperty('--dir_btn-vertical', 5.1)
+            document.documentElement.style.setProperty('--dir_btn-horizontal', 4.1)
+            document.documentElement.style.setProperty('--dir_btn-bottom', 7)
+            document.documentElement.style.setProperty('--dir_btn-right', 3.5)
+            document.documentElement.style.setProperty('--dir_btn-additional_bottom', 1)
+            document.documentElement.style.setProperty("--corner", corner)
             joystick_centerX = screen_width - console_height / 2 - 22
             joystick_centerY = screen_height - console_height / 2 - 22
             document.documentElement.style.setProperty('--screen_width', screen_width)
             document.documentElement.style.setProperty('--screen_height', screen_height)
             new_orientation = "portrait"
             if (orientation != new_orientation) {
-                document.documentElement.style.setProperty('--posX', screen_width / 2)
-                document.documentElement.style.setProperty('--posY', screen_height / 2 - console_height / 2 - 22)
+                player.style.left = (screen_width / 2) + "px"
+                player.style.top = (screen_height / 2 - console_height / 2 - 22) + "px"
                 total_reset()
             }
             console_width = 0
@@ -311,7 +333,6 @@ document.addEventListener("DOMContentLoaded", () => {
         last_game_score = Math.round(present_game_score)
         present_game_score = 0
     }
-
     function total_reset() {
         reset_player_stats()
         reset_player_visuals()
@@ -321,26 +342,22 @@ document.addEventListener("DOMContentLoaded", () => {
         reset_bullets()
         reset_score()
     }
-
     let start_moving = ''
+    // joystick.onmouseover = () => {
+    //     clearInterval(start_moving)
+    //     start_moving = setInterval(move_cursor_mouse, 15)
+    // }
 
-
-    joystick.onmouseover = () => {
-        clearInterval(start_moving)
-        start_moving = setInterval(move_cursor_mouse, 15)
-    }
-
-    joystick.onmouseleave = () => {
-        clearInterval(start_moving)
-    }
-    joystick.ontouchmove = () => {
-        clearInterval(start_moving)
-        start_moving = setInterval(move_cursor_touch, 10)
-    }
-    joystick.ontouchend = () => {
-        clearInterval(start_moving)
-    }
-
+    // joystick.onmouseleave = () => {
+    //     clearInterval(start_moving)
+    // }
+    // joystick.ontouchmove = () => {
+    //     clearInterval(start_moving)
+    //     start_moving = setInterval(move_cursor_touch, 10)
+    // }
+    // joystick.ontouchend = () => {
+    //     clearInterval(start_moving)
+    // }
     function define_joystick_radius_and_margins() {
         let additional_margin_X = 0
         let additional_margin_Y = 0
@@ -357,109 +374,114 @@ document.addEventListener("DOMContentLoaded", () => {
         margin_top = 25
         margin_bottom = screen_height - 25 - console_height - additional_margin_Y
     }
-
-    shoot_x = 0
-    shoot_y = - bullet_speed * player_speed
     dif_posX = 0
     dif_posY = player_speed
 
-    function move_cursor_touch() {
-        posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
-        posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
-        dif_posX_raw = +(cursorX_move_touch - joystick_centerX)
-        dif_posY_raw = +(cursorY_move_touch - joystick_centerY)
-        hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
-        dif_posX = dif_posX_raw / hepotinuse * player_speed
-        dif_posY = dif_posY_raw / hepotinuse * player_speed
-        shoot_x = dif_posX * bullet_speed
-        shoot_y = dif_posY * bullet_speed
-        dif_posX_abs = Math.abs(dif_posX)
-        dif_posY_abs = Math.abs(dif_posY)
-        if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
-            new_posX = posX + dif_posX
-            new_posY = posY + dif_posY
-            if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
-                if (new_posX > margin_right) {
-                    new_posX = margin_right
-                } else if (new_posX < margin_left) {
-                    new_posX = margin_left
-                }
+    // function move_cursor_touch() {
+    //     posX = +player.style.left.slice(0, -2)
+    //     posY = +player.style.top.slice(0, -2)
+    //     dif_posX_raw = +(cursorX_move_touch - joystick_centerX)
+    //     dif_posY_raw = +(cursorY_move_touch - joystick_centerY)
+    //     hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
+    //     dif_posX = dif_posX_raw / hepotinuse * player_speed
+    //     dif_posY = dif_posY_raw / hepotinuse * player_speed
+    //     shoot_x = dif_posX * bullet_speed
+    //     shoot_y = dif_posY * bullet_speed
+    //     dif_posX_abs = Math.abs(dif_posX)
+    //     dif_posY_abs = Math.abs(dif_posY)
+    //     if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
+    //         new_posX = posX + dif_posX
+    //         new_posY = posY + dif_posY
+    //         if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
+    //             if (new_posX > margin_right) {
+    //                 new_posX = margin_right
+    //             } else if (new_posX < margin_left) {
+    //                 new_posX = margin_left
+    //             }
 
-                document.documentElement.style.setProperty('--posX', new_posX)
-            }
-            if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
-                if (new_posY < margin_top) {
-                    new_posY = margin_top
-                } else if (new_posY > margin_bottom) {
-                    new_posY = margin_bottom
-                }
-                document.documentElement.style.setProperty('--posY', new_posY)
-            }
-            // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
-            //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
-            //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
-        }
-    }
-    function move_cursor_mouse() {
-        posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
-        posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
-        dif_posX_raw = +(cursorX_move - joystick_centerX)
-        dif_posY_raw = +(cursorY_move - joystick_centerY)
-        hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
-        dif_posX = dif_posX_raw / hepotinuse * player_speed
-        dif_posY = dif_posY_raw / hepotinuse * player_speed
-        shoot_x = dif_posX * bullet_speed
-        shoot_y = dif_posY * bullet_speed
-        dif_posX_abs = Math.abs(dif_posX)
-        dif_posY_abs = Math.abs(dif_posY)
-        if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
-            new_posX = posX + dif_posX
-            new_posY = posY + dif_posY
-            if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
-                if (new_posX > margin_right) {
-                    new_posX = margin_right
-                } else if (new_posX < margin_left) {
-                    new_posX = margin_left
-                }
+    //             document.documentElement.style.setProperty('--posX', new_posX)
+    //         }
+    //         if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
+    //             if (new_posY < margin_top) {
+    //                 new_posY = margin_top
+    //             } else if (new_posY > margin_bottom) {
+    //                 new_posY = margin_bottom
+    //             }
+    //             document.documentElement.style.setProperty('--posY', new_posY)
+    //         }
+    //         // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
+    //         //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
+    //         //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
+    //     }
+    // }
+    // function move_cursor_mouse() {
+    //     posX = +player.style.left.slice(0, -2)
+    //     posY = +player.style.top.slice(0, -2)
+    //     dif_posX_raw = +(cursorX_move - joystick_centerX)
+    //     dif_posY_raw = +(cursorY_move - joystick_centerY)
+    //     hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
+    //     dif_posX = dif_posX_raw / hepotinuse * player_speed
+    //     dif_posY = dif_posY_raw / hepotinuse * player_speed
+    //     shoot_x = dif_posX * bullet_speed
+    //     shoot_y = dif_posY * bullet_speed
+    //     dif_posX_abs = Math.abs(dif_posX)
+    //     dif_posY_abs = Math.abs(dif_posY)
+    //     if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
+    //         new_posX = posX + dif_posX
+    //         new_posY = posY + dif_posY
+    //         if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
+    //             if (new_posX > margin_right) {
+    //                 new_posX = margin_right
+    //             } else if (new_posX < margin_left) {
+    //                 new_posX = margin_left
+    //             }
 
-                document.documentElement.style.setProperty('--posX', new_posX)
-            }
-            if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
-                if (new_posY < margin_top) {
-                    new_posY = margin_top
-                } else if (new_posY > margin_bottom) {
-                    new_posY = margin_bottom
-                }
-                document.documentElement.style.setProperty('--posY', new_posY)
-            }
-            // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
-            //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
-            //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
-        }
-    }
-    function get_sin(catet1, catet2) {
-        catet1_squared = Math.abs(catet1) ^ 2
-        catet2_squared = Math.abs(catet2) ^ 2
-        hepotinuse = Math.sqrt(catet1_squared + catet2_squared)
-        sin = catet1 / hepotinuse
-        return sin
-    }
+    //             document.documentElement.style.setProperty('--posX', new_posX)
+    //         }
+    //         if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
+    //             if (new_posY < margin_top) {
+    //                 new_posY = margin_top
+    //             } else if (new_posY > margin_bottom) {
+    //                 new_posY = margin_bottom
+    //             }
+    //             document.documentElement.style.setProperty('--posY', new_posY)
+    //         }
+    //         // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
+    //         //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
+    //         //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
+    //     }
+    // }
     function get_hepotinuse(catet1, catet2) {
         catet1_squared = catet1 * catet1
         catet2_squared = catet2 * catet2
         hepotinuse = Math.sqrt(catet1_squared + catet2_squared)
         return hepotinuse
     }
-
-    let all_bullets = document.querySelectorAll('.bullet')
-    shoot_btn.onclick = () => {
-        anticlick.classList.remove("invisible")
+    function get_direction_X() {
+        dirX = joystick_radius * Math.sin(corner * Math.PI / 180)
+        return dirX
+    }
+    function get_direction_Y() {
+        dirY = -joystick_radius * Math.cos(corner * Math.PI / 180)
+        return dirY
+    }
+    function changeDirections(thisObject) {
+        dirX = get_direction_X()
+        dirY = get_direction_Y()
+        thisObject.querySelector('.dirX').innerHTML = dirX
+        thisObject.querySelector('.dirY').innerHTML = dirY
+    }
+    let shooting_barrage
+    shoot_btn.ontouchstart = () => {
+        // anticlick.classList.remove("invisible")
         shooting_barrage = setInterval(shoot_bullet, Math.round(shooting_speed))
-        setTimeout(end_barrage, Math.round(shooting_speed) * Math.round(bullet_count) + 1)
-        function end_barrage() {
-            clearInterval(shooting_barrage)
-            anticlick.classList.add("invisible")
-        }
+        // function end_barrage() {
+        //     clearInterval(shooting_barrage)
+        //     // anticlick.classList.add("invisible")
+        // }
+    }
+    shoot_btn.ontouchend = () => {
+        clearInterval(shooting_barrage)
     }
     function shoot_bullet() {
         let invisible_bullet = ''
@@ -470,22 +492,77 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         if (invisible_bullet) {
-            player_posX = +getComputedStyle(document.documentElement).getPropertyValue("--posX")
-            player_posY = +getComputedStyle(document.documentElement).getPropertyValue("--posY")
+            player_posX = +player.style.left.slice(0, -2) + 25
+            player_posY = +player.style.top.slice(0, -2) + 25
+            invisible_bullet.querySelector('.speed').innerHTML = bullet_speed
             invisible_bullet.classList.remove('invisible')
             invisible_bullet.classList.add('visible')
             invisible_bullet.setAttribute('style', `top: ${Math.round(player_posY - 5)}px; left: ${Math.round(player_posX - 5)}px`)
-            invisible_bullet.querySelector('.dirX').innerHTML = shoot_x
-            invisible_bullet.querySelector('.dirY').innerHTML = shoot_y
+            invisible_bullet.querySelector('.dirX').innerHTML = get_direction_X() * bullet_speed
+            invisible_bullet.querySelector('.dirY').innerHTML = get_direction_Y() * bullet_speed
             invisible_bullet.querySelector('.damage').innerHTML = Math.round(bullet_damage)
         }
+    }
+    function moveAnyObject(thatObject, direction) {
+        posX = +(thatObject.style.left).slice(0, -2)
+        posY = +(thatObject.style.top).slice(0, -2)
+        dirX = +thatObject.querySelector('.dirX').innerHTML
+        dirY = +thatObject.querySelector('.dirY').innerHTML
+        speed = +thatObject.querySelector('.speed').innerHTML
+        thatObject.style.left = (posX + (speed * dirX * direction)) + 'px'
+        thatObject.style.top = (posY + (speed * dirY * direction)) + 'px'
+    }
+    let moveFoward
+    up_btn.ontouchstart = () => {
+        moveFoward = setInterval(() => {
+            moveAnyObject(player, 1)
+        }, game_speed)
+    }
+    up_btn.ontouchend = () => {
+        clearInterval(moveFoward)
+    }
+    let moveBackward
+    down_btn.ontouchstart = () => {
+        moveBackward = setInterval(() => {
+            moveAnyObject(player, -1)
+        }, game_speed)
+    }
+    down_btn.ontouchend = () => {
+        clearInterval(moveBackward)
+    }
+    let turnLeft
+    left_btn.ontouchstart = () => {
+        turnLeft = setInterval(() => {
+            corner -= turnSpeed
+            document.documentElement.style.setProperty('--corner', corner)
+            changeDirections(player)
+            if (corner <= -360) {
+                corner = 0
+            }
+        }, game_speed)
+    }
+    left_btn.ontouchend = () => {
+        clearInterval(turnLeft)
+    }
+    let turnRight
+    right_btn.ontouchstart = () => {
+        turnRight = setInterval(() => {
+            corner += turnSpeed
+            document.documentElement.style.setProperty('--corner', corner)
+            changeDirections(player)
+            if (corner >= 360) {
+                corner = 0
+            }
+        }, game_speed)
+    }
+    right_btn.ontouchend = () => {
+        clearInterval(turnRight)
     }
 
     let show_debug = document.getElementById('show_debug')
     show_debug.onclick = () => {
         console_debug.classList.toggle("invisible")
     }
-
     let menu_btn = document.getElementById("menu_btn")
     let play_btn = document.getElementById("play")
     let play_game_regen = ''
@@ -505,7 +582,6 @@ document.addEventListener("DOMContentLoaded", () => {
         play_game_regen = setInterval(game_tick_regen, game_speed * player_regen_speed)
         spawning_enemies = setInterval(spawn_enemy, spawn_interval)
     }
-
     let fullscreen_on_btn = document.querySelector(".fullscreen_on")
     let fullscreen_off_btn = document.querySelector(".fullscreen_off")
     fullscreen_on_btn.onclick = () => {
@@ -518,7 +594,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fullscreen_off_btn.classList.toggle('invisible')
         closeFullscreen()
     }
-
     var elem = document.documentElement;
     function openFullscreen() {
         if (elem.requestFullscreen) {
@@ -552,6 +627,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         if (invisible_enemy) {
+            invisible_enemy.querySelector('.speed').innerHTML = enemy_speed
             health_div = invisible_enemy.querySelector('.health')
             health_max_div = invisible_enemy.querySelector('.health_max')
             text_display = enemy.querySelector(".text_display")
@@ -601,7 +677,6 @@ document.addEventListener("DOMContentLoaded", () => {
             invisible_enemy.querySelector('.dirY').innerHTML = dirY
         }
     }
-
     function game_tick_regen() {
         player_regenerates()
     }
@@ -720,7 +795,7 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.left = 0
             health_div.style.top = 0
             spawn_interval_increased()
-            
+
         } else {
             text_display.innerHTML = show_big_number(health)
             text_display.style.left = 20 - (text_display.innerHTML.length * 4) + 'px'
@@ -867,8 +942,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function collide_with_me() {
         for (this_enemy of all_enemies) {
             if (this_enemy.classList.contains('visible')) {
-                other_e_X = +getComputedStyle(document.documentElement).getPropertyValue("--posX") - 20
-                other_e_Y = +getComputedStyle(document.documentElement).getPropertyValue("--posY") - 20
+                other_e_X = +player.style.left.slice(0, -2) - 20
+                other_e_Y = +player.style.top.slice(0, -2) - 20
                 this_dirX = this_enemy.querySelector('.dirX').innerHTML
                 this_dirY = this_enemy.querySelector('.dirY').innerHTML
                 this_e_posX_px = this_enemy.style.left

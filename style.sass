@@ -4,10 +4,13 @@
 :root
     --screen_width: 100
     --screen_height: 100
-    --posX: 500
-    --posY: 500
-    --console_size: 10px
-    --corner: 0
+    --console_size: 10p
+    --corner: 10
+    --dir_btn-size: 3
+    --dir_btn-vertical: 10
+    --dir_btn-horizontal: 10
+    --dir_btn-bottom: 8
+    --dir_btn-right: 3.5
 
 @keyframes show_damage
     0%
@@ -60,10 +63,10 @@ body
     #gun
         position: relative
         width: 10px
-        height: 20px
-        background-color: rgba(0, 0, 0, 0)
-        top: -15px
-        left: 15px
+        height: 10px
+        background-color: rgba(0, 99, 31, 0.743)
+        top: -5px
+        left: 20px
         z-index: 5
     #cursor_chaser
         position: fixed
@@ -71,9 +74,10 @@ body
         height: 50px
         background-color: rgba(0, 99, 31, 0.743)
         border-radius: 100%
-        left: calc(calc(var(--posX) - 25) * 1px)
-        top: calc(calc(var(--posY) - 25) * 1px)
+        left: 500px
+        top: 500px
         z-index: 10
+        transform: rotate(calc(var(--corner) * 1deg))
         .health
             position: absolute
             background-color: rgb(80, 192, 0)
@@ -143,6 +147,7 @@ body
             justify-content: space-between
             position: absolute
             border: 1px solid rgb(139, 66, 17)
+            background-color: rgb(222, 240, 86)
             #shoot, #melee
                 font-weight: 900
                 border-radius: 100%
@@ -160,6 +165,37 @@ body
                     height: 15px
                     z-index: 100
                     border-radius: 100%
+            #directions
+                display: grid
+                position: relative
+                bottom: calc(var(--console_size) / var(--dir_btn-bottom) * 1px)
+                right: calc(var(--console_size) / var(--dir_btn-right) * 1px)
+                grid-template-columns: auto auto
+                transform: rotate(45deg)
+                #up
+                    transform: rotate(-45deg)
+                    left: calc(var(--console_size) / var(--dir_btn-vertical) * 1px)
+                    top: calc(var(--console_size) / var(--dir_btn-vertical) * 1px)
+                #right
+                    transform: rotate(45deg)
+                    left: calc(var(--console_size) / var(--dir_btn-horizontal) * 1px)
+                    top: calc(var(--console_size) / -var(--dir_btn-horizontal) * 1px)
+                #left
+                    transform: rotate(-135deg)
+                    left: calc(var(--console_size) / -var(--dir_btn-horizontal) * 1px)
+                    top: calc(var(--console_size) / var(--dir_btn-horizontal) * 1px)
+                #down
+                    transform: rotate(135deg)
+                    left: calc((-var(--console_size) / var(--dir_btn-vertical)) * 1px)
+                    top: calc((-var(--console_size) / var(--dir_btn-vertical)) * 1px)
+                #up, #right, #left, #down
+                    position: relative
+                    font-size: calc(var(--console_size) / var(--dir_btn-size) * 1px)
+                    border-radius: 15%
+                    border: none
+                    background-image: radial-gradient(rgb(190, 100, 0), rgba(240, 220, 70, 0.629))
+                // #up:hover, #right:hover, #left:hover, #down:hover
+                //     background-image: radial-gradient(rgb(140, 88, 29), rgba(178, 165, 67, 0.629))
                 
 
     #play_field
@@ -216,7 +252,7 @@ body
 body.wide
     #console
         height: calc(calc(var(--screen_height) * 1px) - 16px)
-        width: var(--console_size)
+        width: calc(var(--console_size) * 1px)
         flex-direction: column
         #menu.show
             left: 45px
@@ -226,23 +262,23 @@ body.wide
             top: 40px
             height: calc(calc(var(--screen_height) * 1px) - 54px)
             #joystick, #shoot
-                width: calc(var(--console_size) - 6px)
-                height: calc(var(--console_size) - 6px)
+                width: calc(var(--console_size) * 1px - 6px)
+                height: calc(var(--console_size) * 1px - 6px)
             #shoot, #melee
-                width: calc(var(--console_size) / 2 - 6px)
-                height: calc(var(--console_size) / 2 - 6px)
+                width: calc(var(--console_size) * 1px  / 2 - 6px)
+                height: calc(var(--console_size) * 1px / 2 - 6px)
     #play_field
         height: calc(calc(var(--screen_height) * 1px) - 60px)
-        width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) + 76px))
-        left: calc(calc(var(--console_size) + 16px))
+        width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) * 1px + 76px))
+        left: calc(calc(var(--console_size) * 1px + 16px))
 body.high
     #console
         width: calc(calc(var(--screen_width) * 1px) - 16px)
-        height: calc(var(--console_size) + 30px)
-        top: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) + 46px))
+        height: calc(var(--console_size) * 1px + 30px)
+        top: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) * 1px + 46px))
         left: 0
         #menu
-            top: calc(calc(0px - var(--screen_height) * 1px) + calc(var(--console_size) + 46px))
+            top: calc(calc(0px - var(--screen_height) * 1px) + calc(var(--console_size) * 1px + 46px))
         #menu.show
             left: 45px
         #play_buttons
@@ -250,15 +286,15 @@ body.high
             width: calc(calc(var(--screen_width) * 1px) - 14px)
             align-items: center
             #joystick
-                width: calc(var(--console_size) + 28px)
-                height: calc(var(--console_size) + 28px)
+                width: calc(var(--console_size) * 1px + 28px)
+                height: calc(var(--console_size) * 1px + 28px)
             #shoot, #melee
-                width: calc(var(--console_size) / 2 + 28px)
-                height: calc(var(--console_size) / 2 + 28px)
+                width: calc(var(--console_size) * 1px / 2 + 28px)
+                height: calc(var(--console_size) * 1px / 2 + 28px)
 
     #play_field
         width: calc(calc(var(--screen_width) * 1px) - 60px)
-        height: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) + 106px))
+        height: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) * 1px + 106px))
 
 .invisible
     display: none
