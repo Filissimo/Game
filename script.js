@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player_regen_upgr = 0.001
         player_regen_speed = 10
         player_melee_dmg = 3
-        player_melee_dmg_upgr = 0.005
+        player_melee_dmg_upgr = 0.01
     }
     reset_player_stats()
     player.querySelector(".health").innerHTML = player_health
@@ -59,22 +59,22 @@ document.addEventListener("DOMContentLoaded", () => {
     player_text_display.style.left = 27 - (player_text_display.innerHTML.length * 7) + 'px'
     reset_player_visuals()
     function player_health_upgr(percentage) {
-        if (percentage < 0.05) {
-            percentage = 0.05
+        if (percentage < 0.2) {
+            percentage = 0.2
         }
         player_health_max = player_health_max + (player_health_max_upgr / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_health_bonus_upgr(damage, percentage) {
-        if (percentage < 0.01) {
-            percentage = 0.01
+        if (percentage < 0.1) {
+            percentage = 0.1
         }
         player_health_max = player_health_max + (player_health_max_upgr * damage / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_regeneration_upgr(percentage) {
-        if (percentage < 0.02) {
-            percentage = 0.02
+        if (percentage < 0.1) {
+            percentage = 0.1
         }
         player_regen = player_regen + (player_regen_upgr * player_regen / (percentage))
         player.querySelector(".regen").innerHTML = player_regen
@@ -566,7 +566,7 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.background = `rgb(${rgb1},${rgb2},${rgb3})`
             text_display.innerHTML = show_big_number(Math.round(enemy_health_max))
             damage_div.innerHTML = Math.round(enemy_damage)
-            text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
+            text_display.style.left = 20 - (text_display.innerHTML.length * 4) + 'px'
             enemy_upgr()
             invisible_enemy.classList.add('visible')
             let play_field_side = Math.floor(Math.random() * 4)
@@ -723,7 +723,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
         } else {
             text_display.innerHTML = show_big_number(health)
-            text_display.style.left = 20 - (text_display.innerHTML.length * 5) + 'px'
+            text_display.style.left = 20 - (text_display.innerHTML.length * 4) + 'px'
             health_div.innerHTML = health
             percent = health / health_max
             health_div.style.width = (40 * percent) + "px"
