@@ -136,15 +136,15 @@ document.addEventListener("DOMContentLoaded", () => {
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_health_bonus_upgr(damage, percentage) {
-        if (percentage < 0.03) {
-            percentage = 0.03
+        if (percentage < 0.01) {
+            percentage = 0.01
         }
         player_health_max = player_health_max + (player_health_max_upgr * damage / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_regeneration_upgr(percentage) {
-        if (percentage < 0.1) {
-            percentage = 0.1
+        if (percentage < 0.03) {
+            percentage = 0.03
         }
         player_regen = player_regen + (player_regen_upgr * player_regen / (percentage))
         player.querySelector(".regen").innerHTML = player_regen
