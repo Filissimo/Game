@@ -627,8 +627,8 @@ document.addEventListener("DOMContentLoaded", () => {
             health_div.style.height = (50 * percentage) + "px"
             health_div.style.top = (25 - 25 * percentage) + "px"
             health_div.style.left = (25 - 25 * percentage) + "px"
-            if (percentage < 0.5) {
-                bonus_regen = 0.5
+            if (percentage < 0.3) {
+                bonus_regen = 0.3
             }
             health = health + (regen / bonus_regen)
             player.querySelector('.health').innerHTML = health
