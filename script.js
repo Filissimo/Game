@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         enemy_health_max = 1
         enemy_health_max_upgr = 0.04
         enemy_damage = 1
-        enemy_damage_upgr = 0.01
+        enemy_damage_upgr = 0.02
     }
     reset_enemy_stats()
     reset_bullet_stats()
