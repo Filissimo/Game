@@ -1,29 +1,9 @@
 
-// document.addEventListener('mousemove', e => {
-//     cursorX_move = e.x
-//     cursorY_move = e.y
-// }, { passive: true });
-
-// document.addEventListener('touchmove', e => {
-//     var touch = e.touches[0];
-//     // get the DOM element
-//     var checkbox = document.elementFromPoint(touch.clientX, touch.clientY);
-//     // make sure an element was found - some areas on the page may have no elements
-//     if (checkbox) {
-//         // interact with the DOM element
-//         checkbox.checked = !checkbox.checked;
-//     }
-//     cursorX_move_touch = touch.clientX
-//     cursorY_move_touch = touch.clientY
-// })
-
-// document.addEventListener('click', printMousePos, true);
-// function printMousePos(e) {
-//     cursorX_click = e.pageX;
-//     cursorY_click = e.pageY;
-// }
-
 document.addEventListener("DOMContentLoaded", () => {
+
+    window.oncontextmenu = function(event) {
+        event.preventDefault()
+    }
 
     let game_speed = 30
     let last_game_score = 0
@@ -43,8 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let player_melee_dmg_upgr
     function reset_player_stats() {
         corner = 0 // It's angle, but I was dumb, and now I'm too lazy to change the name of the variable
-        turnSpeed = 5
+        turnSpeed = 3
         player_speed = 0.04
+        player_size = 25
         player.querySelector('.speed').innerHTML = player_speed
         player_health = 10
         player_health_max = 10
@@ -56,13 +37,97 @@ document.addEventListener("DOMContentLoaded", () => {
         player_melee_dmg_upgr = 0.01
     }
     reset_player_stats()
+    let bullet_limit
+    let bullet_speed
+    let bullet_speed_upgr
+    let bullet_damage
+    let bullet_damage_upgr
+    let bullet_count
+    let bullet_count_upgr
+    let shooting_speed
+    let shooting_speed_upgr
+    function reset_bullet_stats() {
+        bullet_limit = 30
+        bullet_speed = 0.1
+        bullet_speed_upgr = 0.001
+        bullet_damage = 1
+        bullet_damage_upgr = 0.005
+        bullet_count = 1
+        bullet_count_upgr = 0.01
+        shooting_speed = 250
+        shooting_speed_upgr = 0.01
+    }
+    let enemy_limit
+    let enemy_speed
+    let enemy_speed_upgr
+    let spawn_interval
+    let spawn_interval_upgr
+    let enemy_health_max
+    let enemy_health_max_upgr
+    let enemy_damage
+    let enemy_damage_upgr
+    function reset_enemy_stats() {
+        enemy_limit = 30
+        enemy_speed = 2
+        enemy_speed_upgr = 0.01
+        spawn_interval = 50
+        spawn_interval_upgr = 50
+        enemy_health_max = 1
+        enemy_health_max_upgr = 0.04
+        enemy_damage = 1
+        enemy_damage_upgr = 0.04
+    }
+    reset_enemy_stats()
+    reset_bullet_stats()
     reset_player_visuals()
-    player.querySelector(".health").innerHTML = player_health
-    player.querySelector(".health_max").innerHTML = player_health_max
-    player.querySelector(".regen").innerHTML = player_regen
-    player_text_display = player.querySelector(".text_display")
-    player_text_display.innerHTML = (player_health)
-    player_text_display.style.left = 27 - (player_text_display.innerHTML.length * 7) + 'px'
+
+    let defaultStats
+    function setDefaultStats() {
+        defaultStats = {
+            'game': {
+                'speed': 30,
+                'last_score': 0,
+                'present_score': 0,
+                'best_score': 0
+            },
+            'player': {
+                'angle': 0,
+                'turnSpeed': 3,
+                'speed': 0.04,
+                'health_max': 10,
+                'health_max_upgr': 0.1,
+                'regen': 1,
+                'regen_upgr': 0.001,
+                'regen_speed': 10,
+                'melee_dmg': 3,
+                'melee_dmg_upgr': 0.01
+            },
+            'bullet': {
+                'limit': 30,
+                'speed': 0.1,
+                'speed_upgr': 0.001,
+                'damage': 1,
+                'damage_upgr': 0.005,
+                'count': 1,
+                'count_upgr': 0.01,
+                'shooting_speed': 250,
+                'shooting_speed_upgr': 0.01,
+            },
+            'enemy': {
+                'limit': 10,
+                'speed': 0.3,
+                'speed_upgr': 0.01,
+                'spawn_interval': 50,
+                'spawn_interval_upgr': 50,
+                'health_max': 1,
+                'health_max_upgr': 0.04,
+                'damage': 1,
+                'damage_upgr': 0.04
+            }
+        }
+    }
+    setDefaultStats()
+
     function player_health_upgr(percentage) {
         if (percentage < 0.2) {
             percentage = 0.2
@@ -109,27 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
         text_display.style.top = 10
         text_display.style.left = 25 - (text_display.innerHTML.length * 6) + 'px'
     }
-    let bullet_limit
-    let bullet_speed
-    let bullet_speed_upgr
-    let bullet_damage
-    let bullet_damage_upgr
-    let bullet_count
-    let bullet_count_upgr
-    let shooting_speed
-    let shooting_speed_upgr
-    reset_bullet_stats()
-    function reset_bullet_stats() {
-        bullet_limit = 30
-        bullet_speed = 0.1
-        bullet_speed_upgr = 0.001
-        bullet_damage = 1
-        bullet_damage_upgr = 0.005
-        bullet_count = 1
-        bullet_count_upgr = 0.01
-        shooting_speed = 250
-        shooting_speed_upgr = 0.01
-    }
     function bullet_upgr() {
         bullet_damage = bullet_damage + (bullet_damage_upgr * bullet_damage)
         bullet_count = bullet_count + bullet_count_upgr
@@ -137,27 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
             shooting_speed = shooting_speed - shooting_speed_upgr
         }
         bullet_speed = bullet_speed + bullet_speed_upgr
-    }
-    let enemy_limit
-    let enemy_speed
-    let enemy_speed_upgr
-    let spawn_interval
-    let spawn_interval_upgr
-    let enemy_health_max
-    let enemy_health_max_upgr
-    let enemy_damage
-    let enemy_damage_upgr
-    reset_enemy_stats()
-    function reset_enemy_stats() {
-        enemy_limit = 10
-        enemy_speed = 0.3
-        enemy_speed_upgr = 0.01
-        spawn_interval = 50
-        spawn_interval_upgr = 50
-        enemy_health_max = 1
-        enemy_health_max_upgr = 0.04
-        enemy_damage = 1
-        enemy_damage_upgr = 0.04
     }
     function spawn_interval_increased() {
         spawn_interval = Math.round(spawn_interval + (spawn_interval_upgr))
@@ -198,14 +221,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let console_height = 0
     let orientation = NaN
     let new_orientation = NaN
-    // let joystick = document.getElementById("joystick")
     let shoot_btn = document.getElementById("shoot")
     let up_btn = document.getElementById("up")
     let down_btn = document.getElementById("down")
     let right_btn = document.getElementById("right")
     let left_btn = document.getElementById("left")
-    // let joystick_centerX = 0
-    // let joystick_centerY = 0
     let play_field = document.getElementById("play_field")
     function render_enemies_and_bullets() {
         for (i = 0; i < enemy_limit; i++) {
@@ -342,22 +362,6 @@ document.addEventListener("DOMContentLoaded", () => {
         reset_bullets()
         reset_score()
     }
-    let start_moving = ''
-    // joystick.onmouseover = () => {
-    //     clearInterval(start_moving)
-    //     start_moving = setInterval(move_cursor_mouse, 15)
-    // }
-
-    // joystick.onmouseleave = () => {
-    //     clearInterval(start_moving)
-    // }
-    // joystick.ontouchmove = () => {
-    //     clearInterval(start_moving)
-    //     start_moving = setInterval(move_cursor_touch, 10)
-    // }
-    // joystick.ontouchend = () => {
-    //     clearInterval(start_moving)
-    // }
     function define_joystick_radius_and_margins() {
         let additional_margin_X = 0
         let additional_margin_Y = 0
@@ -375,89 +379,6 @@ document.addEventListener("DOMContentLoaded", () => {
         margin_bottom = screen_height - 25 - console_height - additional_margin_Y
     }
     changeDirections(player)
-    dif_posX = 0
-    dif_posY = player_speed
-
-    // function move_cursor_touch() {
-    //     posX = +player.style.left.slice(0, -2)
-    //     posY = +player.style.top.slice(0, -2)
-    //     dif_posX_raw = +(cursorX_move_touch - joystick_centerX)
-    //     dif_posY_raw = +(cursorY_move_touch - joystick_centerY)
-    //     hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
-    //     dif_posX = dif_posX_raw / hepotinuse * player_speed
-    //     dif_posY = dif_posY_raw / hepotinuse * player_speed
-    //     shoot_x = dif_posX * bullet_speed
-    //     shoot_y = dif_posY * bullet_speed
-    //     dif_posX_abs = Math.abs(dif_posX)
-    //     dif_posY_abs = Math.abs(dif_posY)
-    //     if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
-    //         new_posX = posX + dif_posX
-    //         new_posY = posY + dif_posY
-    //         if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
-    //             if (new_posX > margin_right) {
-    //                 new_posX = margin_right
-    //             } else if (new_posX < margin_left) {
-    //                 new_posX = margin_left
-    //             }
-
-    //             document.documentElement.style.setProperty('--posX', new_posX)
-    //         }
-    //         if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
-    //             if (new_posY < margin_top) {
-    //                 new_posY = margin_top
-    //             } else if (new_posY > margin_bottom) {
-    //                 new_posY = margin_bottom
-    //             }
-    //             document.documentElement.style.setProperty('--posY', new_posY)
-    //         }
-    //         // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
-    //         //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
-    //         //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
-    //     }
-    // }
-    // function move_cursor_mouse() {
-    //     posX = +player.style.left.slice(0, -2)
-    //     posY = +player.style.top.slice(0, -2)
-    //     dif_posX_raw = +(cursorX_move - joystick_centerX)
-    //     dif_posY_raw = +(cursorY_move - joystick_centerY)
-    //     hepotinuse = Math.abs(get_hepotinuse(dif_posX_raw, dif_posY_raw))
-    //     dif_posX = dif_posX_raw / hepotinuse * player_speed
-    //     dif_posY = dif_posY_raw / hepotinuse * player_speed
-    //     shoot_x = dif_posX * bullet_speed
-    //     shoot_y = dif_posY * bullet_speed
-    //     dif_posX_abs = Math.abs(dif_posX)
-    //     dif_posY_abs = Math.abs(dif_posY)
-    //     if ((dif_posX_abs ^ 2) + (dif_posY_abs ^ 2) < joystick_radius * 1.4) {
-    //         new_posX = posX + dif_posX
-    //         new_posY = posY + dif_posY
-    //         if (new_posX != Infinity && new_posX != NaN && new_posX != -Infinity) {
-    //             if (new_posX > margin_right) {
-    //                 new_posX = margin_right
-    //             } else if (new_posX < margin_left) {
-    //                 new_posX = margin_left
-    //             }
-
-    //             document.documentElement.style.setProperty('--posX', new_posX)
-    //         }
-    //         if (new_posY != Infinity && new_posY != NaN && new_posY != -Infinity) {
-    //             if (new_posY < margin_top) {
-    //                 new_posY = margin_top
-    //             } else if (new_posY > margin_bottom) {
-    //                 new_posY = margin_bottom
-    //             }
-    //             document.documentElement.style.setProperty('--posY', new_posY)
-    //         }
-    //         // console_debug.innerHTML += "<br>New X: " + new_posX.toFixed(2) + ", Y: " + new_posY.toFixed(2) +
-    //         //     "<br>Moved X: " + (posX - new_posX).toFixed(2) + ", Y: " + (posY - new_posY).toFixed(2) +
-    //         //     "<br>Sin Y: " + ratio_x + ", Sin Y: " + ratio_y
-    //     }
-    // }
-    function get_hepotinuse(catet1, catet2) {
-        catet1_squared = catet1 * catet1
-        catet2_squared = catet2 * catet2
-        hepotinuse = Math.sqrt(catet1_squared + catet2_squared)
-        return hepotinuse
-    }
     function get_direction_X() {
         dirX = joystick_radius * Math.sin(corner * Math.PI / 180)
         return dirX
@@ -848,16 +769,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 posX = +e_posX_px.slice(0, e_posX_px.length - 2)
                 posY = +e_posY_px.slice(0, e_posY_px.length - 2)
                 if (posX < margin_left - 15) {
-                    dirX = Math.abs(dirX) * (1 + enemy_speed_upgr)
+                    dirX = Math.abs(dirX) + enemy_speed_upgr
                 }
                 if (posX > margin_right - 25) {
-                    dirX = - Math.abs(dirX) * (1 + enemy_speed_upgr)
+                    dirX = - Math.abs(dirX) + enemy_speed_upgr
                 }
                 if (posY < margin_top - 15) {
-                    dirY = Math.abs(dirY) * (1 + enemy_speed_upgr)
+                    dirY = Math.abs(dirY) + enemy_speed_upgr
                 }
                 if (posY > margin_bottom - 25) {
-                    dirY = - Math.abs(dirY) * (1 + enemy_speed_upgr)
+                    dirY = - Math.abs(dirY) + enemy_speed_upgr
                 }
                 enemy.querySelector('.dirX').innerHTML = dirX
                 enemy.querySelector('.dirY').innerHTML = dirY
@@ -943,8 +864,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function collide_with_me() {
         for (this_enemy of all_enemies) {
             if (this_enemy.classList.contains('visible')) {
-                other_e_X = +player.style.left.slice(0, -2) - 20
-                other_e_Y = +player.style.top.slice(0, -2) - 20
+                other_e_X = +player.style.left.slice(0, -2) + 5
+                other_e_Y = +player.style.top.slice(0, -2) + 5
                 this_dirX = this_enemy.querySelector('.dirX').innerHTML
                 this_dirY = this_enemy.querySelector('.dirY').innerHTML
                 this_e_posX_px = this_enemy.style.left
