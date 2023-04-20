@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player_health_max = 10
         player_health_max_upgr = 0.1
         player_regen = 1
-        player_regen_upgr = 0.001
+        player_regen_upgr = 0.0001
         player_regen_speed = 10
         player_melee_dmg = 3
         player_melee_dmg_upgr = 0.01
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         enemy_health_max = 1
         enemy_health_max_upgr = 0.04
         enemy_damage = 1
-        enemy_damage_upgr = 0.04
+        enemy_damage_upgr = 0.01
     }
     reset_enemy_stats()
     reset_bullet_stats()
