@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player_health_max = 10
         player_health_max_upgr = 0.2
         player_regen = 1
-        player_regen_upgr = 0.00001
+        player_regen_upgr = 0.00002
         player_regen_speed = 10
         player_melee_dmg = 3
         player_melee_dmg_upgr = 0.008
@@ -136,8 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
         player.querySelector(".health_max").innerHTML = player_health_max
     }
     function player_health_bonus_upgr(damage, percentage) {
-        if (percentage < 0.05) {
-            percentage = 0.05
+        if (percentage < 0.03) {
+            percentage = 0.03
         }
         player_health_max = player_health_max + (player_health_max_upgr * damage / (percentage))
         player.querySelector(".health_max").innerHTML = player_health_max
