@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player_regen_upgr = 0.00004
         player_regen_speed = 10
         player_melee_dmg = 3
-        player_melee_dmg_upgr = 0.008
+        player_melee_dmg_upgr = 0.01
     }
     reset_player_stats()
     let bullet_limit
@@ -49,13 +49,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function reset_bullet_stats() {
         bullet_limit = 30
         bullet_speed = 0.1
-        bullet_speed_upgr = 0.001
+        bullet_speed_upgr = 0.0001
         bullet_damage = 1
-        bullet_damage_upgr = 0.008
+        bullet_damage_upgr = 0.01
         bullet_count = 1
-        bullet_count_upgr = 0.01
+        bullet_count_upgr = 0.02
         shooting_speed = 250
-        shooting_speed_upgr = 0.01
+        shooting_speed_upgr = 0.02
     }
     let enemy_limit
     let enemy_speed
@@ -67,15 +67,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let enemy_damage
     let enemy_damage_upgr
     function reset_enemy_stats() {
-        enemy_limit = 25
-        enemy_speed = 1.8
+        enemy_limit = 20
+        enemy_speed = 1.5
         enemy_speed_upgr = 0.01
         spawn_interval = 50
         spawn_interval_upgr = 50
         enemy_health_max = 1
-        enemy_health_max_upgr = 0.07
+        enemy_health_max_upgr = 0.1
         enemy_damage = 1
-        enemy_damage_upgr = 0.04
+        enemy_damage_upgr = 0.05
     }
     reset_enemy_stats()
     reset_bullet_stats()
