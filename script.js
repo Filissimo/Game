@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault()
     }
 
-    let game_speed = 30
+    let game_speed = 40
     let last_game_score = 0
     let present_game_score = 0
     let best_game_score = 0
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player_health_max_upgr = 0.1
         player_regen = 1
         player_regen_upgr = 0.00003
-        player_regen_speed = 10
+        player_regen_speed = 3
         player_melee_dmg = 3
         player_melee_dmg_upgr = 0.01
     }
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         bullet_count = 1
         bullet_count_upgr = 0.02
         shooting_speed = 250
-        shooting_speed_upgr = 0.02
+        shooting_speed_upgr = 0.05
     }
     let enemy_limit
     let enemy_speed
@@ -68,14 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let enemy_damage_upgr
     function reset_enemy_stats() {
         enemy_limit = 20
-        enemy_speed = 1.5
-        enemy_speed_upgr = 0.01
+        enemy_speed = 2
+        enemy_speed_upgr = 0.02
         spawn_interval = 50
         spawn_interval_upgr = 50
         enemy_health_max = 1
         enemy_health_max_upgr = 0.1
         enemy_damage = 1
-        enemy_damage_upgr = 0.05
+        enemy_damage_upgr = 0.1
     }
     reset_enemy_stats()
     reset_bullet_stats()
