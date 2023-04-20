@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let enemy_damage_upgr
     function reset_enemy_stats() {
         enemy_limit = 30
-        enemy_speed = 2
+        enemy_speed = 1.8
         enemy_speed_upgr = 0.01
         spawn_interval = 50
         spawn_interval_upgr = 50
