@@ -2,15 +2,16 @@
     margin: 0
     padding: 0
 :root
-    --screen_width: 100
-    --screen_height: 100
-    --console_size: 10p
-    --corner: 10
-    --dir_btn-size: 3
-    --dir_btn-vertical: 10
-    --dir_btn-horizontal: 10
-    --dir_btn-bottom: 8
-    --dir_btn-right: 3.5
+    --screen-width: 100
+    --screen-height: 100
+    --console-size: 10
+
+    --player-angle: 0
+    --player-size: 30
+    --bullet-size: 30
+    --enemy-size: 10
+    --btn_area-border-color: #0e4811
+    --btn_area-background-color: #073309
 
 @keyframes show_damage
     0%
@@ -40,261 +41,35 @@
 
 
 body
-    #anticlick
-        position: absolute
-        background-color: #00000000
-        top: 0
-        left: 0
-        z-index: 1000
-        width: 100vw
-        height: 100vh
-    #score_bar
+    display: flex
+    background-color: #000000
+    #menu
         position: fixed
-        top: 0
-        left: 62px
-        z-index: 5
-        width: calc(100vw - 62px)
-        text-align: center
-        font-size: 13px
-        background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.382), rgba(0, 0, 0, 0))
-        text-shadow: 0px 0px 5px rgb(255, 255, 255)
-        span
-            font-size: 10px
-    #gun
-        position: relative
-        width: 10px
-        height: 10px
-        background-color: rgba(0, 99, 31, 0.743)
-        top: -5px
-        left: 20px
-        z-index: 5
-    #cursor_chaser
-        position: fixed
-        width: 50px
-        height: 50px
-        background-color: rgba(0, 99, 31, 0.743)
-        border-radius: 100%
-        left: 500px
-        top: 500px
-        z-index: 10
-        transform: rotate(calc(var(--corner) * 1deg))
-        .health
-            position: absolute
-            background-color: rgb(80, 192, 0)
-            color: #00000000
-            border-radius: 100%
-            width: 50px
-            height: 50px
-            z-index: 20
-        .text_display
-            background-color: rgba(0, 0, 0, 0)
-            position: absolute
-            z-index: 30
-            top: 13px
-            color: #ffea00
-            font-size: 20px
-    #console
-        display: flex
-        position: fixed
-        padding: 5px
-        border: 3px solid rgb(19, 189, 0)
-        background-color: rgb(241, 255, 134)
-        #debug
-            font-size: 1rem
-            position: fixed
-            top: 0px
-            left: 20px
-            width: calc(calc(var(--screen_width) * 1px) - 55px)
-            text-align: center
-            padding: 7px
-            background-color: rgba(255, 0, 0, 0.274)
-            z-index: 10
-        #menu
-            display: flex
-            position: absolute
-            flex-direction: column
-            width: calc(calc(var(--screen_width) - 100) * 1px)
-            left:  calc(calc(var(--screen_width) - 50) * calc(0px - 1px))
-            z-index: 100 !important
-            transition: all 500ms
-            p
-                position: relative
-                left: - 30px
-                width: calc(calc(var(--screen_width) - 59) * 1px)
-                background-color: #000000d7
-                color: #ffffff
-                padding: 0.5rem
-                text-align: center
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
-                border: 3px solid #d90000
-                span
-                    font-weight: bold
-                    font-size: 1.2rem
-                    color: #ffffff
-            #menu_btn
-                position: fixed
-                left: 2px
-                top: 2px
-                padding: 3px 10px
-                background-color: rgb(242, 255, 0)
-                border: 1px solid rgb(79, 53, 53)
-                z-index: 100
-            button
-                font-size: 1.3rem
-                padding: 2px 7px
-        #play_buttons
-            display: flex
-            justify-content: space-between
-            position: absolute
-            border: 1px solid rgb(139, 66, 17)
-            background-color: rgb(222, 240, 86)
-            #shoot, #melee
-                font-weight: 900
-                border-radius: 100%
-                background-image: radial-gradient(rgb(255, 255, 255)55%, rgb(0, 0, 0))
-            #joystick
-                display: flex
-                justify-content: center
-                align-items: center
-                border: 1px solid rgb(139, 66, 17)
-                border-radius: 100%
-                background-image: radial-gradient(rgb(255, 255, 255), rgb(98, 55, 0))
-                #joystick_center
-                    background-color: rgb(0, 151, 156)
-                    width: 15px
-                    height: 15px
-                    z-index: 100
-                    border-radius: 100%
-            #directions
-                display: grid
-                position: relative
-                bottom: calc(var(--console_size) / var(--dir_btn-bottom) * 1px)
-                right: calc(var(--console_size) / var(--dir_btn-right) * 1px)
-                grid-template-columns: auto auto
-                transform: rotate(45deg)
-                #up
-                    transform: rotate(-45deg)
-                    left: calc(var(--console_size) / var(--dir_btn-vertical) * 1px)
-                    top: calc(var(--console_size) / var(--dir_btn-vertical) * 1px)
-                #right
-                    transform: rotate(45deg)
-                    left: calc(var(--console_size) / var(--dir_btn-horizontal) * 1px)
-                    top: calc(var(--console_size) / -var(--dir_btn-horizontal) * 1px)
-                #left
-                    transform: rotate(-135deg)
-                    left: calc(var(--console_size) / -var(--dir_btn-horizontal) * 1px)
-                    top: calc(var(--console_size) / var(--dir_btn-horizontal) * 1px)
-                #down
-                    transform: rotate(135deg)
-                    left: calc((-var(--console_size) / var(--dir_btn-vertical)) * 1px)
-                    top: calc((-var(--console_size) / var(--dir_btn-vertical)) * 1px)
-                #up, #right, #left, #down
-                    position: relative
-                    font-size: calc(var(--console_size) / var(--dir_btn-size) * 1px)
-                    border-radius: 15%
-                    border: none
-                    background-image: radial-gradient(rgb(190, 100, 0), rgba(240, 220, 70, 0.629))
-                // #up:hover, #right:hover, #left:hover, #down:hover
-                //     background-image: radial-gradient(rgb(140, 88, 29), rgba(178, 165, 67, 0.629))
-                
-
-    #play_field
-        position: fixed
-        padding: 20px
-        border: 10px solid rgb(132, 152, 68)
-        background-color: rgb(183, 202, 119)
-        .enemy
-            position: fixed
-            width: 40px
-            height: 40px
-            background-color: rgba(98, 0, 0, 0.729)
-            border-radius: 20%
-            z-index: 10
-            color: #ffffff02
-            font-size: 0px
-            text-align: center
-            .health
-                position: relative
-                // background-color: rgb(255, 0, 25)
-                border-radius: 20%
-                width: 40px
-                height: 40px
-                z-index: 20
-            .text_display
-                position: absolute
-                z-index: 30
-                top: 13px
-                color: #ffea00
-                font-size: 15px
-
-        .bullet
-            position: fixed
-            width: 10px
-            height: 10px
-            background-color: rgb(0, 52, 2)
-            border-radius: 100%
-            z-index: 10
-            color: #ffffff02
-            font-size: 7px
-            text-align: center
-        .bullet.show_damage
-            z-index: 40
-            background-color: #00000000
-            .damage
-                border-radius: 100%
-                position: absolute
-                z-index: 40
-                animation-name: show_damage
-                animation-duration: 2s
-
-
-
-body.wide
-    #console
-        height: calc(calc(var(--screen_height) * 1px) - 16px)
-        width: calc(var(--console_size) * 1px)
-        flex-direction: column
-        #menu.show
-            left: 45px
-        #play_buttons
-            flex-direction: column
-            align-items: center
-            top: 40px
-            height: calc(calc(var(--screen_height) * 1px) - 54px)
-            #joystick, #shoot
-                width: calc(var(--console_size) * 1px - 6px)
-                height: calc(var(--console_size) * 1px - 6px)
-            #shoot, #melee
-                width: calc(var(--console_size) * 1px  / 2 - 6px)
-                height: calc(var(--console_size) * 1px / 2 - 6px)
-    #play_field
-        height: calc(calc(var(--screen_height) * 1px) - 60px)
-        width: calc(calc(var(--screen_width) * 1px) - calc(var(--console_size) * 1px + 76px))
-        left: calc(calc(var(--console_size) * 1px + 16px))
-body.high
-    #console
-        width: calc(calc(var(--screen_width) * 1px) - 16px)
-        height: calc(var(--console_size) * 1px + 30px)
-        top: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) * 1px + 46px))
-        left: 0
-        #menu
-            top: calc(calc(0px - var(--screen_height) * 1px) + calc(var(--console_size) * 1px + 46px))
-        #menu.show
-            left: 45px
-        #play_buttons
-            left: 3px
-            width: calc(calc(var(--screen_width) * 1px) - 14px)
-            align-items: center
-            #joystick
-                width: calc(var(--console_size) * 1px + 28px)
-                height: calc(var(--console_size) * 1px + 28px)
-            #shoot, #melee
-                width: calc(var(--console_size) * 1px / 2 + 28px)
-                height: calc(var(--console_size) * 1px / 2 + 28px)
-
-    #play_field
-        width: calc(calc(var(--screen_width) * 1px) - 60px)
-        height: calc(calc(var(--screen_height) * 1px) - calc(var(--console_size) * 1px + 106px))
+    #center
+        width: calc( var(--screen-width) * 0.6px )
+        height: calc( var(--screen-height) * 1px)
+        #game_display
+            box-sizing: border-box
+            width: calc( var(--screen-width) * 0.6px )
+            height: calc( var(--screen-height) * 0.8px )
+            border: 5px solid #001f01
+        #statusbar
+            box-sizing: border-box
+            width: calc( var(--screen-width) * 0.6px)
+            height: calc( var(--screen-height) * 0.2px)
+            border: 10px solid var(--btn_area-border-color)
+            border-left: none
+            border-right: none
+            background-color: var(--btn_area-background-color)
+    #play_buttons_left, #play_buttons_right
+        box-sizing: border-box
+        height: calc( var(--screen-height) * 1px )
+        width: calc( var(--screen-width) * 0.2px )
+        border: 10px solid var(--btn_area-border-color)
+        background-color: var(--btn_area-background-color)
+body.portrait
+    position: fixed
+    transform: rotate(90deg)
 
 .invisible
     display: none

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <link rel="stylesheet" href="./style/style.min.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <div id="anticlick" class="invisible"></div>
+    <div id="score_bar" class="invisible"></div>
+    <div id="cursor_chaser">
+        <div id="gun"></div>
+        <div class="dirX invisible">0</div>
+        <div class="dirY invisible">1</div>
+        <div class="speed invisible"></div>
+        <div class="text_display"></div>
+        <div class="health"></div>
+        <div class="health_max invisible"></div>
+        <div class="regen invisible"></div>
+    </div>
+    </div>
+    <div id="play_field"></div>
+    <div id="console">
+        <div id="debug" class="invisible"></div>
+        <div id="menu" class="show">
+            <div id="menu_btn">Menu</div>
+            <button id="show_debug">toggle show debug</button>
+            <button class="fullscreen_on">Turn fullscreen on</button>
+            <button class="fullscreen_off invisible">Turn fullscreen off</button>
+            <button class="tutorial_on invisible">Turn tips on</button>
+            <button class="tutorial_0ff invisible">Turn tips off</button>
+            <button id="play">Play</button>
+            <!-- <a href="scary_page.html">Scary page</a> -->
+            <p>
+                <span>Important tips:<br></span>
+                The game is paused (if this page is freshly loaded). If you can't see buttons and "joystick" properly,
+                turn on fullcreen.
+                To start (or resume) game press "play" button in menu. You can pause game by pressing menu.
+                Shoot button works only when you stand still. Melee doesn't work yet.
+            </p>
+        </div>
+        <div id="play_buttons">
+            <button id="shoot" onselectstart="return false" onmousedown="return false">Shoot</button>
+
+            <div id="directions">
+                <button id="up" onselectstart="return false" onmousedown="return false">&#128314</button>
+                <button id="right" onselectstart="return false" onmousedown="return false">&#128314</button>
+                <button id="left" onselectstart="return false" onmousedown="return false">&#128314</button>
+                <button id="down" onselectstart="return false" onmousedown="return false">&#128314</button>
+            </div>
+            <!-- <div id="joystick">
+                <div id="joystick_center"></div>
+            </div> -->
+        </div>
+    </div>
+</body>
+
+</html>
