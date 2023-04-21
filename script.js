@@ -78,11 +78,13 @@ document.addEventListener("DOMContentLoaded", () => {
         screen_width = screen.availWidth
         screen_height = screen.availHeight
         if (screen_width > screen_height) {
+            popravkaNaVeter = 0
             body.classList.remove("portrait")
             document.documentElement.style.setProperty('--screen-width', screen_width)
             document.documentElement.style.setProperty('--screen-height', screen_height)
             screenWidth = screen_width
             screenHeight = screen_height
+            defineMarginsAndMoveStep()
         } else {
             popravkaNaVeter = 20
             screenWidth = screen_height + popravkaNaVeter
@@ -105,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
         marginTop = 10
         marginBottom = screenHeight * 0.75 - 10
         moveStep = (screenHeight + screenWidth / 500)
-        console.log(marginBottom, marginTop, marginRight, marginLeft)
     }
 
     let fullscreen_on_btn = document.querySelector(".fullscreen_on")
