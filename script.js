@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault()
     }
 
-    screen.orientation.lock('landscape')
-
     let defaultStats = {
         'game': {
             'speed': 30,
@@ -75,15 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
         screen_height = screen.availHeight
         document.documentElement.style.setProperty('--screen-width', screen_width)
         document.documentElement.style.setProperty('--screen-height', screen_height)
-        // if (screen_width > screen_height) {
-        //     body.classList.remove("portrait")
-        // } else {
-        //     document.documentElement.style.setProperty('--screen-width', screen_height)
-        //     document.documentElement.style.setProperty('--screen-height', screen_width)
-        //     body.classList.add("portrait")
-        // }
+        if (screen_width > screen_height) {
+            body.classList.remove("portrait")
+        } else {
+            document.documentElement.style.setProperty('--screen-width', screen_height)
+            document.documentElement.style.setProperty('--screen-height', screen_width)
+            body.classList.add("portrait")
+        }
         // defineMarginsAndMoveStep()
-        
+
     }
     setInterval(set_orientation, 1000)
 })
