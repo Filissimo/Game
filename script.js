@@ -150,6 +150,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('menu').classList.remove('show')
         resume_game()
     }
+    let newGameBtn = document.getElementById('newGame')
+    newGameBtn.onclick = () => {
+        document.getElementById('menu').classList.remove('show')
+        newGame()
+        resume_game()
+    }
 
     let enemySpawnStats = thisGame.enemySpawnStats
     let enemies = thisGame.enemies
