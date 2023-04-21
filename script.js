@@ -84,11 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
             screenWidth = screen_width
             screenHeight = screen_height
         } else {
-            body.classList.add("portrait")
-            document.documentElement.style.setProperty('--screen-width', screen_height)
-            document.documentElement.style.setProperty('--screen-height', screen_width)
-            screenWidth = screen_height
+            popravkaNaVeter = 20
+            screenWidth = screen_height + popravkaNaVeter
             screenHeight = screen_width
+            body.classList.add("portrait")
+            document.documentElement.style.setProperty('--screen-width', screenWidth)
+            document.documentElement.style.setProperty('--screen-height', screenHeight)
         }
         defineMarginsAndMoveStep()
     }
@@ -96,10 +97,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let marginRight
     let marginTop
     let marginBottom
+    let popravkaNaVeter = 0
     setInterval(set_orientation, 1000)
     function defineMarginsAndMoveStep() {
-        marginLeft = screenWidth * 0.15 + 30
-        marginRight = screenWidth * 0.85 - 10
+        marginLeft = screenWidth * 0.15 + 30 - popravkaNaVeter / 2
+        marginRight = screenWidth * 0.85 - 10 - popravkaNaVeter / 2
         marginTop = 10
         marginBottom = screenHeight * 0.75 - 10
         moveStep = (screenHeight + screenWidth / 500)
