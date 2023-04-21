@@ -47,18 +47,19 @@ body
     background-color: #000000
     #menu
         display: grid
-        position: fixed
-        left: calc(0px - var(--screen-width) * 0.35px)
-        top: calc(0px - var(--screen-height) * 0.56px)
+        position: absolute
+        top: calc(0px - var(--screen-width) * 0.4px)
+        left: calc(0px - var(--screen-width) * 0.34px + var(--screen-height) * 0.01px)
+        width: calc( var(--screen-width) * 0.75px - 35px)
         transform: rotate(-90deg)
         transition: all 1s
         #menu_btn
+            position: absolute
             transform: rotate(90deg)
-            top: calc( var(--screen-height) * 0.14px)
+            top: calc( var(--screen-width) * 0.08px + var(--screen-height) * 0.02px)
             left: calc(0px - var(--screen-width) * 0.04px)
             transition: all 800ms
             font-size: calc( var(--screen-width) * 0.029px)
-            position: fixed
             color: #eeff00
             background: #000000
             padding: calc( var(--screen-width) * 0.005px) calc( var(--screen-width) * 0.02px)
@@ -69,7 +70,6 @@ body
             font-size: calc( var(--screen-width) * 0.02px)
             padding: calc( var(--screen-width) * 0.012px) calc( var(--screen-width) * 0.05px)
         p
-            width: calc( var(--screen-width) * 0.75px - 35px)
             color: #ffffff
             background: #000000
             span
