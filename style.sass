@@ -46,29 +46,58 @@ body
     #menu
         position: fixed
     #center
-        width: calc( var(--screen-width) * 0.6px )
+        width: calc( var(--screen-width) * 0.75px )
         height: calc( var(--screen-height) * 1px)
         #game_display
             box-sizing: border-box
-            width: calc( var(--screen-width) * 0.6px )
-            height: calc( var(--screen-height) * 0.8px )
-            border: 5px solid #001f01
+            width: calc( var(--screen-width) * 0.75px )
+            height: calc( var(--screen-height) * 0.75px )
+            border: 10px solid #001f01
         #statusbar
             box-sizing: border-box
-            width: calc( var(--screen-width) * 0.6px)
-            height: calc( var(--screen-height) * 0.2px)
+            width: calc( var(--screen-width) * 0.75px)
+            height: calc( var(--screen-height) * 0.25px)
             border: 10px solid var(--btn_area-border-color)
             border-left: none
             border-right: none
             background-color: var(--btn_area-background-color)
     #play_buttons_left, #play_buttons_right
+        display: flex
+        flex-direction: column
+        justify-content: end
         box-sizing: border-box
+        width: calc( var(--screen-width) * 0.15px )
         height: calc( var(--screen-height) * 1px )
-        width: calc( var(--screen-width) * 0.2px )
         border: 10px solid var(--btn_area-border-color)
         background-color: var(--btn_area-background-color)
+        #up, #down, #right, #left
+            width: calc( var(--screen-width) * 0.15px - 69px)
+            border: none
+            background-color:  #011a02
+            font-size: calc( var(--screen-width) * 0.05px)
+            height: calc( var(--screen-width) * 0.15px - 70px)
+            margin: 10px
+        #up
+            border-radius: 10%
+        #down
+            border-radius: 10%
+            transform: rotate(180deg)
+        #right
+            border-radius: 10%
+            transform: rotate(90deg)
+        #left
+            border-radius: 10%
+            transform: rotate(-90deg)
+        #shoot
+            border: none
+            color: #f1e5e5
+            background-color:  #011a02
+            font-size: calc( var(--screen-width) * 0.025px)
+            height: calc( var(--screen-width) * 0.15px - 60px)
+            margin: 5px
+            border-radius: 25%
+
 body.portrait
-    position: fixed
     transform: rotate(90deg)
 
 .invisible

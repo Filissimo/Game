@@ -71,14 +71,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function set_orientation() {
         screen_width = screen.availWidth
         screen_height = screen.availHeight
-        document.documentElement.style.setProperty('--screen-width', screen_width)
-        document.documentElement.style.setProperty('--screen-height', screen_height)
         if (screen_width > screen_height) {
+            document.documentElement.style.setProperty('--screen-width', screen_width)
+            document.documentElement.style.setProperty('--screen-height', screen_height)
             body.classList.remove("portrait")
         } else {
+            body.classList.add("portrait")
             document.documentElement.style.setProperty('--screen-width', screen_height)
             document.documentElement.style.setProperty('--screen-height', screen_width)
-            body.classList.add("portrait")
         }
         // defineMarginsAndMoveStep()
 
