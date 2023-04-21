@@ -1,6 +1,8 @@
 *
     margin: 0
     padding: 0
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    
 :root
     --screen-width: 100
     --screen-height: 100
@@ -44,7 +46,45 @@ body
     display: flex
     background-color: #000000
     #menu
+        display: grid
         position: fixed
+        left: calc(0px - var(--screen-width) * 0.35px)
+        top: calc(0px - var(--screen-height) * 0.56px)
+        transform: rotate(-90deg)
+        transition: all 1s
+        #menu_btn
+            transform: rotate(90deg)
+            top: calc( var(--screen-height) * 0.14px)
+            left: calc(0px - var(--screen-width) * 0.04px)
+            transition: all 800ms
+            font-size: calc( var(--screen-width) * 0.029px)
+            position: fixed
+            color: #eeff00
+            background: #000000
+            padding: calc( var(--screen-width) * 0.005px) calc( var(--screen-width) * 0.02px)
+            border-radius: calc( var(--screen-width) * 0.01px)
+        button
+            color: #ffffff
+            background: #000000
+            font-size: calc( var(--screen-width) * 0.02px)
+            padding: calc( var(--screen-width) * 0.012px) calc( var(--screen-width) * 0.05px)
+        p
+            width: calc( var(--screen-width) * 0.75px - 35px)
+            color: #ffffff
+            background: #000000
+            span
+                font-weight: 900
+
+    #menu.show
+        left: calc( var(--screen-width) * 0.14px)
+        top: 15px
+        transform: rotate(0deg)
+        #menu_btn
+            top: 5px
+            left: 5px
+            transform: rotate(0deg)
+            transition: all 800ms
+        transition: all 1s
     #center
         width: calc( var(--screen-width) * 0.75px )
         height: calc( var(--screen-height) * 1px)

@@ -116,4 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
             document.msExitFullscreen();
         }
     }
+
+    let menu_btn = document.getElementById('menu_btn')
+    menu_btn.onclick = () => {
+        document.getElementById('menu').classList.toggle('show')
+    }
 })
