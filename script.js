@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         spawn_interval = 10
         spawn_interval_upgr = 10
         enemy_health_max = 1
-        enemy_health_max_upgr = 0.3
+        enemy_health_max_upgr = 0.08
         enemy_damage = 1
         enemy_damage_upgr = 0.1
     }
