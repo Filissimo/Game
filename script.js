@@ -120,5 +120,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let menu_btn = document.getElementById('menu_btn')
     menu_btn.onclick = () => {
         document.getElementById('menu').classList.toggle('show')
+        pause_game()
+    }
+    let play_btn = document.getElementById('play')
+    play_btn.onclick = () => {
+        document.getElementById('menu').classList.remove('show')
+        resume_game()
+    }
+    function pause_game() {
+    }
+    function resume_game() {
     }
 })
