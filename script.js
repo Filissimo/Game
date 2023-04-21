@@ -81,7 +81,39 @@ document.addEventListener("DOMContentLoaded", () => {
             document.documentElement.style.setProperty('--screen-height', screen_width)
         }
         // defineMarginsAndMoveStep()
-
     }
     setInterval(set_orientation, 1000)
+
+    
+    let fullscreen_on_btn = document.querySelector(".fullscreen_on")
+    let fullscreen_off_btn = document.querySelector(".fullscreen_off")
+    fullscreen_on_btn.onclick = () => {
+        fullscreen_on_btn.classList.toggle('invisible')
+        fullscreen_off_btn.classList.toggle('invisible')
+        openFullscreen()
+    }
+    fullscreen_off_btn.onclick = () => {
+        fullscreen_on_btn.classList.toggle('invisible')
+        fullscreen_off_btn.classList.toggle('invisible')
+        closeFullscreen()
+    }
+    var elem = document.documentElement;
+    function openFullscreen() {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+    }
+    function closeFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+    }
 })
