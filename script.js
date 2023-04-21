@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //     body.classList.add("portrait")
         // }
         // defineMarginsAndMoveStep()
+        
     }
     setInterval(set_orientation, 1000)
 })
