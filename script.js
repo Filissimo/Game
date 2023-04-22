@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 'best_score': 0
             },
             'player': {
-                'size': 70,
+                'size': 0,
                 'angle': 0,
                 'turnSpeed': 3,
                 'speed': 4,
@@ -42,14 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
             'enemy': {
                 'id': 1,
                 'amount': 0,
-                'size': 40,
-                'limit': 10,
+                'size': 0,
+                'limit': 20,
                 'angle': 180,
                 'angleUpgr': 15,
                 'speed': 0.3,
                 'speedUpgr': 0.01,
-                'spawn_interval': 500,
-                'spawn_interval_upgr': 50,
+                'spawn_interval': 1,
+                'spawn_interval_upgr': 0.3,
                 'healthMax': 1,
                 'healthMaxUpgr': 1.04,
                 'damage': 1,
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let div_enemies = document.getElementById('enemies')
     let div_bullets = document.getElementById('bullets')
     function newGame() {
-        setdefaultStats() 
+        setdefaultStats()
         thisGame = {
             'saveGame': 1,
             'game': defaultStats.game,
@@ -88,15 +88,16 @@ document.addEventListener("DOMContentLoaded", () => {
         screen_width = screen.availWidth
         screen_height = screen.availHeight
         if (screen_width > screen_height) {
-            popravkaNaVeter = 0
+            popravkaNaVeter = 10
+            screenWidth = screen_width
+            screenHeight = screen_height + popravkaNaVeter
             body.classList.remove("portrait")
-            document.documentElement.style.setProperty('--screen-width', screen_width)
-            document.documentElement.style.setProperty('--screen-height', screen_height)
+            document.documentElement.style.setProperty('--screen-width', screenWidth)
+            document.documentElement.style.setProperty('--screen-height', screenHeight)
             screenWidth = screen_width
             screenHeight = screen_height
-            defineMarginsAndMoveStep()
         } else {
-            popravkaNaVeter = 20
+            popravkaNaVeter = 10
             screenWidth = screen_height + popravkaNaVeter
             screenHeight = screen_width
             body.classList.add("portrait")
@@ -110,13 +111,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let marginTop
     let marginBottom
     let popravkaNaVeter = 0
+    let moveStep
     setInterval(set_orientation, 1000)
     function defineMarginsAndMoveStep() {
-        marginLeft = screenWidth * 0.15 + 30 - popravkaNaVeter / 2
-        marginRight = screenWidth * 0.85 - 10 - popravkaNaVeter / 2
+        marginLeft = screenWidth * 0.15 - 15
+        marginRight = screenWidth * 0.864
         marginTop = 10
-        marginBottom = screenHeight * 0.75 - 10
-        moveStep = (screenHeight + screenWidth / 500)
+        marginBottom = screenHeight * 0.745
+        moveStep = (screenHeight + screenWidth) / 500
+        enemySize = moveStep * 10
+        thisGame.enemySpawnStats.size = enemySize
+        document.documentElement.style.setProperty('--enemy-size', enemySize)
     }
 
     let fullscreen_on_btn = document.querySelector(".fullscreen_on")
@@ -168,13 +173,25 @@ document.addEventListener("DOMContentLoaded", () => {
         resume_game()
     }
 
-    let spawning_enemies
+    let gameGoes
 
     function pause_game() {
-        clearInterval(spawning_enemies)
+        clearInterval(gameGoes)
     }
     function resume_game() {
-        spawning_enemies = setInterval(spawn_enemy, thisGame.enemySpawnStats.spawn_interval)
+        gameGoes = setInterval(gameTick, thisGame.game.speed)
+    }
+    let spawnInterval = thisGame.enemySpawnStats.spawn_interval
+    let spawCountdown = spawnInterval
+    function gameTick() {
+        spawCountdown--
+        if (spawCountdown <= 0) {
+            spawn_enemy()
+            thisGame.enemySpawnStats.spawn_interval += thisGame.enemySpawnStats.spawn_interval_upgr
+            spawCountdown = thisGame.enemySpawnStats.spawn_interval
+        }
+        divsToMove = document.querySelectorAll('#cursor_chaser, #enemies>div, #bullets>div')
+        movementAtGameDisplay(divsToMove)
     }
     function getRndInteger(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -184,30 +201,29 @@ document.addEventListener("DOMContentLoaded", () => {
         enemyAmount = thisGame.enemySpawnStats.amount
         enemyId = thisGame.enemySpawnStats.id
         if (thisGame.enemySpawnStats.limit > enemyAmount) {
-            console.log(`Spawning e${enemyId} enemy`)
-            fieldSide = Math.round(Math.random() * 4)
+            fieldSide = getRndInteger(0, 3)
             size = thisGame.enemySpawnStats.size
-            // let spawnX
-            // let spawnY
+            let spawnY
+            let spawnX
             switch (fieldSide) {
-                case 0:
+                case 0: // top
                     spawnY = marginTop
                     spawnX = getRndInteger(marginLeft, marginRight - size)
                     break
-                case 1:
+                case 1: // right
                     spawnY = getRndInteger(marginTop, marginBottom - size)
-                    spawnX = marginRight - size / 2
+                    spawnX = marginRight - size
                     break
-                case 2:
+                case 2: // bottom
                     spawnY = marginBottom - size
                     spawnX = getRndInteger(marginLeft, marginRight - size)
                     break
-                case 3:
+                case 3: // left
                     spawnY = getRndInteger(marginTop, marginBottom - size)
-                    spawnX = marginLeft - size
+                    spawnX = marginLeft
                     break
             }
-            thisGame.enemies[enemyId] = {
+            thisGame.enemies[`e${enemyId}`] = {
                 'id': enemyId,
                 'angle': thisGame.enemySpawnStats.angle,
                 'spawnY': spawnY,
@@ -219,11 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             div_enemies.innerHTML += `
                 <div id="e${enemyId}">
-                    <div class="angle invisible">${thisGame.enemySpawnStats.angle}</div>
-                    <div class="speed invisible"">${thisGame.enemySpawnStats.speed}</div>
-                    <div class="healthMax" invisible"></div>
                     <div class="health"></div>
-                    <div class="damage" invisible"></div>
                 </div>
             `
             document.getElementById(`e${enemyId}`).style.left = spawnX + 'px'
@@ -246,18 +258,28 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderEnemies() {
         for (enemyId in thisGame.enemies) {
             enemy = thisGame.enemies[enemyId]
-            console.log(`EnemyId ${enemy.id}`)
             div_enemies.innerHTML += `
             <div id="e${enemy.id}">
-                <div class="angle invisible">${enemy.angle}</div>
-                <div class="speed invisible"">${enemy.speed}</div>
-                <div class="healthMax" invisible"></div>
                 <div class="health"></div>
-                <div class="damage" invisible"></div>
             </div>
             `
             document.getElementById(`e${enemy.id}`).style.left = enemy.spawnX + 'px'
             document.getElementById(`e${enemy.id}`).style.top = enemy.spawnY + 'px'
         }
+    }
+    function movementAtGameDisplay(divsToMove) {
+        for (div of divsToMove) {
+            if (div.id.slice(0, 1) == 'e') {
+                divData = thisGame.enemies[div.id]
+            } else if (div.id.slice(0, 1) == 'b') {
+                divData = thisGame.bullets[div.id]
+            } else if (div.id == 'cursor_chaser') {
+                divData = thisGame.player
+            }
+        }
+        moveThisDiv(div, divData)
+    }
+    function moveThisDiv(div, divData) {
+        
     }
 })
