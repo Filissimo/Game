@@ -5,55 +5,63 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault()
     }
 
-    let defaultStats = {
-        'game': {
-            'speed': 30,
-            'last_score': 0,
-            'present_score': 0,
-            'best_score': 0
-        },
-        'player': {
-            'size': 70,
-            'angle': 0,
-            'turnSpeed': 3,
-            'speed': 4,
-            'healthMax': 10,
-            'healthMaxUpgr': 0.1,
-            'regen': 1,
-            'regen_upgr': 0.001,
-            'regen_speed': 10,
-            'melee_dmg': 3,
-            'melee_dmg_upgr': 0.01
-        },
-        'bullet': {
-            'size': 8,
-            'limit': 30,
-            'speed': 0.1,
-            'speedUpgr': 0.001,
-            'damage': 1,
-            'damageUpgr': 1.005,
-            'count': 1,
-            'count_upgr': 0.01,
-            'shooting_speed': 250,
-            'shooting_speedUpgr': 0.01,
-        },
-        'enemy': {
-            'size': 40,
-            'limit': 30,
-            'angle': 180,
-            'angleUpgr': 15,
-            'speed': 0.3,
-            'speedUpgr': 0.01,
-            'spawn_interval': 50,
-            'spawn_interval_upgr': 50,
-            'healthMax': 1,
-            'healthMaxUpgr': 1.04,
-            'damage': 1,
-            'damageUpgr': 1.04
+    let defaultStats
+    function setdefaultStats() {
+        defaultStats = {
+            'game': {
+                'speed': 30,
+                'last_score': 0,
+                'present_score': 0,
+                'best_score': 0
+            },
+            'player': {
+                'size': 70,
+                'angle': 0,
+                'turnSpeed': 3,
+                'speed': 4,
+                'healthMax': 10,
+                'healthMaxUpgr': 0.1,
+                'regen': 1,
+                'regen_upgr': 0.001,
+                'regen_speed': 10,
+                'melee_dmg': 3,
+                'melee_dmg_upgr': 0.01
+            },
+            'bullet': {
+                'size': 8,
+                'limit': 30,
+                'speed': 0.1,
+                'speedUpgr': 0.001,
+                'damage': 1,
+                'damageUpgr': 1.005,
+                'count': 1,
+                'count_upgr': 0.01,
+                'shooting_speed': 250,
+                'shooting_speedUpgr': 0.01,
+            },
+            'enemy': {
+                'id': 1,
+                'amount': 0,
+                'size': 40,
+                'limit': 10,
+                'angle': 180,
+                'angleUpgr': 15,
+                'speed': 0.3,
+                'speedUpgr': 0.01,
+                'spawn_interval': 500,
+                'spawn_interval_upgr': 50,
+                'healthMax': 1,
+                'healthMaxUpgr': 1.04,
+                'damage': 1,
+                'damageUpgr': 1.04
+            }
         }
     }
     let thisGame = {}
+    let div_enemies = document.getElementById('enemies')
+    let div_bullets = document.getElementById('bullets')
     function newGame() {
+        setdefaultStats() 
         thisGame = {
             'saveGame': 1,
             'game': defaultStats.game,
@@ -63,6 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
             'bullets': {},
             'enemies': {}
         }
+        div_enemies.innerHTML = ''
+        div_bullets.innerHTML = ''
         localStorage.setItem('filissimoThisGame', JSON.stringify(thisGame))
     }
     if (!localStorage.getItem('filissimoThisGame')) {
@@ -158,28 +168,25 @@ document.addEventListener("DOMContentLoaded", () => {
         resume_game()
     }
 
-    let enemySpawnStats = thisGame.enemySpawnStats
-    let enemies = thisGame.enemies
-    let div_enemies = document.getElementById('enemies')
     let spawning_enemies
-    let enemyAmount = 0
-    let enemyId = 1
 
     function pause_game() {
         clearInterval(spawning_enemies)
     }
     function resume_game() {
-        spawning_enemies = setInterval(spawn_enemy, enemySpawnStats.spawn_interval)
+        spawning_enemies = setInterval(spawn_enemy, thisGame.enemySpawnStats.spawn_interval)
     }
     function getRndInteger(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     function spawn_enemy() {
-        if (enemySpawnStats.limit > enemyAmount) {
-            console.log(`Spawning ${enemyAmount} enemy`)
+        enemyAmount = thisGame.enemySpawnStats.amount
+        enemyId = thisGame.enemySpawnStats.id
+        if (thisGame.enemySpawnStats.limit > enemyAmount) {
+            console.log(`Spawning e${enemyId} enemy`)
             fieldSide = Math.round(Math.random() * 4)
-            size = enemySpawnStats.size
+            size = thisGame.enemySpawnStats.size
             // let spawnX
             // let spawnY
             switch (fieldSide) {
@@ -201,31 +208,56 @@ document.addEventListener("DOMContentLoaded", () => {
                     break
             }
             thisGame.enemies[enemyId] = {
-                'angle': enemySpawnStats.angle,
-                'speed': enemySpawnStats.speed,
-                'healthMax': enemySpawnStats.healthMax,
-                'health': enemySpawnStats.healthMax,
-                'damage': enemySpawnStats.damage
+                'id': enemyId,
+                'angle': thisGame.enemySpawnStats.angle,
+                'spawnY': spawnY,
+                'spawnX': spawnX,
+                'speed': thisGame.enemySpawnStats.speed,
+                'healthMax': thisGame.enemySpawnStats.healthMax,
+                'health': thisGame.enemySpawnStats.healthMax,
+                'damage': thisGame.enemySpawnStats.damage
             }
             div_enemies.innerHTML += `
-                <div id="${enemyId}">
-                    <div class="angle invisible">${enemySpawnStats.angle}</div>
-                    <div class="speed invisible"">${enemySpawnStats.speed}</div>
+                <div id="e${enemyId}">
+                    <div class="angle invisible">${thisGame.enemySpawnStats.angle}</div>
+                    <div class="speed invisible"">${thisGame.enemySpawnStats.speed}</div>
                     <div class="healthMax" invisible"></div>
                     <div class="health"></div>
                     <div class="damage" invisible"></div>
                 </div>
             `
-            document.getElementById(`${enemyId}`).style.left = spawnX + 'px'
-            document.getElementById(`${enemyId}`).style.top = spawnY + 'px'
-            enemySpawnStats.angle += enemySpawnStats.angleUpgr
-            enemySpawnStats.speed += enemySpawnStats.speedUpgr
-            enemySpawnStats.healthMax *= enemySpawnStats.healthMaxUpgr
-            enemySpawnStats.damage *= enemySpawnStats.damageUpgr
-            enemySpawnStats.spawn_interval += enemySpawnStats.spawn_interval_upgr
+            document.getElementById(`e${enemyId}`).style.left = spawnX + 'px'
+            document.getElementById(`e${enemyId}`).style.top = spawnY + 'px'
+            thisGame.enemySpawnStats.angle += thisGame.enemySpawnStats.angleUpgr
+            thisGame.enemySpawnStats.speed += thisGame.enemySpawnStats.speedUpgr
+            thisGame.enemySpawnStats.healthMax *= thisGame.enemySpawnStats.healthMaxUpgr
+            thisGame.enemySpawnStats.damage *= thisGame.enemySpawnStats.damageUpgr
+            thisGame.enemySpawnStats.spawn_interval += thisGame.enemySpawnStats.spawn_interval_upgr
             enemyAmount++
             enemyId++
+            thisGame.enemySpawnStats.amount = enemyAmount
+            thisGame.enemySpawnStats.id = enemyId
         }
         localStorage.setItem('filissimoThisGame', JSON.stringify(thisGame))
+    }
+    if (thisGame.enemySpawnStats.amount > 0 && div_enemies.innerHTML == '') {
+        renderEnemies()
+    }
+    function renderEnemies() {
+        for (enemyId in thisGame.enemies) {
+            enemy = thisGame.enemies[enemyId]
+            console.log(`EnemyId ${enemy.id}`)
+            div_enemies.innerHTML += `
+            <div id="e${enemy.id}">
+                <div class="angle invisible">${enemy.angle}</div>
+                <div class="speed invisible"">${enemy.speed}</div>
+                <div class="healthMax" invisible"></div>
+                <div class="health"></div>
+                <div class="damage" invisible"></div>
+            </div>
+            `
+            document.getElementById(`e${enemy.id}`).style.left = enemy.spawnX + 'px'
+            document.getElementById(`e${enemy.id}`).style.top = enemy.spawnY + 'px'
+        }
     }
 })

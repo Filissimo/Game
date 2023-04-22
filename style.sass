@@ -48,22 +48,25 @@ body
     #menu
         display: grid
         position: absolute
-        top: calc(0px - var(--screen-width) * 0.41px)
-        left: calc(0px - var(--screen-width) * 0.35px + var(--screen-height) * 0.01px)
+        top: calc(0px - var(--screen-width) * 0.45px - var(--screen-height) * 0.015px)
+        left: calc(0px - var(--screen-width) * 0.4px - var(--screen-height) * 0.02px)
         width: calc( var(--screen-width) * 0.75px - 35px)
         transform: rotate(-90deg)
         transition: all 1s
+        z-index: 100
         #menu_btn
             position: absolute
             transform: rotate(90deg)
-            top: calc( var(--screen-width) * 0.08px + var(--screen-height) * 0.07px)
-            left: calc(0px - var(--screen-width) * 0.06px)
-            font-size: calc((var(--screen-width) + var(--screen-height)) * 0.023px)
-            background:  #41414189
+            z-index: 100
+            top: calc( var(--screen-width) * 0.17px + var(--screen-height) * 0.2px)
+            left: calc(0px - var(--screen-width) * 0.03px)
+            font-size: calc((var(--screen-width) + var(--screen-height)) * 0.02px)
+            background:  #414141
+            opacity: 1
             text-shadow: 0px 0px 10px #000
             transition: all 800ms
             color: #eeff00
-            padding: calc( var(--screen-width) * 0.005px) calc( var(--screen-width) * 0.02px)
+            padding: calc( var(--screen-width) * 0.005px) calc( var(--screen-width) * 0.001px)
             border-radius: calc( var(--screen-width) * 0.01px)
         button
             color: #ffffff
@@ -72,9 +75,13 @@ body
             padding: calc( var(--screen-width) * 0.012px) calc( var(--screen-width) * 0.05px)
         p
             color: #ffffff
-            background: #000000
+            background: #090909
+            padding: calc( var(--screen-width) * 0.02px) calc( var(--screen-width) * 0.03px)
             span
                 font-weight: 900
+        button, p
+            opacity: 0.1
+            transition: all 1500ms
 
     #menu.show
         left: calc( var(--screen-width) * 0.14px)
@@ -84,10 +91,15 @@ body
             top: 5px
             left: 5px
             transform: rotate(0deg)
+            padding: calc( var(--screen-width) * 0.005px) calc( var(--screen-width) * 0.02px)
             font-size: calc((var(--screen-width) + var(--screen-height)) * 0.025px)
             background: #414141
             text-shadow: -10px -5px 15px #000
-            transition: all 800ms
+            opacity: 0.5
+            transition: all 1500ms
+        button, p
+            opacity: 1
+            transition: all 1500ms
         transition: all 1s
     #center
         width: calc( var(--screen-width) * 0.75px )
@@ -98,6 +110,7 @@ body
             height: calc( var(--screen-height) * 0.75px )
             border: 10px solid #001f01
             #enemies>div
+                z-index: 80
                 position: fixed
                 width: 40px
                 height: 40px
